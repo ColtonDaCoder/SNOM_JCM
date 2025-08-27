@@ -1,0 +1,68 @@
+Layout3D {
+  UnitOfLength = 1e-09 # nanometers
+
+  BoundaryConditions {
+    Boundary {
+      Direction = All
+      Class = Transparent
+    }
+  }
+
+  Extrusion {
+    Objects {
+      Parallelogram {
+        Priority = -1
+        DomainId = 101
+        Width = 600.0
+        Height = 600.0
+      }
+    }
+    MultiLayer {
+      LayerInterface {
+        BoundaryClass = Transparent
+        ExteriorDomainId = 1
+      }
+      Layer {
+        Name = "BottomAir"
+        Thickness = 120.0
+        DomainIdMapping = [101 1]
+      }
+      Layer {
+        Name = "Water"
+        Thickness = 60.0
+        DomainIdMapping = [101 4]
+      }
+      Layer {
+        Name = "Si3N4"
+        Thickness = 15.0
+        DomainIdMapping = [101 3]
+      }
+      Layer {
+        Name = "Gold"
+        Thickness = 30.0
+        DomainIdMapping = [101 2]
+      }
+      Layer {
+        Name = "TopAir"
+        Thickness = 600.0
+        DomainIdMapping = [101 1]
+      }
+      LayerInterface {
+        BoundaryClass = Transparent
+        ExteriorDomainId = 1
+      }
+    }
+  }
+
+  Objects {
+    Cone  {
+      Name = "AFM_Tip_Pt"
+      DomainId = 5
+      Priority = 4
+      BottomRadius = 10
+      TopRadius = 100
+      Height = 660.0
+      GlobalPosition = [0 0 0.0]
+    }
+  }
+}

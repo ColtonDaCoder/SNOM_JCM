@@ -1,0 +1,22 @@
+SourceBag {
+  Source {
+    ElectricFieldStrength {
+      PlaneWave {
+        ThetaPhi = [60 0]# theta = incidence angle; phi = azimuth
+        Lambda0 = 5.0e-6 # wavelength in meters
+        Incidence = FromAbove # light incident from above
+        SP = [1 0]
+      }
+    }
+  }
+  Source {
+    ElectricFieldStrength {
+      PlaneWave {
+        ThetaPhi = [60 0]
+        Lambda0 = 5.0e-6
+        Incidence = FromAbove
+        SP = [0 1]
+      }
+    }
+  }
+}

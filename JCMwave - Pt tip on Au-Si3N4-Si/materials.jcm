@@ -1,0 +1,31 @@
+Material {
+  DomainId = 1
+  Name = "Air"
+  RelPermeability = 1.0
+  RelPermittivity = 1.0
+}
+Material {
+  DomainId = 2
+  Name = "Gold"
+  RelPermeability = 1.0
+  RelPermittivity = (-1169.5,100.98)
+}
+Material {
+  DomainId = 3
+  Name = "Si3N4"
+  RelPermeability = 1.0
+  RelPermittivity = 4.05
+}
+Material {
+  DomainId = 4
+  Name = "Water"
+  RelPermeability = 1.0
+  RelPermittivity = (1.7555,0.032860)
+}
+Material {
+  DomainId = 5
+  Name = "Platinum"
+  RelPermeability = 1.0
+  RelPermittivity = (-376.89,162.51)
+    }
+

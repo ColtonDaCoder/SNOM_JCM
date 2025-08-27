@@ -1,0 +1,13 @@
+Project {
+  InfoLevel = 3
+  StorageFormat = Binary
+  Electromagnetics {
+    TimeHarmonic {
+      Scattering {
+        Accuracy {
+          Precision = 0.0002
+        }
+      }
+    }
+  }
+}
