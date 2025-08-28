@@ -7,9 +7,14 @@ SourceBag {
         Incidence = FromAbove
         3DTo2D = yes
         SP = [0 1]
-        Waist = 6.2831e-5
-        Focus = [0 0 0]
+        Waist = 1e-3
+        Focus = [0 -1440e-9 0]
+      
+        OpticalSystem {
+          NumericalAperture = 0.6
+          SpotMagnification = 1.06e-3  # gives focal waist ?1.06 µm
+        }
       }
     }
   }
-}
+}
