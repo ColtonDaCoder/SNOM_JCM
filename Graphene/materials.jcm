@@ -1,4 +1,4 @@
-#Gold
+#Air
 Material {
   DomainId = 1
   RelPermittivity = 1
@@ -7,18 +7,18 @@ Material {
 #Water
 Material {
   DomainId = 2
-  RelPermittivity = (1.68, 0.003)
+  RelPermittivity = (1.58, 0.27)
   RelPermeability = 1
 }
 #Platinum
 Material {
   DomainId = 3
-  RelPermittivity = (-422, 121)
+  RelPermittivity = (-549.3, 255.73)
   RelPermeability = 1
 }
 #Graphene
 Material {
   DomainId = 4
-  RelPermittivity = (3.86, 26.69)
+  RelPermittivity = (4.46, 81.22)
   RelPermeability = 1
 }

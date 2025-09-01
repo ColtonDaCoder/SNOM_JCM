@@ -1,24 +1,24 @@
-#Gold
-Material {
-  DomainId = 1
-  RelPermittivity = 1
-  RelPermeability = 1
-}
-#Water
-Material {
-  DomainId = 2
-  RelPermittivity = (1.68, 0.003)
-  RelPermeability = 1
-}
-#Platinum
-Material {
-  DomainId = 3
-  RelPermittivity = (-422, 121)
-  RelPermeability = 1
-}
-#Silicon Nitride
-Material {
-  DomainId = 4
-  RelPermittivity = (6, 0)
-  RelPermeability = 1
+#Air
+Material {
+  DomainId = 1
+  RelPermittivity = 1
+  RelPermeability = 1
+}
+#Water
+Material {
+  DomainId = 2
+  RelPermittivity = (1.58, 0.27)
+  RelPermeability = 1
+}
+#Platinum
+Material {
+  DomainId = 3
+  RelPermittivity = (-549.3, 255.73)
+  RelPermeability = 1
+}
+#Silicon Nitride
+Material {
+  DomainId = 4
+  RelPermittivity = (6, 0)
+  RelPermeability = 1
 }
