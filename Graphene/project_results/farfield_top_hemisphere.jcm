@@ -1,0 +1,30 @@
+/* <BLOBHead>
+__BLOBTYPE__=Table
+__MODE__=BINARY0
+__OPTIONS__=LHExchanged
+__OWNER__=JCMwave
+__TAG__=447d2c221995aae646084960d4b79b1f
+__VERSION__=1.0.0
+Column1:Name=EvaluationPointX
+Column1:Type=double
+Column2:Name=EvaluationPointY
+Column2:Type=double
+Column3:Name=EvaluationPointZ
+Column3:Type=double
+Column4:Name=ElectricFieldStrengthX_1
+Column4:Type=doublecomplex
+Column5:Name=ElectricFieldStrengthY_1
+Column5:Type=doublecomplex
+Column6:Name=ElectricFieldStrengthZ_1
+Column6:Type=doublecomplex
+Title=ElectricFieldStrength_FarField
+<I>NColumns=6
+<I>NRows=1
+<F>MetaData:FDOmegaImag=0.000000000000000e+00
+<F>MetaData:FDOmegaReal=3.108335919651573e+14
+<F>MetaData:RelPermeabilityImag=0.000000000000000e+00
+<F>MetaData:RelPermeabilityReal=1.000000000000000e+00
+<F>MetaData:RelPermittivityImag=0.000000000000000e+00
+<F>MetaData:RelPermittivityReal=1.000000000000000e+00
+*/
+0«LXèz¶ë?ÿÿÿÿÿÿß?\3&¦‘<Ùˆ¨6¶Q?D<©zG?~Ên}uF?£Íø®lˆe¿SÝN£NŠç»ÇÄŒ”´'<

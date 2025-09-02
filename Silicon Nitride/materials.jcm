@@ -19,6 +19,6 @@ Material {
 #Silicon Nitride
 Material {
   DomainId = 4
-  RelPermittivity = (6, 0)
+  RelPermittivity = (2.5, 0)
   RelPermeability = 1
 }
