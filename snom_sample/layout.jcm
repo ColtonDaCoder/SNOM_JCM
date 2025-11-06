@@ -1,0 +1,62 @@
+
+Layout2D {
+  UnitOfLength = 1e-9
+  MeshOptions {
+    MaximumSideLength = 200    
+  }
+  CoordinateSystem = Cylindrical
+  BoundaryConditions {
+    Boundary {
+      Class = Transparent
+      Direction = All
+    }
+    Boundary {
+      Class = Transparent 
+      ExteriorDomainId = 1
+      Direction = Y      
+    }
+  }
+  Objects {
+    
+    Parallelogram {
+      Name = "CD"
+      Height = 1500
+      Width = 200
+      Port = Point1
+      GlobalPosition = [0 -200]
+      DomainId = 1
+      Priority = ComputationalDomain
+    }
+    EllipseSector {
+      Name = "AFM Tip"
+      RadiusX = 100
+      RadiusY = 1200
+      AngleRange = [-90 90]
+      GlobalPosition = [0 0]
+      Port = Point1
+      DomainId = 2
+      Priority = 1
+      RefineAll = 4
+      MeshOptions {
+        #MaximumSideLength = .50
+        MaximumSideLength = 10
+      }
+    }
+    Parallelogram {
+      Name = "Substrate"
+      Height = 500
+      Width = 300
+      Port = Point4
+      Alignment {
+        Parent {
+          Domain = "AFM Tip"
+          Port = Point1
+        }      
+        Displacement = [0 -100] # Substrate / Tip separation
+        Orientation = Global
+      }      
+      DomainId = 3
+      Priority = 2        
+    }
+  }
+}  

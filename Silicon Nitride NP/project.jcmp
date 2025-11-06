@@ -1,0 +1,20 @@
+Project {
+  Electromagnetics {
+    TimeHarmonic {
+      Scattering {
+        FieldComponents = Electric
+        Accuracy {
+          FiniteElementDegree = 4
+        }
+      }
+    }
+  }
+}
+
+PostProcess {
+  FourierTransform {      
+    FieldBagPath = "project_results/fieldbag.jcm"
+    OutputFileName = "project_results/ft.jcm"    
+    NormalDirection = Y
+  }
+}

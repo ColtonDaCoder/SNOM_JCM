@@ -1,0 +1,49 @@
+#Air
+Material {
+  DomainId = 1
+  RelPermittivity = 1
+  RelPermeability = 1
+}
+#Water
+Material {
+  DomainId = 2
+  RelPermittivity = (%(water_eps1)e, %(water_eps2)e)
+  RelPermeability = 1
+}
+
+#Platinum
+
+Material {
+
+  DomainId = 3
+
+  RelPermittivity = (%(pt_eps1)e, %(pt_eps2)e)
+
+  RelPermeability = 1
+
+}
+#Silicon Nitride
+Material {
+  DomainId = 7
+  RelPermittivity = (%(SN_eps1)e, %(SN_eps2)e)
+  RelPermeability = 1
+}
+
+#Graphene
+Material {
+  DomainId = 4
+  RelPermittivity = (4.46, 81.22)
+  RelPermeability = 1
+}
+
+#Au
+
+Material {
+
+  DomainId = 5
+
+  RelPermittivity = (-1682.1, 175.2)
+
+  RelPermeability = 1
+
+}

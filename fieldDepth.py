@@ -88,7 +88,7 @@ def get_depth(X, Y, I, y0):
 size = 15
 X, Y, I = get_field("Graphene/project_results/fullbag2nm.jcm")
 y_line, I_line, x0 = get_depth(X, Y, I, -1442.3)
-plt.plot(y_line, np.log10(I_line), label="Graphene w/ 2nm Gap", ls="-", color="red")
+plt.plot(y_line, I_line, label="Graphene w/ 2nm Gap", ls="-", color="red")
 #plt.scatter(y_line, np.log10(I_line), s=size, marker=".")
 
 # X, Y, I = get_field("Graphene/project_results/fullbag10nm.jcm")
@@ -107,14 +107,14 @@ plt.plot(y_line, np.log10(I_line), label="Graphene w/ 2nm Gap", ls="-", color="r
 # y_line, I_line, x0 = get_depth(X, Y, I, -1480.3)
 # ax[0].plot(y_line, np.log10(I_line), label="Graphene w/ 40nm Gap")
 
-X, Y, I = get_field("Graphene/project_results/fullbag50nm.jcm")
-y_line, I_line, x0 = get_depth(X, Y, I, -1490.3)
-plt.plot(y_line, np.log10(I_line), label="Graphene w/ 50nm Gap", ls="-", color="green")
+# X, Y, I = get_field("Graphene/project_results/fullbag50nm.jcm")
+# y_line, I_line, x0 = get_depth(X, Y, I, -1490.3)
+# plt.plot(y_line, np.log10(I_line), label="Graphene w/ 50nm Gap", ls="-", color="green")
 #plt.scatter(y_line, np.log10(I_line), s=size, marker=".")
 
-X, Y, I = get_field("Graphene/project_results/fullbag.jcm")
-y_line, I_line, x0 = get_depth(X, Y, I, -1540.3)
-plt.plot(y_line, np.log10(I_line), label="Graphene w/ 100nm Gap", ls="-", color="blue")
+# X, Y, I = get_field("Graphene/project_results/fullbag.jcm")
+# y_line, I_line, x0 = get_depth(X, Y, I, -1540.3)
+# plt.plot(y_line, np.log10(I_line), label="Graphene w/ 100nm Gap", ls="-", color="blue")
 #plt.scatter(y_line, np.log10(I_line), s=size, marker=".")
 
 
@@ -124,7 +124,7 @@ plt.plot(y_line, np.log10(I_line), label="Graphene w/ 100nm Gap", ls="-", color=
 
 X, Y, I = get_field("Silicon Nitride/project_results/fullbag2nm.jcm")
 y_line, I_line, x0 = get_depth(X, Y, I, -1457.0)
-plt.plot(y_line, np.log10(I_line), label="Silicon Nitride w/ 2nm Gap", ls="--", color="red")
+plt.plot(y_line, I_line, label="Silicon Nitride w/ 2nm Gap", ls="--", color="red")
 #plt.scatter(y_line, np.log10(I_line), s=size, marker="x")
 
 # X, Y, I = get_field("Silicon Nitride/project_results/fullbag10nm.jcm")
@@ -144,18 +144,18 @@ plt.plot(y_line, np.log10(I_line), label="Silicon Nitride w/ 2nm Gap", ls="--", 
 # y_line, I_line, x0 = get_depth(X, Y, I, -1495.0)
 # ax[1].plot(y_line, np.log10(I_line), label="Silicon Nitride w/ 40nm Gap")
 
-X, Y, I = get_field("Silicon Nitride/project_results/fullbag50nm.jcm")
-y_line, I_line, x0 = get_depth(X, Y, I, -1505.0)
-plt.plot(y_line, np.log10(I_line), label="Silicon Nitride w/ 50nm Gap", ls="--", color="green")
+# X, Y, I = get_field("Silicon Nitride/project_results/fullbag50nm.jcm")
+# y_line, I_line, x0 = get_depth(X, Y, I, -1505.0)
+# plt.plot(y_line, np.log10(I_line), label="Silicon Nitride w/ 50nm Gap", ls="--", color="green")
 #plt.scatter(y_line, np.log10(I_line), s=size, marker="x")
 
-X, Y, I = get_field("Silicon Nitride/project_results/fullbag100nm.jcm")
-y_line, I_line, x0 = get_depth(X, Y, I, -1555.0)
-plt.plot(y_line, np.log10(I_line), label="Silicon Nitride w/ 100nm Gap", ls="--", color="blue")
+# X, Y, I = get_field("Silicon Nitride/project_results/fullbag100nm.jcm")
+# y_line, I_line, x0 = get_depth(X, Y, I, -1555.0)
+# plt.plot(y_line, np.log10(I_line), label="Silicon Nitride w/ 100nm Gap", ls="--", color="blue")
 #plt.scatter(y_line, np.log10(I_line), s=size, marker="x")
 
 plt.xlabel("y (nm)")
-plt.ylabel("E Field (log10)")
+plt.ylabel("E Field")
 plt.title(f"Intensity along x≈{x0:.3e} vs Water Depth")
 plt.grid(True)
 plt.legend()

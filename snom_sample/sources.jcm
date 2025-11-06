@@ -1,0 +1,31 @@
+SourceBag {
+  Source {
+    ElectricFieldStrength {
+      GaussianBeam {
+        3DTo2D = yes
+        Incidence = FromAbove
+        Lambda0 = 8e-7
+        Focus =  [0 0 0 ]
+        SP = [1 0] 
+        ThetaPhi = [70 0]
+        Waist = 1e-6      
+        SourceFileName = "beam.jcm"
+        DumpSourceAsTable = yes
+      }      
+    }
+  }
+}
+#SourceBag {
+#  Source {
+#    ElectricFieldStrength {
+#      PlaneWave {
+#        Lambda0 = 6e-06
+#        ThetaPhi = [70 0]
+#        Incidence = FromBelow
+#        3DTo2D = yes
+#        SP = [1 0]
+#      }
+#    }
+#  }
+#}
+#

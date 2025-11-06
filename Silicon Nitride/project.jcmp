@@ -10,23 +10,11 @@ Project {
     }
   }
 }
+
 PostProcess {
-  ExportFields {
+  FourierTransform {      
     FieldBagPath = "project_results/fieldbag.jcm"
-    OutputFileName = "project_results/fullbag.jcm"
-    Cartesian {
-        GridPointsX = [ -1000.0e-9 : 1.0e-9 : 1000.0e-9 ]
-        GridPointsY = [ -2115.0e-9 : 1.0e-9 : 1615.0e-9 ]
-        GridPointsZ = 0.0
-    }
+    OutputFileName = "project_results/ft.jcm"    
+    NormalDirection = Y
   }
-}
-
-PostProcess {
-  FluxIntegration {
-    FieldBagPath = "project_results/fieldbag.jcm"
-    OutputFileName = "project_results/flux.jcm"
-    OutputQuantity = ElectromagneticFieldEnergyFlux
-    InterfaceType = ExteriorDomain
-  }
 }

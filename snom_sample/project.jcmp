@@ -1,0 +1,30 @@
+Project {
+  InfoLevel = 3
+  StorageFormat = Binary
+  Electromagnetics {
+    TimeHarmonic {
+      Scattering {
+        FieldComponents = Electric
+        Accuracy {
+          FiniteElementDegree = 4
+        }
+      }
+    }
+  }
+}
+
+PostProcess {
+  FarField {   
+    FieldBagPath = "project_results/fieldbag.jcm"
+    OutputFileName = "project_results/farfield.jcm"
+    Rotation = X:Z:-Y
+    NRefinements = 5
+  }
+}
+PostProcess {
+  FourierTransform {      
+    FieldBagPath = "project_results/fieldbag.jcm"
+    OutputFileName = "project_results/ft.jcm"    
+    NormalDirection = Y    
+  }
+}
