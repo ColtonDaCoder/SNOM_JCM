@@ -7,7 +7,7 @@ Material {
 #Water
 Material {
   DomainId = 2
-  RelPermittivity = (11.5, 0)
+  RelPermittivity = (%(water_eps1)e, %(water_eps2)e)
   RelPermeability = 1
 }
 
@@ -36,13 +36,13 @@ Material {
   RelPermeability = 1
 }
 
-#Au
+#Si
 
 Material {
 
   DomainId = 5
 
-  RelPermittivity = (-1682.1, 175.2)
+  RelPermittivity = (11.6, 0)
 
   RelPermeability = 1
 

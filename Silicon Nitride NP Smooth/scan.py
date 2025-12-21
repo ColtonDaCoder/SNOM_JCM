@@ -24,7 +24,7 @@ water_eps2 = [0.0301136,0.0333723,0.038144636,0.045785896,0.05502507,0.07080512,
 # lastheight = height[-1]
 # print(radius[-1]+2)
 # runs = np.arange(radius[-1]+2,101)
-heights = [i for i in range(0, 100)]
+heights = [i for i in np.arange(0, 105, 5)]
 WVL = list([round(j,2) for j in np.linspace(5.5,6.5,20)])
 for index, j in enumerate(WVL):
     for i in heights:
@@ -40,5 +40,5 @@ for index, j in enumerate(WVL):
         wvl.append(j) 
         data = {"field": field, "height": height, "wvl": wvl}
         # Pickle to a file
-        with open('field_vs_height_wvl.pkl', 'wb') as f:
+        with open('field_vs_height_wvl_smooth_FE5.pkl', 'wb') as f:
             pk.dump(data, f)

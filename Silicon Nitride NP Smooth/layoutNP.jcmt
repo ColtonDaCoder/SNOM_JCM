@@ -29,9 +29,9 @@ Layout2D {
       GlobalPosition = [0 0]
       Priority = 2
       MeshOptions {
-        MaximumSideLength = 10
+        MaximumSideLength = 5
       }
-      Points = [-50 -800, -50 -1442, 300 -1442, 300 -800]
+      Points = [-50 -1300, -50 -1442, 300 -1442, 300 -1300]
     }
     Polygon {
       DomainId = 2
@@ -43,17 +43,17 @@ Layout2D {
       Points = [-50 -1457, -50 -1600, 300 -1600, 300 -1457]
     }
     Polygon {
-      DomainId = 7
+      DomainId = 4
       GlobalPosition = [0 0]
       Priority = 2
       MeshOptions {
         MaximumSideLength = 5
       }
-      Points = [-50 -1442, -50 -1457, 300 -1457, 300 -1442]
+      Points = [-50 -1442, -50 -1442.3, 300 -1442.3, 300 -1442]
     }
     Polygon {
       DomainId = 3
-      GlobalPosition = [0 76]
+      GlobalPosition = [0 0]
       Priority = 2
       MeshOptions {
         MaximumSideLength = 10
@@ -62,7 +62,7 @@ Layout2D {
     }
     
     Parallelogram {
-      Height = 15
+      Height = 0.3
       Width = 500
       Port = North      
       MeshOptions {
@@ -76,9 +76,26 @@ Layout2D {
         Displacement = [-0 -665]
         Orientation = AntiParallel
       }
-      DomainId = 7
+      DomainId = 4
       Priority = 1
       
+    }
+    CircleSector{
+      Radius = %(radius)e
+      AngleRange = [90 270]
+      MeshOptions {
+        MaximumSideLength = 2
+      }
+      Alignment {
+        Parent {
+          Domain = "CD"
+          Port = South
+        }
+        Displacement = [250 %(displacement)e]
+        Orientation = AntiParallel
+      }
+      DomainId = 5
+      Priority = 5
     }
     Parallelogram {
       Height = 900
@@ -92,7 +109,7 @@ Layout2D {
           Domain = "CD"
           Port = South
         }
-        Displacement = [-0 -650]
+        Displacement = [-0 -664.7]
         Orientation = AntiParallel
       }
       DomainId = 2

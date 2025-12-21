@@ -43,7 +43,7 @@ Layout2D {
       Points = [-50 -1457, -50 -1600, 300 -1600, 300 -1457]
     }
     Polygon {
-      DomainId = 4
+      DomainId = 7
       GlobalPosition = [0 0]
       Priority = 2
       MeshOptions {
@@ -76,7 +76,7 @@ Layout2D {
         Displacement = [-0 -665]
         Orientation = AntiParallel
       }
-      DomainId = 4
+      DomainId = 7
       Priority = 1
       
     }

@@ -7,7 +7,7 @@ Material {
 #Water
 Material {
   DomainId = 2
-  RelPermittivity = (1.68466944, 0.0301136)
+  RelPermittivity = (11.5, 0)
   RelPermeability = 1
 }
 
@@ -17,7 +17,7 @@ Material {
 
   DomainId = 3
 
-  RelPermittivity = (-461.91, 206.8)
+  RelPermittivity = (-640, 312)
 
   RelPermeability = 1
 
@@ -25,7 +25,7 @@ Material {
 #Silicon Nitride
 Material {
   DomainId = 7
-  RelPermittivity = (5.214240758, 0.052369789)
+  RelPermittivity = (4.672649601, 0.3204249834)
   RelPermeability = 1
 }
 

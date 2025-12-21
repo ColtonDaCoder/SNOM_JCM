@@ -5,7 +5,7 @@ import pickle as pk
 
 
 
-with open("field_vs_height_wvl.pkl", "rb") as f:
+with open("field_vs_height_wvl_smooth_FE5.pkl", "rb") as f:
     loaded_data = pk.load(f)
 z = []
 real = []

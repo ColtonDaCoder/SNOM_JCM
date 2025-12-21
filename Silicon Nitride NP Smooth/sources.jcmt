@@ -7,7 +7,7 @@ SourceBag {
         Incidence = FromAbove
         3DTo2D = yes
         SP = [0 1]
-        Waist = 3e-6
+        Waist = 100e-6
         Focus = [0 -1457e-9 0]
       
         OpticalSystem {

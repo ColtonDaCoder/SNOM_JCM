@@ -1,0 +1,12 @@
+#!/bin/bash
+#SBATCH -J nanoFTIR_Disp
+#SBATCH -A hpc_mcpeak15
+#SBATCH -p single
+#SBATCH -N 1
+#SBATCH --ntasks-per-node 8
+#SBATCH -t 150:00:00
+
+
+export WDIR=/work/coltonb/SNOM_JCM/Silicon\ Nitride\ NP\
+cd $WDIR
+python scan.py

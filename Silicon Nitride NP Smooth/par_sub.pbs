@@ -1,0 +1,12 @@
+#!/bin/bash
+#SBATCH -J nanoFTIR_Disp_Smooth
+#SBATCH -A hpc_mcpeak15
+#SBATCH -p single
+#SBATCH -N 1
+#SBATCH --ntasks-per-node 12
+#SBATCH -t 100:00:00
+
+
+export WDIR=/work/coltonb/SNOM_JCM/Silicon\ Nitride\ NP\ Smooth\
+cd $WDIR
+python scan.py
