@@ -2,12 +2,12 @@ SourceBag {
   Source {
     ElectricFieldStrength {
       GaussianBeam {
-        Lambda0 = 5.5e-06
+        Lambda0 = 5.76e-06
         ThetaPhi = [60 0]
         Incidence = FromAbove
         3DTo2D = yes
         SP = [0 1]
-        Waist = 100e-6
+        Waist = 10e-6
         Focus = [0 -1457e-9 0]
       
         OpticalSystem {
