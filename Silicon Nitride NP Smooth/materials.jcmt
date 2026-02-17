@@ -10,6 +10,13 @@ Material {
   RelPermittivity = (%(water_eps1)e, %(water_eps2)e)
   RelPermeability = 1
 }
+#Adsorbed Water
+Material {
+  DomainId = 8
+  RelPermittivity = (%(ads_water_eps1)e, %(ads_water_eps2)e)
+  RelPermeability = 1
+}
+
 
 #Platinum
 

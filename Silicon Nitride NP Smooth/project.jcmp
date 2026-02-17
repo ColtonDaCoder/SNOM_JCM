@@ -4,7 +4,7 @@ Project {
       Scattering {
         FieldComponents = Electric
         Accuracy {
-          FiniteElementDegree = 3
+          FiniteElementDegree = 7
         }
       }
     }
@@ -15,6 +15,6 @@ PostProcess {
   FourierTransform {      
     FieldBagPath = "project_results/fieldbag.jcm"
     OutputFileName = "project_results/ft.jcm"    
-    NormalDirection = Y
+    ScatteredFieldOnly = yes
   }
 }
