@@ -1,0 +1,29 @@
+Project {
+  Electromagnetics {
+    TimeHarmonic {
+      Scattering {
+        FieldComponents = Electric
+        #FourierModeRange = [0 10]
+        Accuracy {
+          FiniteElementDegree = 3
+          Refinement {
+            Strategy = HAdaptive
+            MaxNumberSteps = 1
+            Adaptivity {
+              MinimumRefinementFraction = 0.05
+            }
+          }
+          Precision = 1e-5
+        }
+      }
+    }
+  }
+}
+
+PostProcess {
+  FourierTransform {      
+    FieldBagPath = "project_results/fieldbag.jcm"
+    OutputFileName = "project_results/ft.jcm"    
+    ScatteredFieldOnly = yes
+  }
+}

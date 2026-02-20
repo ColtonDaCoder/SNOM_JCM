@@ -1,0 +1,56 @@
+#Air
+Material {
+  DomainId = 1
+  RelPermittivity = 1
+  RelPermeability = 1
+}
+#Water
+Material {
+  DomainId = 2
+  RelPermittivity = (1.6070444736, 0.07080512)
+  RelPermeability = 1
+}
+#Adsorbed Water
+Material {
+  DomainId = 8
+  RelPermittivity = (1.5609382144, 1.78099248)
+  RelPermeability = 1
+}
+
+
+#Platinum
+
+Material {
+
+  DomainId = 3
+
+  RelPermittivity = (-506.000997229917, 232.467590027701)
+
+  RelPermeability = 1
+
+}
+#Silicon Nitride
+Material {
+  DomainId = 7
+  RelPermittivity = (5.078323095, 0.088994664)
+  RelPermeability = 1
+}
+
+#Graphene
+Material {
+  DomainId = 4
+  RelPermittivity = (4.46, 81.22)
+  RelPermeability = 1
+}
+
+#Si
+
+Material {
+
+  DomainId = 5
+
+  RelPermittivity = (11.6, 0)
+
+  RelPermeability = 1
+
+}
