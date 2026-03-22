@@ -1,0 +1,85 @@
+Layout2D {
+  UnitOfLength = 1e-09
+
+  MeshOptions {
+    MaximumSideLength = 300
+  }
+  CoordinateSystem = Cylindrical
+BoundaryConditions {
+    Boundary{
+    Direction = All
+      Class = Transparent
+      }
+  }
+  Objects {
+    Parallelogram {
+      Name = "CD"
+      Height = 15000
+      Width = 8000
+      Port = West
+      GlobalPosition = [0 5393]
+      DomainId = 1
+      Priority = ComputationalDomain      
+    }
+    
+    
+
+      Polygon {
+        DomainId=3
+        GlobalPosition=[0 %(height)e]
+        Points=[0 -1440, 7514 11500, 0 11500, -7514 11500]
+        CornerRounding {
+          Point = 1
+          Radius = 75
+          NPoints = 50
+        }
+        MeshOptions {
+          CurvilinearDegree = 3
+          MaximumSideLength = 300
+        }
+        Priority=3
+      }
+     
+    
+    Parallelogram {
+      Height = 15
+      Width = 16000
+      Port = North      
+      MeshOptions {
+        MinimumMeshAngle = 1
+        MaximumSideLength = 300
+      }
+      Alignment {
+        Parent {
+          Domain = "CD"
+          Port = South
+        }
+        Displacement = [-0 -665]
+        Orientation = AntiParallel
+      }
+      DomainId = 7
+      Priority = 2
+    }
+
+    Parallelogram {
+      Height = 2000
+      Width = 16000
+      Port = North
+      MeshOptions {
+        
+        MaximumSideLength = 300
+      }
+      Alignment {
+        Parent {
+          Domain = "CD"
+          Port = South
+        }
+        Displacement = [-0 -645]
+        Orientation = AntiParallel
+      }
+      DomainId = 2
+      Priority = 2
+    }     
+  }
+} 
+

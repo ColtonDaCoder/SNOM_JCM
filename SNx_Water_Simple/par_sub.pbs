@@ -1,0 +1,12 @@
+#!/bin/bash
+#SBATCH -J SNx_Water_Simple
+#SBATCH -A ----ALLOCATION----
+#SBATCH -p single
+#SBATCH -N 1
+#SBATCH --ntasks-per-node 8
+#SBATCH -t 150:00:00
+
+
+export WDIR=/work/coltonb/SNOM_JCM/SNx_Water_Simple\
+cd $WDIR
+python scanWVL_and_H.py
