@@ -1,0 +1,4 @@
+# regenerated on every solve
+project_results/
+grid.jcm
+__pycache__/

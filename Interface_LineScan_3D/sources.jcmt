@@ -1,0 +1,24 @@
+# Plane wave from the air side, travelling along +x and down, angle theta from
+# the surface normal.  K and the polarization vectors are computed in
+# run_linescan.py, so the propagation direction is explicit (no angle convention).
+# Source 1: s-polarized (E along y), Source 2: p-polarized (E in the x-z plane).
+SourceBag {
+  Source {
+    ElectricFieldStrength {
+      PlaneWave {
+        K = %(k_inc)e
+        Amplitude = %(amp_s)e
+      }
+    }
+  }
+}
+SourceBag {
+  Source {
+    ElectricFieldStrength {
+      PlaneWave {
+        K = %(k_inc)e
+        Amplitude = %(amp_p)e
+      }
+    }
+  }
+}

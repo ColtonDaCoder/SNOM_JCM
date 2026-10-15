@@ -1,0 +1,35 @@
+Project {
+  Electromagnetics {
+    TimeHarmonic {
+      Scattering {
+        FieldComponents = Electric
+        Accuracy {
+          FiniteElementDegree = 3
+          Refinement {
+            Strategy = HAdaptive
+            MaxNumberSteps = 1
+            Adaptivity {
+              MinimumRefinementFraction = 0.05
+            }
+          }
+          Precision = 1e-5
+        }
+      }
+    }
+  }
+}
+
+# Far field of the scattered light in the upper (air) half space.
+# The NA cone around the backscatter direction is selected in python
+# (run_linescan.py -> collect_backscatter), so the full spectrum is kept here.
+PostProcess {
+  FourierTransform {
+    FieldBagPath = "project_results/fieldbag.jcm"
+    OutputFileName = "project_results/ft.jcm"
+    NormalDirection = Z
+    ScatteredFieldOnly = yes
+    # automatic k spacing ~ 2 pi / domain size leaves only a few directions in the
+    # NA 0.4 cone; 3 refinements = 8x finer spacing (~200 directions in the cone)
+    NRefinements = 3
+  }
+}

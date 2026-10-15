@@ -1,0 +1,30 @@
+#Air
+Material {
+  DomainId = 1
+  RelPermittivity = 1
+  RelPermeability = 1
+}
+#Water
+Material {
+  DomainId = 2
+  RelPermittivity = (1.7226, 0.345577999999999)
+  RelPermeability = 1
+}
+#Platinum
+Material {
+  DomainId = 3
+  RelPermittivity = (-567.461282333083, 266.645243175842)
+  RelPermeability = 1
+}
+#Silicon Nitride
+Material {
+  DomainId = 7
+  RelPermittivity = (4.88665054299161, 0.17320384368743)
+  RelPermeability = 1
+}
+#Oil / OTS
+Material {
+  DomainId = 9
+  RelPermittivity = (1.91825822563519, 0.0011367195901221)
+  RelPermeability = 1
+}

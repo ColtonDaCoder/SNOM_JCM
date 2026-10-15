@@ -1,0 +1,73 @@
+
+Layout3D {
+  UnitOfLength = 1e-09
+  MeshOptions {
+    MaximumSideLength = 1500
+  }
+
+  Extrusion {
+    Objects {
+      # 2D id 101 -> oil side (and everything above the liquid)
+      Parallelogram {
+        Name = "CD"
+        DomainId = 101
+        Priority = ComputationalDomain
+        Width = 16000
+        Height = 16000
+        Boundary {
+          Class = Transparent
+        }
+      }
+      # 2D id 102 -> water side, x < x_interface
+      Polygon {
+        Name = "WaterSide"
+        DomainId = 102
+        Priority = 1
+        Points = [-8000 -8000, 0 -8000, 0 8000, -8000 8000]
+      }
+    }
+    MultiLayer {
+      LayerInterface {
+        BoundaryClass = Transparent
+        GlobalZ = -2005
+      }
+      Layer {
+        Name = "Liquid"
+        Thickness = 2000
+        DomainIdMapping = [101 9 102 2]
+      }
+      Layer {
+        Name = "SiN"
+        Thickness = 5
+        DomainIdMapping = [101 7 102 7]
+      }
+      Layer {
+        Name = "Air"
+        Thickness = 13441
+        DomainIdMapping = [101 1 102 1]
+      }
+      LayerInterface {
+        BoundaryClass = Transparent
+      }
+    }
+  }
+
+  Objects {
+    Cone {
+      Name = "Tip"
+      DomainId = 3
+      Priority = 2
+      BottomRadius = 75
+      TopRadius = 7588.12997123574
+      Height = 12940
+      GlobalPosition = [0 0 1]
+      EdgeRounding {
+        Type = Fillet
+        Radius = 70
+      }
+      MeshOptions {
+        MaximumSideLength = 1500
+      }
+    }
+  }
+}

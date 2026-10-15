@@ -1,0 +1,95 @@
+<?
+# ---------------------------------------------------------------------------
+# 3D layout, lengths in nm.  z = 0 is the top surface of the SiN window.
+#
+#   air (1)            z > 0          Pt tip (3) above, apex at z = gap
+#   SiN (7)            -t_SiN < z < 0
+#   water (2) | oil (9)  z < -t_SiN   water for x < x_interface, oil for x > x_interface
+#
+# The tip is a single Cone (apex down) whose flat end of radius tip_radius has
+# its edge rounded with a fillet of radius tip_fillet (the 3D version of the
+# CornerRounding used in the 2D cylindrical projects).
+# Tested alternatives: Sphere + Cone overlap -> mesher runs out of memory;
+# SolidOfRevolution -> silently truncated 1000 nm above the apex.
+# ---------------------------------------------------------------------------
+import numpy as np
+half = 0.5*keys['cd_width']
+alpha = np.deg2rad(keys['tip_half_angle'])
+keys['half'] = half
+keys['x_if'] = keys['x_interface']
+keys['cone_r1'] = keys['tip_radius'] + keys['tip_length']*np.tan(alpha)
+keys['air_height'] = keys['gap'] + keys['tip_length'] + keys['air_above_tip']
+keys['liquid_bottom'] = -keys['t_SiN'] - keys['liquid_depth']
+?>
+Layout3D {
+  UnitOfLength = 1e-09
+  MeshOptions {
+    MaximumSideLength = %(max_side)e
+  }
+
+  Extrusion {
+    Objects {
+      # 2D id 101 -> oil side (and everything above the liquid)
+      Parallelogram {
+        Name = "CD"
+        DomainId = 101
+        Priority = ComputationalDomain
+        Width = %(cd_width)e
+        Height = %(cd_width)e
+        Boundary {
+          Class = Transparent
+        }
+      }
+      # 2D id 102 -> water side, x < x_interface
+      Polygon {
+        Name = "WaterSide"
+        DomainId = 102
+        Priority = 1
+        Points = [-%(half)e -%(half)e, %(x_if)e -%(half)e, %(x_if)e %(half)e, -%(half)e %(half)e]
+      }
+    }
+    MultiLayer {
+      LayerInterface {
+        BoundaryClass = Transparent
+        GlobalZ = %(liquid_bottom)e
+      }
+      Layer {
+        Name = "Liquid"
+        Thickness = %(liquid_depth)e
+        DomainIdMapping = [101 9 102 2]
+      }
+      Layer {
+        Name = "SiN"
+        Thickness = %(t_SiN)e
+        DomainIdMapping = [101 7 102 7]
+      }
+      Layer {
+        Name = "Air"
+        Thickness = %(air_height)e
+        DomainIdMapping = [101 1 102 1]
+      }
+      LayerInterface {
+        BoundaryClass = Transparent
+      }
+    }
+  }
+
+  Objects {
+    Cone {
+      Name = "Tip"
+      DomainId = 3
+      Priority = 2
+      BottomRadius = %(tip_radius)e
+      TopRadius = %(cone_r1)e
+      Height = %(tip_length)e
+      GlobalPosition = [0 0 %(gap)e]
+      EdgeRounding {
+        Type = Fillet
+        Radius = %(tip_fillet)e
+      }
+      MeshOptions {
+        MaximumSideLength = %(tip_side)e
+      }
+    }
+  }
+}
