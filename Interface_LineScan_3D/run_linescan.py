@@ -81,8 +81,8 @@ GEOMETRY = {
     'oil_depth': 1000,          # depth of the oil block (>> near-field reach of ~100 nm)
     'patch_margin': 1000,       # oil block stops this far from the side walls (layered exterior)
     'cd_width': 16000,          # lateral size of the computational domain (x and y)
-    'tip_radius': 75,           # radius of the flat cone end before rounding
-    'tip_fillet': 70,           # fillet radius on that edge (must be < tip_radius)
+    'tip_radius': 75,           # apex radius: sphere tangent to the cone
+    'tip_cap_height': 900,      # revolved apex section (must be < 1000, see layout.jcmt)
     'tip_half_angle': 30.14,    # same opening angle as the 2D tip (7514 / 12940)
     'tip_length': 12940,
     'air_above_tip': 500,

@@ -7,7 +7,7 @@ Layout3D {
 
   Extrusion {
     Objects {
-      # 2D id 101 -> water (bulk liquid, also everything above it)
+      # 2D id 101 -> water below the SiN, SiN, air (the oil block is a 3D Box below)
       Parallelogram {
         Name = "CD"
         DomainId = 101
@@ -18,13 +18,6 @@ Layout3D {
           Class = Transparent
         }
       }
-      # 2D id 102 -> oil block footprint, x > x_interface
-      Polygon {
-        Name = "OilBlock"
-        DomainId = 102
-        Priority = 1
-        Points = [0 -7000, 7000 -7000, 7000 7000, 0 7000]
-      }
     }
     MultiLayer {
       LayerInterface {
@@ -32,24 +25,19 @@ Layout3D {
         GlobalZ = -2005
       }
       Layer {
-        Name = "WaterBelow"
-        Thickness = 1000
-        DomainIdMapping = [101 2 102 2]
-      }
-      Layer {
-        Name = "OilBlock"
-        Thickness = 1000
-        DomainIdMapping = [101 2 102 9]
+        Name = "Water"
+        Thickness = 2000
+        DomainIdMapping = [101 2]
       }
       Layer {
         Name = "SiN"
         Thickness = 5
-        DomainIdMapping = [101 7 102 7]
+        DomainIdMapping = [101 7]
       }
       Layer {
         Name = "Air"
         Thickness = 13441
-        DomainIdMapping = [101 1 102 1]
+        DomainIdMapping = [101 1]
       }
       LayerInterface {
         BoundaryClass = Transparent
@@ -58,18 +46,38 @@ Layout3D {
   }
 
   Objects {
-    Cone {
-      Name = "Tip"
+    Box {
+      Name = "OilBlock"
+      DomainId = 9
+      Priority = 3
+      Port = Center
+      Length = 7000
+      Width = 14000
+      Height = 1000
+      GlobalPosition = [3500 0 -505]
+    }
+    SolidOfRevolution {
+      Name = "TipApex"
       DomainId = 3
       Priority = 2
-      BottomRadius = 75
-      TopRadius = 7588.12997123574
-      Height = 12940
       GlobalPosition = [0 0 1]
-      EdgeRounding {
-        Type = Fillet
-        Radius = 70
+      Generator {
+        Polygon {
+          Points = [0.0000 0.0000, 9.7668 0.6386, 19.3672 2.5437, 28.6378 5.6828, 37.4206 10.0023, 45.5662 15.4288, 52.9357 21.8699, 59.4037 29.2158, 64.8601 37.3414, 565.7307 900.0000, 0.0000 900.0000]
+        }
       }
+      MeshOptions {
+        MaximumSideLength = 1500
+      }
+    }
+    Cone {
+      Name = "TipShaft"
+      DomainId = 3
+      Priority = 2
+      BottomRadius = 565.730726791352
+      TopRadius = 7556.30915443264
+      Height = 12040
+      GlobalPosition = [0 0 901]
       MeshOptions {
         MaximumSideLength = 1500
       }

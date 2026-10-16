@@ -6,28 +6,51 @@
 #   SiN (7)            -t_SiN < z < 0
 #   water (2) | oil (9)  z < -t_SiN   water for x < x_interface, oil for x > x_interface
 #
-# The oil is a finite block (x_interface < x < half - patch_margin, |y| < half - patch_margin,
-# oil_depth deep) inside bulk water: JCM builds the incident field from the layered stack
+# The oil is a finite 3D Box (x_interface < x < half - patch_margin, |y| < half - patch_margin,
+# oil_depth deep, right under the SiN) inside bulk water.  It is a Box rather than part of
+# the extruded cross-section because an extruded edge at x_interface continues up through
+# the air and cuts the faceted tip apex (JCMgeo then fails or hangs for |x_interface| < ~50).
+# It is finite because JCM builds the incident field from the layered stack
 # outside the domain, so every side must see the same air / SiN / water stack
 # ("Layered exterior not initialized" otherwise).  Only the interface at x_interface is
 # near the tip; the other block faces are >= several um away.
 #
-# The tip is a single Cone (apex down) whose flat end of radius tip_radius has
-# its edge rounded with a fillet of radius tip_fillet (the 3D version of the
-# CornerRounding used in the 2D cylindrical projects).
-# Tested alternatives: Sphere + Cone overlap -> mesher runs out of memory;
-# SolidOfRevolution -> silently truncated 1000 nm above the apex.
+# Tip: a sphere of radius tip_radius at the apex, tangent to a cone of half angle
+# tip_half_angle (smooth, no edges).  The lowest tip_cap_height of the tip is a
+# SolidOfRevolution of that exact profile (polygon through the spherical cap, sagitta
+# < 0.4 nm), the rest is a Cone stacked on top with the same radius at the joint.
+# Tested in JCMgeo 5.2.1 (mesh volumes checked to fill the domain):
+#   - tip_cap_height 900 nm: OK, ~6x fewer elements than a filleted Cone
+#   - tip_cap_height 300 nm: the AIR DOMAIN IS SILENTLY MISSING from the mesh
+#   - SolidOfRevolution is truncated 1000 nm above its base, so keep it < 1000 nm
+#   - Cone + Sphere overlap: mesher runs out of memory
+#   - Cone with EdgeRounding fillet (previous version): works, ~6x more elements
 # ---------------------------------------------------------------------------
 import numpy as np
 half = 0.5*keys['cd_width']
 alpha = np.deg2rad(keys['tip_half_angle'])
 keys['half'] = half
 keys['x_if'] = keys['x_interface']
-keys['cone_r1'] = keys['tip_radius'] + keys['tip_length']*np.tan(alpha)
+R = keys['tip_radius']
+h1 = keys['tip_cap_height']
+prof = [(0.0, 0.0)]                                      # spherical cap, apex -> tangent point
+for p in np.linspace(-np.pi/2, -alpha, 9)[1:]:           # (plain loop: jcmt blocks run with
+    prof.append((R*np.cos(p), R + R*np.sin(p)))          #  separate locals, no comprehensions)
+r_joint = R*np.cos(alpha) + (h1 - (R - R*np.sin(alpha)))*np.tan(alpha)
+prof += [(r_joint, h1), (0.0, h1)]
+keys['tip_profile'] = ', '.join('%.4f %.4f' % xy for xy in prof)
+keys['shaft_r0'] = r_joint
+keys['shaft_r1'] = r_joint + (keys['tip_length'] - h1)*np.tan(alpha)
+keys['shaft_h'] = keys['tip_length'] - h1
+keys['shaft_z'] = keys['gap'] + h1
 keys['air_height'] = keys['gap'] + keys['tip_length'] + keys['air_above_tip']
 keys['liquid_bottom'] = -keys['t_SiN'] - keys['liquid_depth']
 keys['patch_edge'] = half - keys['patch_margin']
-keys['water_below'] = keys['liquid_depth'] - keys['oil_depth']
+# oil block as a 3D Box (centre port), so no extruded wall at x_interface cuts the air / tip
+keys['oil_length'] = keys['patch_edge'] - keys['x_interface']
+keys['oil_width'] = 2*keys['patch_edge']
+keys['oil_cx'] = 0.5*(keys['patch_edge'] + keys['x_interface'])
+keys['oil_cz'] = -keys['t_SiN'] - 0.5*keys['oil_depth']
 ?>
 Layout3D {
   UnitOfLength = 1e-09
@@ -37,7 +60,7 @@ Layout3D {
 
   Extrusion {
     Objects {
-      # 2D id 101 -> water (bulk liquid, also everything above it)
+      # 2D id 101 -> water below the SiN, SiN, air (the oil block is a 3D Box below)
       Parallelogram {
         Name = "CD"
         DomainId = 101
@@ -48,13 +71,6 @@ Layout3D {
           Class = Transparent
         }
       }
-      # 2D id 102 -> oil block footprint, x > x_interface
-      Polygon {
-        Name = "OilBlock"
-        DomainId = 102
-        Priority = 1
-        Points = [%(x_if)e -%(patch_edge)e, %(patch_edge)e -%(patch_edge)e, %(patch_edge)e %(patch_edge)e, %(x_if)e %(patch_edge)e]
-      }
     }
     MultiLayer {
       LayerInterface {
@@ -62,24 +78,19 @@ Layout3D {
         GlobalZ = %(liquid_bottom)e
       }
       Layer {
-        Name = "WaterBelow"
-        Thickness = %(water_below)e
-        DomainIdMapping = [101 2 102 2]
-      }
-      Layer {
-        Name = "OilBlock"
-        Thickness = %(oil_depth)e
-        DomainIdMapping = [101 2 102 9]
+        Name = "Water"
+        Thickness = %(liquid_depth)e
+        DomainIdMapping = [101 2]
       }
       Layer {
         Name = "SiN"
         Thickness = %(t_SiN)e
-        DomainIdMapping = [101 7 102 7]
+        DomainIdMapping = [101 7]
       }
       Layer {
         Name = "Air"
         Thickness = %(air_height)e
-        DomainIdMapping = [101 1 102 1]
+        DomainIdMapping = [101 1]
       }
       LayerInterface {
         BoundaryClass = Transparent
@@ -88,18 +99,38 @@ Layout3D {
   }
 
   Objects {
-    Cone {
-      Name = "Tip"
+    Box {
+      Name = "OilBlock"
+      DomainId = 9
+      Priority = 3
+      Port = Center
+      Length = %(oil_length)e
+      Width = %(oil_width)e
+      Height = %(oil_depth)e
+      GlobalPosition = [%(oil_cx)e 0 %(oil_cz)e]
+    }
+    SolidOfRevolution {
+      Name = "TipApex"
       DomainId = 3
       Priority = 2
-      BottomRadius = %(tip_radius)e
-      TopRadius = %(cone_r1)e
-      Height = %(tip_length)e
       GlobalPosition = [0 0 %(gap)e]
-      EdgeRounding {
-        Type = Fillet
-        Radius = %(tip_fillet)e
+      Generator {
+        Polygon {
+          Points = [%(tip_profile)s]
+        }
       }
+      MeshOptions {
+        MaximumSideLength = %(tip_side)e
+      }
+    }
+    Cone {
+      Name = "TipShaft"
+      DomainId = 3
+      Priority = 2
+      BottomRadius = %(shaft_r0)e
+      TopRadius = %(shaft_r1)e
+      Height = %(shaft_h)e
+      GlobalPosition = [0 0 %(shaft_z)e]
       MeshOptions {
         MaximumSideLength = %(tip_side)e
       }

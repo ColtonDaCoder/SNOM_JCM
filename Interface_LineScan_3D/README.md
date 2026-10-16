@@ -11,7 +11,7 @@ two polarizations per solve, and a far-field Fourier transform of the scattered 
 
 ```
           z
-          ^        Pt tip (cone, filleted apex), axis at x = y = 0
+          ^        Pt tip (cone + 75 nm spherical apex), axis at x = y = 0
           |              \      /
   air     |               \    /
           |                \__/     <- apex at z = gap
@@ -43,17 +43,27 @@ two polarizations per solve, and a far-field Fourier transform of the scattered 
   typo. The spectrum has no O-H or C-O bands, see `optical_data/octane_Myers.csv`.
 - The tip stays fixed and the **interface moves**. `x_interface < 0` means the tip is over oil.
 - All lateral and vertical boundaries are transparent (PML). Air, SiN and water extend into them.
-- The oil is a finite block (`x_interface` < x < 7 um, |y| < 7 um, 1 um deep) in bulk water.
-  JCM builds the incident field from the layered stack outside the domain, so the exterior
-  must be the same air / SiN / water stack on every side; oil reaching a boundary gives
-  "Layered exterior not initialized". 1 um of oil is effectively infinite for the near field,
-  and the other block faces are >= 7 um from the tip. The block also reflects some light into
-  the collection cone; that part does not depend on tip height, so it drops out of S_1 - S_4
-  and only offsets S_0. Size via `oil_depth` and `patch_margin` in `GEOMETRY`.
-- 3D construction: the stack is a 2D cross-section (`Extrusion` / `MultiLayer`). The tip is a
-  free 3D `Cone` with `EdgeRounding` (fillet).
-  - `SolidOfRevolution` was tried: it silently truncates the tip 1000 nm above the apex.
-  - Cone + Sphere was tried: the tangent overlap makes JCMgeo run out of memory.
+- The oil is a finite 3D `Box` (`x_interface` < x < 7 um, |y| < 7 um, 1 um deep) in bulk water.
+  - Finite: JCM builds the incident field from the layered stack outside the domain, so the
+    exterior must be the same air / SiN / water stack on every side; oil reaching a boundary
+    gives "Layered exterior not initialized".
+  - A `Box`, not part of the extruded cross-section: an extruded edge at `x_interface` also runs
+    up through the air and cut the tip apex; JCMgeo then failed or hung at 16 of the 31 scan
+    positions (all within +-45 nm of the tip).
+  - 1 um of oil is effectively infinite for the near field, and the other block faces are
+    >= 7 um from the tip. The block also reflects some light into the collection cone; that
+    part does not depend on tip height, so it drops out of S_1 - S_4 and only offsets S_0.
+    Size via `oil_depth` and `patch_margin` in `GEOMETRY`.
+- 3D construction: the water / SiN / air stack is an extruded 2D cross-section
+  (`Extrusion` / `MultiLayer`); the oil `Box` and the tip are free 3D objects.
+- Tip: a 75 nm sphere at the apex, tangent to a 30.14 deg cone (same opening angle as the 2D
+  tip), 12.94 um long. The lowest 900 nm is a `SolidOfRevolution` of that exact profile, a
+  `Cone` is stacked on top. Tested alternatives (JCMgeo 5.2.1, mesh volumes checked):
+  - `Cone` with a filleted end (previous version): works but ~7x more elements; the coarse
+    `test` solve needed 8.5 M unknowns and 231 GB.
+  - Revolved section only 300 nm tall: the air domain is silently missing from the mesh.
+  - `SolidOfRevolution` alone: truncated 1000 nm above its base.
+  - Cone + Sphere overlap: JCMgeo runs out of memory.
 
 ## Illumination and signal
 
