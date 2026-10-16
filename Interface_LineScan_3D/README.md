@@ -83,6 +83,8 @@ two polarizations per solve, and a far-field Fourier transform of the scattered 
   - the raw far field inside the NA cone (`K_cone`, `E_cone_s_in`, `E_cone_p_in`) and the total
     scattered power, so the collection can be re-analysed without re-solving;
   - `costs` (unknowns, time, memory per adaptive level) and the wall time;
+  - JCM's own accuracy estimates: `est_error_FarField` / `est_error_NearField` per refinement
+    level and `pml_quality` (per boundary compartment, with the PML thickness level);
   - `failures` holds the traceback of any failed solve; `settings` holds geometry, mesh, materials
     at the wavelength, host and SLURM job.
 
@@ -99,6 +101,7 @@ Stages are resumable: if the job hits the time limit, submit again and it contin
 
 | stage | solves | purpose |
 |---|---|---|
+| `converge` | 6 | gaps 1 - 6 nm with 3 HAdaptive refinement steps (coarse start), saves field slices: does the mesh-to-mesh noise of the 1-step runs go away? |
 | `test` | 1 | does it run (coarse mesh), cost per solve, far-field sampling (stops if < 50 directions in the cone) |
 | `zsweep` | 35 | dense height sweep at the interface: are the 14 heights enough for S_n? |
 | `coarse_check` | 14 | same position on the coarse mesh: mesh convergence |
@@ -106,13 +109,33 @@ Stages are resumable: if the job hits the time limit, submit again and it contin
 | `scan` | 434 | 31 positions (5 nm steps within +-50 nm, out to +-300 nm) x 14 heights at 6.1 um |
 | `scan_5.5um` | 434 | the same scan at 5.5 um (water contrast from n only, k small) |
 
+**Run `converge` next** (`sbatch submit.sbatch converge`, on `bigmem`). The 1-step `zsweep`
+showed ~3 % scatter between neighbouring heights; JCM itself estimated ~1.9 % far-field error
+for every solve and the +X PML stayed at thickness level 0 (quality ~0.22). That noise makes
+S_2 / S_3 unreliable, so the scan should only be run with a setting that removes it.
+
 Settings are at the top of `run_linescan.py` (`STAGES`, `HEIGHTS`, `X_SCAN`, `THETA`, `NA`,
 `TAP_AMPLITUDE`, `MIN_GAP`, `MATERIAL_FILES`, `GEOMETRY`, `MESH`).
 
 ```
-python plot_linescan.py test | zsweep | coarse_check | noise | scan   # analysis per stage
+python plot_linescan.py test | zsweep | coarse_check | noise | scan | converge   # analysis per stage
+python plot_fields.py results/fields/converge_x+0_g1.npz [s|p] [abs|Ex|Ey|Ez]  # field slices
 python run_linescan.py --jcm [--coarse]                              # write .jcm for JCMcontrol
 ```
+
+## Field slices and logs
+
+- `project.jcmpt` (template; `jcmwave.solve` turns it into `project.jcmp`) exports two vertical
+  slices through the tip axis after every solve: `slice_yz` (x = 0, parallel to the interface)
+  and `slice_xz` (y = 0, perpendicular to it), +-600 nm laterally, z = -305 ... 1000 nm,
+  2 nm spacing around the apex / gap / SiN and 10 nm further out.
+- Stages with `save_fields=True` (`converge`, `test`) keep them in `results/fields/` as
+  compressed npz (~2.3 MB per solve, both polarizations).
+- `results/jcm_<stage>.log` holds JCM's full console output of every solve; `run_log.txt`
+  has one line per solve including the far-field error estimate and the +X PML quality.
+- `MaxNumberSteps` is set per mesh preset (`MESH[...]['max_steps']`).
+- A stage refuses to continue a results file made with a different geometry, mesh preset,
+  wavelength or materials (move the old file away first).
 
 ## Cost notes
 

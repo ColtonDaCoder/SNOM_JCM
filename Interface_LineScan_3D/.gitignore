@@ -1,4 +1,8 @@
-# regenerated on every solve
+# regenerated on every solve (write them for JCMcontrol with: python run_linescan.py --jcm)
 project_results/
 grid.jcm
+layout.jcm
+materials.jcm
+sources.jcm
+project.jcmp
 __pycache__/

@@ -1,0 +1,81 @@
+<?
+# ---------------------------------------------------------------------------
+# Project template (processed by jcmwave.solve('project.jcmp', keys)).
+# max_steps: HAdaptive refinement steps.  With 1 step JCM's own error estimate
+# stayed at ~1.9 % (far field) and the +X PML at thickness level 0, which showed
+# up as ~3 % mesh-to-mesh scatter in the height sweep; more steps let JCM refine
+# the mesh and the PML towards Precision.
+#
+# Two field slices through the tip axis, both vertical (grid in metres):
+#   slice_yz: x = 0, parallel to the water | oil interface
+#   slice_xz: y = 0, perpendicular to the interface
+# dense (2 nm) around apex / gap / SiN, 10 nm further out.
+# ---------------------------------------------------------------------------
+import numpy as np
+lat = np.concatenate([np.arange(-600, -150, 10), np.arange(-150, 150, 2), np.arange(150, 601, 10)])
+zz = np.concatenate([np.arange(-305, -50, 10), np.arange(-50, 250, 2), np.arange(250, 1001, 10)])
+keys['slice_lat'] = lat*1e-9
+keys['slice_z'] = zz*1e-9
+?>
+Project {
+  Electromagnetics {
+    TimeHarmonic {
+      Scattering {
+        FieldComponents = Electric
+        Accuracy {
+          FiniteElementDegree = 3
+          Refinement {
+            Strategy = HAdaptive
+            MaxNumberSteps = %(max_steps)i
+            Adaptivity {
+              MinimumRefinementFraction = 0.05
+            }
+          }
+          Precision = 1e-5
+        }
+      }
+    }
+  }
+}
+
+# Far field of the scattered light in the upper (air) half space.
+# The NA cone around the backscatter direction is selected in python
+# (run_linescan.py -> collect_backscatter), so the full spectrum is kept here.
+PostProcess {
+  FourierTransform {
+    FieldBagPath = "project_results/fieldbag.jcm"
+    OutputFileName = "project_results/ft.jcm"
+    NormalDirection = Z
+    ScatteredFieldOnly = yes
+    # automatic k spacing ~ 2 pi / domain size leaves only a few directions in the
+    # NA 0.4 cone; 3 refinements = 8x finer spacing (~2800 directions in the cone;
+    # one refinement less changes the summed signal by only 0.2 %)
+    NRefinements = 3
+  }
+}
+
+PostProcess {
+  ExportFields {
+    FieldBagPath = "project_results/fieldbag.jcm"
+    OutputFileName = "project_results/slice_yz.jcm"
+    OutputQuantity = ElectricFieldStrength
+    Cartesian {
+      GridPointsX = 0
+      GridPointsY = %(slice_lat)e
+      GridPointsZ = %(slice_z)e
+    }
+  }
+}
+
+PostProcess {
+  ExportFields {
+    FieldBagPath = "project_results/fieldbag.jcm"
+    OutputFileName = "project_results/slice_xz.jcm"
+    OutputQuantity = ElectricFieldStrength
+    Cartesian {
+      GridPointsX = %(slice_lat)e
+      GridPointsY = 0
+      GridPointsZ = %(slice_z)e
+    }
+  }
+}

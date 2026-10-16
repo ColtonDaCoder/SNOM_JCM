@@ -6,6 +6,7 @@ Analysis of the stages written by run_linescan.py (results/<stage>.pkl).
     python plot_linescan.py coarse_check    # S_n coarse vs fine mesh (needs zsweep too)
     python plot_linescan.py noise           # remeshing noise of S_n vs the edge contrast (needs scan)
     python plot_linescan.py test            # just print the cost of the test solve
+    python plot_linescan.py converge        # gaps 1-6 with more refinement steps vs zsweep: is the noise gone?
 
 Demodulation: the tip height follows z(t) = MIN_GAP + A/2 (1 + cos 2 pi t) over one period,
 E(z) is interpolated with a cubic spline through the simulated heights, and
@@ -150,6 +151,35 @@ def show_noise():
               f'ratio {contrast/spread if spread else np.inf:.0f}')
 
 
+def show_converge():
+    """Gaps 1-6 nm with more refinement steps vs the 1-step zsweep at the same gaps."""
+    data = load('converge')
+    pol, comp = CHANNEL
+    recs = sorted(data['records'], key=lambda r: r['gap'])
+    ref = {}
+    try:
+        ref = {r['gap']: r[pol][comp] for r in load('zsweep')['records']}
+    except FileNotFoundError:
+        pass
+    print(f'converge ({data["settings"]["mesh"]}): {CHANNEL}')
+    print(' gap   |E|        arg      est.err FarField per level              PML quality (+X, level)   unknowns   | zsweep |E|')
+    for r in recs:
+        errs = ' '.join(f'L{l}:{e:.1e}' for l, e in r.get('est_error_FarField', []))
+        z = ref.get(r['gap'])
+        tail = f'| {abs(z):.4e}' if z is not None else ''
+        print(f'{r["gap"]:4.0f}  {abs(r[pol][comp]):.4e}  {np.angle(r[pol][comp]):+.3f}   {errs:38s} '
+              f'{r.get("pml_quality", {}).get("X")}   {r["costs"].get("Unknowns")}   ' + tail)
+    E = np.array([r[pol][comp] for r in recs])
+    if len(E) > 2:
+        step = np.abs(np.diff(E))/np.abs(E[:-1])
+        print(f'\npoint-to-point change |dE|/|E| between neighbouring gaps: median {np.median(step):.2%}, max {np.max(step):.2%}')
+        if ref:
+            Ez = np.array([ref[r['gap']] for r in recs if r['gap'] in ref])
+            if len(Ez) > 2:
+                sz = np.abs(np.diff(Ez))/np.abs(Ez[:-1])
+                print(f'same gaps in zsweep (1 refinement step):            median {np.median(sz):.2%}, max {np.max(sz):.2%}')
+
+
 def show_test():
     r = load('test')['records'][0]
     print({k: r[k] for k in ('x_interface', 'gap', 'wall_time_s', 'costs', 'n_directions', 'n_directions_total')})
@@ -158,4 +188,4 @@ def show_test():
 if __name__ == '__main__':
     stage = sys.argv[1] if len(sys.argv) > 1 else 'scan'
     {'zsweep': show_zsweep, 'coarse_check': show_coarse_check, 'noise': show_noise,
-     'test': show_test}.get(stage, lambda: show_scan(stage))()
+     'test': show_test, 'converge': show_converge}.get(stage, lambda: show_scan(stage))()
