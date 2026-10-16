@@ -7,7 +7,7 @@ Layout3D {
 
   Extrusion {
     Objects {
-      # 2D id 101 -> oil side (and everything above the liquid)
+      # 2D id 101 -> water (bulk liquid, also everything above it)
       Parallelogram {
         Name = "CD"
         DomainId = 101
@@ -18,12 +18,12 @@ Layout3D {
           Class = Transparent
         }
       }
-      # 2D id 102 -> water side, x < x_interface
+      # 2D id 102 -> oil block footprint, x > x_interface
       Polygon {
-        Name = "WaterSide"
+        Name = "OilBlock"
         DomainId = 102
         Priority = 1
-        Points = [-8000 -8000, 0 -8000, 0 8000, -8000 8000]
+        Points = [0 -7000, 7000 -7000, 7000 7000, 0 7000]
       }
     }
     MultiLayer {
@@ -32,9 +32,14 @@ Layout3D {
         GlobalZ = -2005
       }
       Layer {
-        Name = "Liquid"
-        Thickness = 2000
-        DomainIdMapping = [101 9 102 2]
+        Name = "WaterBelow"
+        Thickness = 1000
+        DomainIdMapping = [101 2 102 2]
+      }
+      Layer {
+        Name = "OilBlock"
+        Thickness = 1000
+        DomainIdMapping = [101 2 102 9]
       }
       Layer {
         Name = "SiN"

@@ -15,12 +15,14 @@ two polarizations per solve, and a far-field Fourier transform of the scattered 
           |              \      /
   air     |               \    /
           |                \__/     <- apex at z = gap
-  0 ------+-------------------------------------  SiN top surface
+  0 ------+---------------------------------------  SiN top surface
  -5       |  SiN (5 nm)
-          |  water             |   oil / OTS (octane)
-          |                    |
- -2005    +--------------------|-------------> x
-                          x = x_interface
+          |  water             | oil / OTS (octane)  |  water
+          |                    |   block, 1 um deep  |
+ -1005    |                    +---------------------+
+          |  water
+ -2005    +-------------------------------------------> x
+                          x = x_interface         x = 7000
 ```
 
 | DomainId | material |
@@ -40,7 +42,14 @@ two polarizations per solve, and a far-field Fourier transform of the scattered 
 - The refractiveindex.info octane entry carries the comment "Isopropanol"; that is a database
   typo. The spectrum has no O-H or C-O bands, see `optical_data/octane_Myers.csv`.
 - The tip stays fixed and the **interface moves**. `x_interface < 0` means the tip is over oil.
-- All lateral and vertical boundaries are transparent (PML). The liquids and the SiN extend into them.
+- All lateral and vertical boundaries are transparent (PML). Air, SiN and water extend into them.
+- The oil is a finite block (`x_interface` < x < 7 um, |y| < 7 um, 1 um deep) in bulk water.
+  JCM builds the incident field from the layered stack outside the domain, so the exterior
+  must be the same air / SiN / water stack on every side; oil reaching a boundary gives
+  "Layered exterior not initialized". 1 um of oil is effectively infinite for the near field,
+  and the other block faces are >= 7 um from the tip. The block also reflects some light into
+  the collection cone; that part does not depend on tip height, so it drops out of S_1 - S_4
+  and only offsets S_0. Size via `oil_depth` and `patch_margin` in `GEOMETRY`.
 - 3D construction: the stack is a 2D cross-section (`Extrusion` / `MultiLayer`). The tip is a
   free 3D `Cone` with `EdgeRounding` (fillet).
   - `SolidOfRevolution` was tried: it silently truncates the tip 1000 nm above the apex.

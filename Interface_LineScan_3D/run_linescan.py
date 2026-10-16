@@ -77,7 +77,9 @@ MATERIAL_FILES = {
 # ----------------------------------------------------------------------------
 GEOMETRY = {
     't_SiN': 5,
-    'liquid_depth': 2000,
+    'liquid_depth': 2000,       # water below the SiN, into the bottom boundary
+    'oil_depth': 1000,          # depth of the oil block (>> near-field reach of ~100 nm)
+    'patch_margin': 1000,       # oil block stops this far from the side walls (layered exterior)
     'cd_width': 16000,          # lateral size of the computational domain (x and y)
     'tip_radius': 75,           # radius of the flat cone end before rounding
     'tip_fillet': 70,           # fillet radius on that edge (must be < tip_radius)

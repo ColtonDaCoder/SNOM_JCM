@@ -6,6 +6,12 @@
 #   SiN (7)            -t_SiN < z < 0
 #   water (2) | oil (9)  z < -t_SiN   water for x < x_interface, oil for x > x_interface
 #
+# The oil is a finite block (x_interface < x < half - patch_margin, |y| < half - patch_margin,
+# oil_depth deep) inside bulk water: JCM builds the incident field from the layered stack
+# outside the domain, so every side must see the same air / SiN / water stack
+# ("Layered exterior not initialized" otherwise).  Only the interface at x_interface is
+# near the tip; the other block faces are >= several um away.
+#
 # The tip is a single Cone (apex down) whose flat end of radius tip_radius has
 # its edge rounded with a fillet of radius tip_fillet (the 3D version of the
 # CornerRounding used in the 2D cylindrical projects).
@@ -20,6 +26,8 @@ keys['x_if'] = keys['x_interface']
 keys['cone_r1'] = keys['tip_radius'] + keys['tip_length']*np.tan(alpha)
 keys['air_height'] = keys['gap'] + keys['tip_length'] + keys['air_above_tip']
 keys['liquid_bottom'] = -keys['t_SiN'] - keys['liquid_depth']
+keys['patch_edge'] = half - keys['patch_margin']
+keys['water_below'] = keys['liquid_depth'] - keys['oil_depth']
 ?>
 Layout3D {
   UnitOfLength = 1e-09
@@ -29,7 +37,7 @@ Layout3D {
 
   Extrusion {
     Objects {
-      # 2D id 101 -> oil side (and everything above the liquid)
+      # 2D id 101 -> water (bulk liquid, also everything above it)
       Parallelogram {
         Name = "CD"
         DomainId = 101
@@ -40,12 +48,12 @@ Layout3D {
           Class = Transparent
         }
       }
-      # 2D id 102 -> water side, x < x_interface
+      # 2D id 102 -> oil block footprint, x > x_interface
       Polygon {
-        Name = "WaterSide"
+        Name = "OilBlock"
         DomainId = 102
         Priority = 1
-        Points = [-%(half)e -%(half)e, %(x_if)e -%(half)e, %(x_if)e %(half)e, -%(half)e %(half)e]
+        Points = [%(x_if)e -%(patch_edge)e, %(patch_edge)e -%(patch_edge)e, %(patch_edge)e %(patch_edge)e, %(x_if)e %(patch_edge)e]
       }
     }
     MultiLayer {
@@ -54,9 +62,14 @@ Layout3D {
         GlobalZ = %(liquid_bottom)e
       }
       Layer {
-        Name = "Liquid"
-        Thickness = %(liquid_depth)e
-        DomainIdMapping = [101 9 102 2]
+        Name = "WaterBelow"
+        Thickness = %(water_below)e
+        DomainIdMapping = [101 2 102 2]
+      }
+      Layer {
+        Name = "OilBlock"
+        Thickness = %(oil_depth)e
+        DomainIdMapping = [101 2 102 9]
       }
       Layer {
         Name = "SiN"
