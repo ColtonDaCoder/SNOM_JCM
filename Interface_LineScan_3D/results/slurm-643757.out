@@ -1,0 +1,5 @@
+job 643757 on smic381, 28 cores, stages: converge
+JCMROOT=/home/coltonb/software/JCMsuite_6_0_10
+=== stage converge on smic381 (2026-10-16 10:19:54): 6 solves to run, 0 already done, coarse_3steps mesh, 6.1 um
+[1/6] x=+0 nm gap=1 nm  |Ep|(p_in)=6.4465e-02 arg=-2.798  2764 dirs  unknowns=[732879, 1592346, 2723829, 5712948]  mem=[13.4599723815918, 35.38370513916016, 63.24551773071289, 155.744327545166] GB  2322 s  est.err FarField=[(1, 0.0386382454), (2, 0.175841808), (3, 0.127421505)]  PML(+X)=(0.073, 2)
+slurmstepd: error: *** JOB 643757 ON smic381 CANCELLED AT 2026-10-16T11:04:32 ***

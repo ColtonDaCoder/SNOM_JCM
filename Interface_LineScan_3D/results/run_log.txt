@@ -53,3 +53,5 @@
 [14/14] x=+0 nm gap=101 nm  |Ep|(p_in)=6.1263e-02 arg=-3.033  2764 dirs  unknowns=[791817, 1730340]  mem=[14.73728561401367, 40.55323791503906] GB  409 s
 === stage noise on smic381 (2026-10-16 09:37:30): 42 solves to run, 0 already done, fine mesh, 6.1 um
 [1/42] x=+1000 nm gap=1 nm  |Ep|(p_in)=5.3556e-02 arg=-2.779  2764 dirs  unknowns=[1416150, 2904276]  mem=[32.93700408935547, 78.82771682739258] GB  910 s
+=== stage converge on smic381 (2026-10-16 10:19:54): 6 solves to run, 0 already done, coarse_3steps mesh, 6.1 um
+[1/6] x=+0 nm gap=1 nm  |Ep|(p_in)=6.4465e-02 arg=-2.798  2764 dirs  unknowns=[732879, 1592346, 2723829, 5712948]  mem=[13.4599723815918, 35.38370513916016, 63.24551773071289, 155.744327545166] GB  2322 s  est.err FarField=[(1, 0.0386382454), (2, 0.175841808), (3, 0.127421505)]  PML(+X)=(0.073, 2)
