@@ -10,11 +10,13 @@ TAP_AMPLITUDE = 100 nm and the closest approach MIN_GAP = 1 nm.
 The work is split into stages (see STAGES); each stage writes its own results file and can
 be stopped and restarted (finished points are skipped):
 
+    python run_linescan.py --stage beamcheck      # incident Gaussian beam only: direction, s/p, spot position
     python run_linescan.py --stage converge       # gaps 1-6 nm with 3 refinement steps: is the noise gone?
     python run_linescan.py --stage test           # 1 coarse solve: does it run, cost, far-field sampling
     python run_linescan.py --stage zsweep         # dense height sweep at one position (validates HEIGHTS)
     python run_linescan.py --stage coarse_check   # HEIGHTS on the coarse mesh (mesh convergence)
     python run_linescan.py --stage noise          # interface far away, moved a few nm (remeshing noise)
+    python run_linescan.py --stage linescan_h5    # raw signal across the interface at a fixed 5 nm gap
     python run_linescan.py --stage scan           # the line scan at 6.1 um
     python run_linescan.py --stage scan_5.5um     # the same line scan at 5.5 um
     python run_linescan.py --jcm [--coarse]       # only write the .jcm files for JCMcontrol
@@ -29,6 +31,7 @@ import os
 import sys
 import time
 import re
+import json
 import socket
 import traceback
 import pickle as pk
@@ -61,6 +64,9 @@ X_SCAN = sorted(set([-300, -200, -150, -100, -75] + list(range(-50, 51, 5)) + [7
 STAGES = {
     'converge':     dict(mesh='coarse_3steps', wvl=6.1, x=[0], gaps=[1, 2, 3, 4, 5, 6], save_fields=True),
     'test':         dict(mesh='coarse', wvl=6.1, x=[0],                    gaps=[MIN_GAP], save_fields=True),
+    # exploratory: raw signal across the interface at a fixed 5 nm gap (no demodulation;
+    # 1 refinement step, so expect the ~3 % mesh noise seen in zsweep)
+    'linescan_h5':  dict(mesh='fine',   wvl=6.1, x=X_SCAN,                 gaps=[5]),
     'zsweep':       dict(mesh='fine',   wvl=6.1, x=[0],                    gaps=HEIGHTS_DENSE),
     'coarse_check': dict(mesh='coarse', wvl=6.1, x=[0],                    gaps=HEIGHTS),
     'noise':        dict(mesh='fine',   wvl=6.1, x=[1000, 1003, 1006],     gaps=HEIGHTS),
@@ -125,15 +131,95 @@ def material_keys(wvl):
     return keys
 
 
-def source_keys(wvl, theta_deg):
-    """Incident wave vector (travelling +x, downward) and s/p polarization vectors."""
-    th = np.deg2rad(theta_deg)
+BEAM_FILE = os.path.join(RESULTS, 'beamcheck.json')
+
+
+def beam_convention():
+    """beam_phi / SP vectors found by the beam check (beam along +x, source 1 = s)."""
+    if not os.path.exists(BEAM_FILE):
+        raise SystemExit('no results/beamcheck.json: run  python run_linescan.py --stage beamcheck  first')
+    with open(BEAM_FILE) as f:
+        b = json.load(f)
+    return {'beam_phi': b['beam_phi'], 'sp_s': b['sp_s'], 'sp_p': b['sp_p']}
+
+
+def source_keys(wvl, theta_deg, beam=None):
+    """Focused Gaussian beam (sources.jcmt): focus on the SiN surface, waist lambda/(pi NA)."""
+    keys = {'wvl': wvl, 'theta': float(theta_deg), 'waist': wvl/(np.pi*NA), 'beam_na': NA}
+    b = beam or beam_convention()
+    keys.update(beam_phi=float(b['beam_phi']), sp_s=np.array(b['sp_s'], float), sp_p=np.array(b['sp_p'], float))
+    return keys
+
+
+def run_beamcheck():
+    """
+    Evaluate only the incident beam (no tip solve) for ThetaPhi phi = 0 and 180 and find
+    the setting that travels along +x, which SP gives s (E along y), and check that the
+    spot is centred on the focus.  Writes results/beamcheck.json; stops if anything is off.
+    """
+    os.chdir(HERE)
+    os.makedirs(RESULTS, exist_ok=True)
+    wvl = STAGES['converge']['wvl']*1e-6
     k0 = 2*np.pi/wvl
-    return {
-        'k_inc': k0*np.array([np.sin(th), 0.0, -np.cos(th)]),
-        'amp_s': np.array([0.0, 1.0, 0.0]),
-        'amp_p': np.array([np.cos(th), 0.0, np.sin(th)]),
-    }
+    report = {'wvl': wvl, 'theta': THETA, 'waist': wvl/(np.pi*NA), 'cases': {}}
+    for phi in (0.0, 180.0):
+        keys = dict(GEOMETRY, **MESH['coarse'], x_interface=0.0, gap=float(MIN_GAP))
+        keys.update(material_keys(wvl))
+        keys.update(source_keys(wvl, THETA, {'beam_phi': phi, 'sp_s': [1, 0], 'sp_p': [0, 1]}))
+        jcm_log = os.path.join(HERE, 'project_results', 'jcm_console.log')
+        os.makedirs(os.path.dirname(jcm_log), exist_ok=True)
+        try:
+            jcmwave.solve('beamcheck.jcmp', keys=keys, logfile=jcm_log)
+        finally:
+            text = open(jcm_log, errors='replace').read() if os.path.exists(jcm_log) else ''
+            with open(os.path.join(RESULTS, 'jcm_beamcheck.log'), 'a') as f:
+                f.write(f'\n######## beam_phi={phi:g}\n' + text)
+        lx = jcmwave.loadcartesianfields(os.path.join('project_results', 'beamcheck_x.jcm'))
+        ly = jcmwave.loadcartesianfields(os.path.join('project_results', 'beamcheck_y.jcm'))
+        x = np.ravel(lx['X'])*1e9
+        y = np.ravel(ly['Y'])*1e9
+        for src, sp in ((0, [1, 0]), (1, [0, 1])):
+            Ex = np.reshape(lx['field'][src], (-1, 3))
+            Ey = np.reshape(ly['field'][src], (-1, 3))
+            I = np.sum(np.abs(Ex)**2, axis=1)
+            c = int(np.argmax(np.sum(np.abs(Ex)**2, axis=0)))           # dominant component
+            lit = I > 0.3*I.max()
+            ph = np.unwrap(np.angle(Ex[lit, c]))
+            kx = np.polyfit(x[lit]*1e-9, ph, 1)[0]
+            ipk = int(np.argmax(I))
+            Iy = np.sum(np.abs(Ey)**2, axis=1)
+            report['cases'][f'phi{phi:g}_SP{sp}'] = {
+                'beam_phi': phi, 'SP': sp, 'kx_over_k0': float(kx/k0),
+                'expected_abs_kx_over_k0': float(np.sin(np.deg2rad(THETA))),
+                'peak_x_nm': float(x[ipk]), 'peak_y_nm': float(y[int(np.argmax(Iy))]),
+                'Ey_fraction_at_peak': float(np.abs(Ex[ipk, 1])**2/I[ipk]), 'dominant_component': 'xyz'[c]}
+    cases = report['cases']
+    for name, cse in cases.items():
+        print(f"beamcheck {name}: kx/k0 = {cse['kx_over_k0']:+.3f}, spot at x = {cse['peak_x_nm']:+.0f} nm, "
+              f"y = {cse['peak_y_nm']:+.0f} nm, |Ey|^2 fraction {cse['Ey_fraction_at_peak']:.2f}", flush=True)
+    good = [c for c in cases.values() if c['kx_over_k0'] > 0]
+    problems = []
+    if len(good) != 2 or len({c['beam_phi'] for c in good}) != 1:
+        problems.append('could not find a single beam_phi for which both sources travel along +x')
+    else:
+        report['beam_phi'] = good[0]['beam_phi']
+        s_like = [c for c in good if c['Ey_fraction_at_peak'] > 0.9]
+        p_like = [c for c in good if c['Ey_fraction_at_peak'] < 0.1]
+        if len(s_like) != 1 or len(p_like) != 1:
+            problems.append('could not identify s (E along y) and p sources from the SP settings')
+        else:
+            report['sp_s'], report['sp_p'] = s_like[0]['SP'], p_like[0]['SP']
+        for c in good:
+            if abs(c['kx_over_k0'] - c['expected_abs_kx_over_k0']) > 0.1:
+                problems.append(f"kx/k0 = {c['kx_over_k0']:.3f}, expected {c['expected_abs_kx_over_k0']:.3f} for {THETA} deg")
+            if abs(c['peak_x_nm']) > 1500 or abs(c['peak_y_nm']) > 1500:
+                problems.append(f"spot not centred on the focus: x {c['peak_x_nm']:.0f} nm, y {c['peak_y_nm']:.0f} nm")
+    report['problems'] = problems
+    with open(BEAM_FILE if not problems else BEAM_FILE.replace('.json', '_FAILED.json'), 'w') as f:
+        json.dump(report, f, indent=2)
+    if problems:
+        raise SystemExit('beam check failed: ' + '; '.join(problems) + ' (details in results/beamcheck_FAILED.json)')
+    print(f"beam check OK: beam_phi = {report['beam_phi']:g}, SP s = {report['sp_s']}, SP p = {report['sp_p']}", flush=True)
 
 
 def scan_keys(mesh, wvl):
@@ -272,16 +358,18 @@ def run_stage(name):
         data = {'records': [], 'failures': []}
     wvl = cfg['wvl']*1e-6
     old = data.get('settings')
+    source = {k: (v.tolist() if isinstance(v, np.ndarray) else v) for k, v in source_keys(wvl, THETA).items()}
     if data['records'] and old and (old['geometry'] != dict(GEOMETRY, **MESH[cfg['mesh']])
-                                    or old['wvl'] != wvl or old['materials'] != material_keys(wvl)):
-        raise SystemExit(f'{out_file} was made with different geometry / mesh / wavelength / materials; '
+                                    or old['wvl'] != wvl or old['materials'] != material_keys(wvl)
+                                    or old.get('source') != source):
+        raise SystemExit(f'{out_file} was made with different geometry / mesh / wavelength / materials / illumination; '
                          f'move it away (e.g. results/old/) before rerunning stage {name}, '
                          f'so old and new points are not mixed')
     data['settings'] = {
         'stage': name, 'mesh': cfg['mesh'], 'wvl': wvl, 'theta': THETA, 'NA': NA,
         'tap_amplitude': TAP_AMPLITUDE, 'min_gap': MIN_GAP, 'heights': HEIGHTS,
         'geometry': dict(GEOMETRY, **MESH[cfg['mesh']]),
-        'material_files': MATERIAL_FILES, 'materials': material_keys(wvl),
+        'material_files': MATERIAL_FILES, 'materials': material_keys(wvl), 'source': source,
         'host': socket.gethostname(), 'resources': configure_resources(),
         'slurm_job': os.environ.get('SLURM_JOB_ID'),
     }
@@ -326,7 +414,12 @@ def run_stage(name):
 def write_jcm(mesh='fine', wvl_um=6.1, x_interface=0.0, gap=MIN_GAP):
     """Write layout/materials/sources .jcm for one point, e.g. to inspect in JCMcontrol."""
     os.chdir(HERE)
-    keys = dict(scan_keys(mesh, wvl_um*1e-6), x_interface=x_interface, gap=gap)
+    beam = None if os.path.exists(BEAM_FILE) else {'beam_phi': 0, 'sp_s': [1, 0], 'sp_p': [0, 1]}
+    if beam:
+        print('no results/beamcheck.json yet: sources.jcm written with beam_phi = 0, SP = [1 0] / [0 1] (unchecked)')
+    keys = dict(GEOMETRY, **MESH[mesh], x_interface=x_interface, gap=gap)
+    keys.update(material_keys(wvl_um*1e-6))
+    keys.update(source_keys(wvl_um*1e-6, THETA, beam))
     for name in ('layout.jcmt', 'materials.jcmt', 'sources.jcmt', 'project.jcmpt'):
         jcmwave.jcmt2jcm(name, keys)
         print(f'wrote {name[:-1]}  ({mesh} mesh, {wvl_um} um, x_interface={x_interface} nm, gap={gap} nm)')
@@ -336,6 +429,7 @@ if __name__ == '__main__':
     if '--jcm' in sys.argv:
         write_jcm('coarse' if '--coarse' in sys.argv else 'fine')
     elif '--stage' in sys.argv:
-        run_stage(sys.argv[sys.argv.index('--stage') + 1])
+        stage = sys.argv[sys.argv.index('--stage') + 1]
+        run_beamcheck() if stage == 'beamcheck' else run_stage(stage)
     else:
         print(__doc__)

@@ -1,13 +1,23 @@
-# Plane wave from the air side, travelling along +x and down, angle theta from
-# the surface normal.  K and the polarization vectors are computed in
-# run_linescan.py, so the propagation direction is explicit (no angle convention).
-# Source 1: s-polarized (E along y), Source 2: p-polarized (E in the x-z plane).
+# Focused Gaussian beam from the air side, as the instrument's parabolic mirror:
+# focus on the SiN top surface at x = y = 0, waist = lambda / (pi NA) (diffraction-limited
+# focus of an NA 0.4 mirror), angular spectrum limited to that NA, angle theta from the
+# surface normal.  With a waist of a few um the upper tip shaft and its top are barely lit.
+# beam_phi and the SP vectors are set by the beam check (run_linescan.py --stage beamcheck)
+# so that the beam travels along +x (the backscatter cone points to -x) and
+# source 1 is s-polarized (E along y), source 2 p-polarized.
 SourceBag {
   Source {
     ElectricFieldStrength {
-      PlaneWave {
-        K = %(k_inc)e
-        Amplitude = %(amp_s)e
+      GaussianBeam {
+        Lambda0 = %(wvl)e
+        ThetaPhi = [%(theta)e %(beam_phi)e]
+        Incidence = FromAbove
+        SP = %(sp_s)e
+        Waist = %(waist)e
+        Focus = [0 0 0]
+        OpticalSystem {
+          NumericalAperture = %(beam_na)e
+        }
       }
     }
   }
@@ -15,9 +25,16 @@ SourceBag {
 SourceBag {
   Source {
     ElectricFieldStrength {
-      PlaneWave {
-        K = %(k_inc)e
-        Amplitude = %(amp_p)e
+      GaussianBeam {
+        Lambda0 = %(wvl)e
+        ThetaPhi = [%(theta)e %(beam_phi)e]
+        Incidence = FromAbove
+        SP = %(sp_p)e
+        Waist = %(waist)e
+        Focus = [0 0 0]
+        OpticalSystem {
+          NumericalAperture = %(beam_na)e
+        }
       }
     }
   }

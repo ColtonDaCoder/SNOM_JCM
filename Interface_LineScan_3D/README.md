@@ -67,10 +67,15 @@ two polarizations per solve, and a far-field Fourier transform of the scattered 
 
 ## Illumination and signal
 
-- Two plane waves (`sources.jcmt`) at `THETA` = 60° from the normal, travelling +x and down:
-  - source 1 is s-polarized;
-  - source 2 is p-polarized.
-- `K` and `Amplitude` are given explicitly from python, so no angle convention is involved.
+- A focused Gaussian beam (`sources.jcmt`), as the instrument's parabolic mirror: focus on the
+  SiN top surface at x = y = 0, waist lambda / (pi NA) = 4.85 um at 6.1 um, angular spectrum
+  limited to NA 0.4, `THETA` = 60 deg from the normal, travelling +x and down; source 1 is
+  s-polarized, source 2 p-polarized. With a waist of a few um the upper shaft and the 15 um
+  wide flat tip top are barely lit (a plane wave lit them fully, see below).
+- JCM defines the beam by angles (`ThetaPhi`, `SP`), so the `beamcheck` stage evaluates only the
+  incident beam and stores in `results/beamcheck.json` which `ThetaPhi` travels along +x and which
+  `SP` gives s (E along y) / p; it stops if the direction, the 60 deg angle or the spot position
+  are off. All other stages read that file (and stop if it is missing).
 - The far field of the scattered light (`project.jcmp`, `NormalDirection = Z`) is summed
   coherently inside an NA = 0.4 cone around the backscatter direction (`collect_backscatter`).
   The sum is split into local s and p components.
@@ -101,6 +106,8 @@ Stages are resumable: if the job hits the time limit, submit again and it contin
 
 | stage | solves | purpose |
 |---|---|---|
+| `beamcheck` | 0 (incident beam only) | beam direction, s / p assignment, spot on the focus; writes `results/beamcheck.json` |
+| `linescan_h5` | 31 | exploratory: raw (not demodulated) signal across the interface at a fixed 5 nm gap, fine mesh, 1 refinement step (~3 % mesh noise expected) |
 | `converge` | 6 | gaps 1 - 6 nm with 3 HAdaptive refinement steps (coarse start), saves field slices: does the mesh-to-mesh noise of the 1-step runs go away? |
 | `test` | 1 | does it run (coarse mesh), cost per solve, far-field sampling (stops if < 50 directions in the cone) |
 | `zsweep` | 35 | dense height sweep at the interface: are the 14 heights enough for S_n? |
@@ -109,16 +116,25 @@ Stages are resumable: if the job hits the time limit, submit again and it contin
 | `scan` | 434 | 31 positions (5 nm steps within +-50 nm, out to +-300 nm) x 14 heights at 6.1 um |
 | `scan_5.5um` | 434 | the same scan at 5.5 um (water contrast from n only, k small) |
 
-**Run `converge` next** (`sbatch submit.sbatch converge`, on `bigmem`). The 1-step `zsweep`
-showed ~3 % scatter between neighbouring heights; JCM itself estimated ~1.9 % far-field error
-for every solve and the +X PML stayed at thickness level 0 (quality ~0.22). That noise makes
-S_2 / S_3 unreliable, so the scan should only be run with a setting that removes it.
+**Next run:** `sbatch submit.sbatch beamcheck converge linescan_h5` (on `bigmem`).
+
+What the plane-wave runs showed (results in `results/old_planewave/`):
+- 1 refinement step (`zsweep`): ~3 % scatter between neighbouring heights; JCM's own far-field
+  error estimate ~1.9 % for every solve, +X PML stuck at thickness level 0 (quality ~0.22).
+  S_2 was only ~5x above that noise, S_3 at the noise floor.
+- 3 refinement steps (`converge`, gap 1 nm): 5.7 M unknowns, 156 GB, 39 min, but the error
+  estimate went 3.9 % -> 17.6 % -> 12.7 % while the PML was thickened: the solution was not
+  converged and was dominated by the exterior / PML treatment. The plane wave lit the whole
+  13 um tip, whose 15 um wide top sits only ~0.5 um from the boundaries; the focused beam is
+  meant to remove most of that.
+- Field slices (gap 1 nm): p-incidence gives a ~84x enhanced, confined hot spot under the apex
+  reaching ~100 - 200 nm through the SiN into the liquid; s-incidence gives no hot spot.
 
 Settings are at the top of `run_linescan.py` (`STAGES`, `HEIGHTS`, `X_SCAN`, `THETA`, `NA`,
 `TAP_AMPLITUDE`, `MIN_GAP`, `MATERIAL_FILES`, `GEOMETRY`, `MESH`).
 
 ```
-python plot_linescan.py test | zsweep | coarse_check | noise | scan | converge   # analysis per stage
+python plot_linescan.py test | zsweep | coarse_check | noise | scan | converge | linescan_h5   # analysis per stage
 python plot_fields.py results/fields/converge_x+0_g1.npz [s|p] [abs|Ex|Ey|Ez]  # field slices
 python run_linescan.py --jcm [--coarse]                              # write .jcm for JCMcontrol
 ```

@@ -7,6 +7,7 @@ Analysis of the stages written by run_linescan.py (results/<stage>.pkl).
     python plot_linescan.py noise           # remeshing noise of S_n vs the edge contrast (needs scan)
     python plot_linescan.py test            # just print the cost of the test solve
     python plot_linescan.py converge        # gaps 1-6 with more refinement steps vs zsweep: is the noise gone?
+    python plot_linescan.py linescan_h5     # raw signal vs interface position at a fixed 5 nm gap
 
 Demodulation: the tip height follows z(t) = MIN_GAP + A/2 (1 + cos 2 pi t) over one period,
 E(z) is interpolated with a cubic spline through the simulated heights, and
@@ -104,6 +105,32 @@ def show_scan(stage):
     plt.show()
 
 
+def show_constant_height(stage):
+    """Raw collected field vs interface position at a single gap (no demodulation)."""
+    data = load(stage)
+    s = data['settings']
+    table = field_table(data)
+    xs = np.array(sorted(table))
+    gap = float(table[xs[0]][0][0])
+    fig, ax = plt.subplots(2, sharex=True, figsize=(7, 7))
+    for pol, comp, label in [('p_in', 1, 'p in / p out'), ('s_in', 0, 's in / s out')]:
+        E = np.array([[r[pol][comp] for r in data['records'] if r['x_interface'] == x][0] for x in xs])
+        ref = E[-1]                                     # largest x_interface = tip deepest on the water side
+        amp, ph = np.abs(E/ref), np.angle(E/ref)
+        print(f'{stage} {label}: oil/water amplitude {amp[0]:.4f}, phase {ph[0]:+.4f} rad; '
+              f'10-90 % width amplitude {edge_width(xs, amp):.1f} nm, phase {edge_width(xs, ph):.1f} nm')
+        ax[0].plot(xs, amp, '.-', label=label)
+        ax[1].plot(xs, ph, '.-', label=label)
+    ax[0].set(ylabel='|E| / |E(water)|', title=f'{stage}: gap {gap:g} nm, {s["wvl"]*1e6:.2f} um (raw, not demodulated); '
+                                               f'tip over oil <- -> tip over water')
+    ax[1].set(xlabel='interface position x_interface / nm', ylabel='phase rel. water / rad')
+    for a_ in ax:
+        a_.grid()
+        a_.legend(fontsize=8)
+    plt.tight_layout()
+    plt.show()
+
+
 def show_zsweep():
     data = load('zsweep')
     s = data['settings']
@@ -188,4 +215,5 @@ def show_test():
 if __name__ == '__main__':
     stage = sys.argv[1] if len(sys.argv) > 1 else 'scan'
     {'zsweep': show_zsweep, 'coarse_check': show_coarse_check, 'noise': show_noise,
-     'test': show_test, 'converge': show_converge}.get(stage, lambda: show_scan(stage))()
+     'test': show_test, 'converge': show_converge,
+     'linescan_h5': lambda: show_constant_height('linescan_h5')}.get(stage, lambda: show_scan(stage))()

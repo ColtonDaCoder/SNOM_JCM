@@ -1,0 +1,30 @@
+# Beam check: evaluates only the incident field (no tip solve).  FieldBagPath points to
+# this directory, so the field bag is built from grid.jcm, materials.jcm and sources.jcm,
+# i.e. the illumination of the layered stack.  Exported on lines through the focus,
+# 100 nm above the SiN (incident + specular reflection share the same kx, so the phase
+# slope along x gives the propagation direction unambiguously).
+PostProcess {
+  ExportFields {
+    FieldBagPath = "./"
+    OutputFileName = "project_results/beamcheck_x.jcm"
+    OutputQuantity = ElectricFieldStrength
+    Cartesian {
+      GridPointsX = [-6000e-9 : 25e-9 : 6000e-9]
+      GridPointsY = 0
+      GridPointsZ = 100e-9
+    }
+  }
+}
+
+PostProcess {
+  ExportFields {
+    FieldBagPath = "./"
+    OutputFileName = "project_results/beamcheck_y.jcm"
+    OutputQuantity = ElectricFieldStrength
+    Cartesian {
+      GridPointsX = 0
+      GridPointsY = [-6000e-9 : 25e-9 : 6000e-9]
+      GridPointsZ = 100e-9
+    }
+  }
+}
