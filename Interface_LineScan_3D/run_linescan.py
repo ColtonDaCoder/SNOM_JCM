@@ -17,6 +17,7 @@ be stopped and restarted (finished points are skipped):
     python run_linescan.py --stage coarse_check   # HEIGHTS on the coarse mesh (mesh convergence)
     python run_linescan.py --stage noise          # interface far away, moved a few nm (remeshing noise)
     python run_linescan.py --stage linescan_h5    # raw signal across the interface at a fixed 5 nm gap
+    python run_linescan.py --stage linescan_h101  # same positions at 101 nm; with linescan_h5 -> E(5) - E(101)
     python run_linescan.py --stage scan           # the line scan at 6.1 um
     python run_linescan.py --stage scan_5.5um     # the same line scan at 5.5 um
     python run_linescan.py --jcm [--coarse]       # only write the .jcm files for JCMcontrol
@@ -67,6 +68,9 @@ STAGES = {
     # exploratory: raw signal across the interface at a fixed 5 nm gap (no demodulation;
     # 1 refinement step, so expect the ~3 % mesh noise seen in zsweep)
     'linescan_h5':  dict(mesh='fine',   wvl=6.1, x=X_SCAN,                 gaps=[5]),
+    # same positions at the top of the tapping range: E(5 nm) - E(101 nm) removes the
+    # height-independent far-field drift (plot_linescan.py diff)
+    'linescan_h101': dict(mesh='fine',  wvl=6.1, x=X_SCAN,                 gaps=[101]),
     'zsweep':       dict(mesh='fine',   wvl=6.1, x=[0],                    gaps=HEIGHTS_DENSE),
     'coarse_check': dict(mesh='coarse', wvl=6.1, x=[0],                    gaps=HEIGHTS),
     'noise':        dict(mesh='fine',   wvl=6.1, x=[1000, 1003, 1006],     gaps=HEIGHTS),

@@ -108,6 +108,7 @@ Stages are resumable: if the job hits the time limit, submit again and it contin
 |---|---|---|
 | `beamcheck` | 0 (incident beam only) | beam direction, s / p assignment, spot on the focus; writes `results/beamcheck.json` |
 | `linescan_h5` | 31 | exploratory: raw (not demodulated) signal across the interface at a fixed 5 nm gap, fine mesh, 1 refinement step (~3 % mesh noise expected) |
+| `linescan_h101` | 31 | same positions at 101 nm (top of the tapping range); `plot_linescan.py diff` shows E(5 nm) - E(101 nm), which cancels the height-independent far-field drift |
 | `converge` | 6 | gaps 1 - 6 nm with 3 HAdaptive refinement steps (coarse start), saves field slices: does the mesh-to-mesh noise of the 1-step runs go away? |
 | `test` | 1 | does it run (coarse mesh), cost per solve, far-field sampling (stops if < 50 directions in the cone) |
 | `zsweep` | 35 | dense height sweep at the interface: are the 14 heights enough for S_n? |
@@ -116,7 +117,17 @@ Stages are resumable: if the job hits the time limit, submit again and it contin
 | `scan` | 434 | 31 positions (5 nm steps within +-50 nm, out to +-300 nm) x 14 heights at 6.1 um |
 | `scan_5.5um` | 434 | the same scan at 5.5 um (water contrast from n only, k small) |
 
-**Next run:** `sbatch submit.sbatch beamcheck converge linescan_h5` (on `bigmem`).
+**Next run:** `sbatch submit.sbatch linescan_h101` (on `bigmem`, ~11 h).
+
+What the Gaussian-beam runs showed so far:
+- `beamcheck`: `ThetaPhi` 180 travels +x, `SP [1 0]` = s, `[0 1]` = p; spot within 150 nm of the focus.
+- `converge` (gaps 1 - 5 nm, 3 refinement steps): |Ep| rises smoothly by ~1e-4 per nm, no
+  mesh zigzag; JCM's error estimate still ~10 - 20 % at the last level (looks systematic).
+- `linescan_h5` (31 positions, 1 step): point-to-point noise ~1e-4 (amplitude), ~0.1 mrad (phase).
+  Amplitude and phase drift almost linearly over +-300 nm, for p and for s (which has no
+  near-field hot spot): far-field change as the oil block under the ~10 um beam footprint grows.
+  A near-field step is not resolvable on top of it (phase hint of ~ -0.13 mrad near -40 nm).
+  Hence `linescan_h101` and the E(5) - E(101) difference.
 
 What the plane-wave runs showed (results in `results/old_planewave/`):
 - 1 refinement step (`zsweep`): ~3 % scatter between neighbouring heights; JCM's own far-field
@@ -134,7 +145,7 @@ Settings are at the top of `run_linescan.py` (`STAGES`, `HEIGHTS`, `X_SCAN`, `TH
 `TAP_AMPLITUDE`, `MIN_GAP`, `MATERIAL_FILES`, `GEOMETRY`, `MESH`).
 
 ```
-python plot_linescan.py test | zsweep | coarse_check | noise | scan | converge | linescan_h5   # analysis per stage
+python plot_linescan.py test | zsweep | coarse_check | noise | scan | converge | linescan_h5 | diff   # analysis per stage
 python plot_fields.py results/fields/converge_x+0_g1.npz [s|p] [abs|Ex|Ey|Ez]  # field slices
 python run_linescan.py --jcm [--coarse]                              # write .jcm for JCMcontrol
 ```

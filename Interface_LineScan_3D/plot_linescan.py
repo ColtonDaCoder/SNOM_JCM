@@ -8,6 +8,7 @@ Analysis of the stages written by run_linescan.py (results/<stage>.pkl).
     python plot_linescan.py test            # just print the cost of the test solve
     python plot_linescan.py converge        # gaps 1-6 with more refinement steps vs zsweep: is the noise gone?
     python plot_linescan.py linescan_h5     # raw signal vs interface position at a fixed 5 nm gap
+    python plot_linescan.py diff            # E(5 nm) - E(101 nm) vs position (needs linescan_h5 + linescan_h101)
 
 Demodulation: the tip height follows z(t) = MIN_GAP + A/2 (1 + cos 2 pi t) over one period,
 E(z) is interpolated with a cubic spline through the simulated heights, and
@@ -131,6 +132,59 @@ def show_constant_height(stage):
     plt.show()
 
 
+def show_difference(near='linescan_h5', far='linescan_h101'):
+    """
+    D(x) = E(5 nm) - E(101 nm) at every interface position: the far-field drift barely
+    depends on tip height and cancels, the near-field part (strongly height dependent) stays.
+    Fitted with a step (near-field edge) plus a small linear term.
+    """
+    from scipy.optimize import curve_fit
+    dn, df = load(near), load(far)
+    def by_x(data, pol, comp):
+        return {r['x_interface']: r[pol][comp] for r in data['records']}
+    model = lambda x, a, m, b, x0, w: a + m*x + b/(1 + np.exp(-(x - x0)/w))
+    fig, ax = plt.subplots(2, 2, figsize=(13, 7.5), sharex=True)
+    for col, (pol, comp, label) in enumerate([('p_in', 1, 'p in / p out'), ('s_in', 0, 's in / s out')]):
+        En, Ef = by_x(dn, pol, comp), by_x(df, pol, comp)
+        xs = np.array(sorted(set(En) & set(Ef)))
+        if len(xs) < 3:
+            print(f'{label}: only {len(xs)} positions with both heights so far'); continue
+        D = np.array([En[x] - Ef[x] for x in xs])
+        R = np.array([En[x] for x in xs])
+        oil = xs <= -100
+        ref = D[oil].mean() if oil.any() else D[0]
+        rref = R[oil].mean() if oil.any() else R[0]
+        series = [('amplitude', (np.abs(D)/abs(ref) - 1)*100, '%', (np.abs(R)/abs(rref) - 1)*100),
+                  ('phase', np.angle(D/ref)*1e3, 'mrad', np.angle(R/rref)*1e3)]
+        print(f'{label}: {len(xs)} positions; |E(5)-E(101)| on the oil side = {abs(ref):.3e} '
+              f'({abs(ref)/abs(rref)*100:.3f} % of |E(5)|)')
+        for row, (name, y, unit, raw) in enumerate(series):
+            a_ = ax[row, col]
+            a_.plot(xs, y, 'o-', ms=4, label=f'E(5) - E(101), {name}')
+            a_.plot(xs, raw*(np.ptp(y)/np.ptp(raw) if np.ptp(raw) else 1), '.', color='gray', alpha=0.5,
+                    label='raw E(5), rescaled to the same range (for shape only)')
+            try:
+                p0 = [0, 0, y[-1] - y[0] or 1e-3, 0, 20]
+                p, cov = curve_fit(model, xs, y, p0=p0, maxfev=50000)
+                e = np.sqrt(np.abs(np.diag(cov)))
+                w, we = 2*np.log(9)*abs(p[4]), 2*np.log(9)*e[4]
+                scatter = np.std(y - model(xs, *p))
+                xx = np.linspace(xs.min(), xs.max(), 600)
+                a_.plot(xx, model(xx, *p), '-', label=f'fit: step {p[2]:+.3g} {unit}, centre {p[3]:+.0f}$\pm${e[3]:.0f} nm, '
+                                                        f'10-90% {w:.0f}$\pm${we:.0f} nm')
+                print(f'   {name}: step {p[2]:+.3g}+-{e[2]:.2g} {unit}, centre {p[3]:+.0f}+-{e[3]:.0f} nm, '
+                      f'10-90 % width {w:.0f}+-{we:.0f} nm, linear term {p[1]*100:+.3g} {unit}/100 nm, scatter {scatter:.3g} {unit}')
+            except Exception as ex:
+                print(f'   {name}: fit failed ({ex})')
+            a_.set_ylabel(f'{name} rel. oil side [{unit}]')
+            a_.axvline(0, color='gray', ls=':'); a_.grid(alpha=0.4); a_.legend(fontsize=7, loc='best')
+        ax[0, col].set_title(f'{label}: E(5 nm) - E(101 nm)')
+    for a_ in ax[1]:
+        a_.set_xlabel('x_interface / nm   (tip over oil <- 0 -> tip over water)')
+    plt.tight_layout()
+    plt.show()
+
+
 def show_zsweep():
     data = load('zsweep')
     s = data['settings']
@@ -216,4 +270,5 @@ if __name__ == '__main__':
     stage = sys.argv[1] if len(sys.argv) > 1 else 'scan'
     {'zsweep': show_zsweep, 'coarse_check': show_coarse_check, 'noise': show_noise,
      'test': show_test, 'converge': show_converge,
-     'linescan_h5': lambda: show_constant_height('linescan_h5')}.get(stage, lambda: show_scan(stage))()
+     'linescan_h5': lambda: show_constant_height('linescan_h5'),
+     'diff': show_difference}.get(stage, lambda: show_scan(stage))()
