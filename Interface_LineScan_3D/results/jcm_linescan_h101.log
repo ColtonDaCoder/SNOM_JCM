@@ -1,0 +1,888 @@
+
+######## x_interface=-300 gap=101 (2026-10-17 15:52:44)
+################################################
+Preparing 3D objects ... 
+Seedcount 4[4 ms]
+Generating 3D objects ... [2046 ms]
+Resort 3D objects and set mesh constraints ... [127 ms]
+Meshing 3D objects ... [661 ms]
+Generated surface mesh with 4805 triangles. [2840 ms]
+#############################################
+
+
+
+*** Solving /ddnA/work/coltonb/SNOM_JCM/Interface_LineScan_3D/project.jcmp on refinement level 0 ... 
+  *** A priori interior domain wave propagation characteristics (vacuum wavelength = 6.100 um):
+  
+       Compartment "X":
+    computational domain size:  2.7 (wavelengths).
+    computational domain range wave propagation error: 0.0089
+    'one wavelength' wave propagation error: 0.0059 
+  
+       Compartment "-X":
+    computational domain size:  2.7 (wavelengths).
+    computational domain range wave propagation error: 0.0093
+    'one wavelength' wave propagation error: 0.006 
+  
+       Compartment "Y":
+    computational domain size:  2.7 (wavelengths).
+    computational domain range wave propagation error: 0.009
+    'one wavelength' wave propagation error: 0.0059 
+  
+       Compartment "-Y":
+    computational domain size:  2.7 (wavelengths).
+    computational domain range wave propagation error: 0.0087
+    'one wavelength' wave propagation error: 0.0059 
+  
+       Compartment "Z":
+    computational domain size:  2.5 (wavelengths).
+    computational domain range wave propagation error: 0.0022
+    'one wavelength' wave propagation error: 0.0014 
+  
+       Compartment "-Z":
+    computational domain size:  3.4 (wavelengths).
+    computational domain range wave propagation error: 0.011
+    'one wavelength' wave propagation error: 0.0092 
+
+Cell percentage per Finite Element degree
+  FEM degree  Cell percentage
+-----------------------------------------
+           3            100.0
+
+assembling problem (1835184 unknowns) ...  
+assembling problem done: 00:08:42.75 (cpu), 00:00:21.21 (total) (matrix entries/row = 121)
+solving discrete problem ... 
+solving discrete problem done: 01:08:09.04 (cpu), 00:03:47.15 (total), 41.16GB (mem)
+  *** A posteriori exterior domain quality check:
+       Compartment  "X": 0.038 (thickness level=0)
+       Compartment "-X": 0.0062 (thickness level=0)
+       Compartment  "Y": 0.087 (thickness level=0)
+       Compartment "-Y": 0.11 (thickness level=0)
+       Compartment  "Z": 0.011 (thickness level=0)
+       Compartment "-Z": 0.077 (thickness level=0)
+updating inner nodes ...
+updating inner nodes done: 00:00:17.49 (cpu), 00:00:00.82 (total)
+
+
+selecting cells for refinement ...  
+selecting cells for refinement: done 00:03:44.15 (cpu)
+
+refining grid ...  
+refining grid: done 00:00:06.59 (cpu)
+
+
+*** Solving /ddnA/work/coltonb/SNOM_JCM/Interface_LineScan_3D/project.jcmp on refinement level 1 ... 
+  *** A priori interior domain wave propagation characteristics (vacuum wavelength = 6.100 um):
+  
+       Compartment "X":
+    computational domain size:  2.7 (wavelengths).
+    computational domain range wave propagation error: 0.0086
+    'one wavelength' wave propagation error: 0.0059 
+  
+       Compartment "-X":
+    computational domain size:  2.7 (wavelengths).
+    computational domain range wave propagation error: 0.0064
+    'one wavelength' wave propagation error: 0.0041 
+  
+       Compartment "Y":
+    computational domain size:  2.7 (wavelengths).
+    computational domain range wave propagation error: 0.0069
+    'one wavelength' wave propagation error: 0.0044 
+  
+       Compartment "-Y":
+    computational domain size:  2.7 (wavelengths).
+    computational domain range wave propagation error: 0.0068
+    'one wavelength' wave propagation error: 0.0043 
+  
+       Compartment "Z":
+    computational domain size:  2.5 (wavelengths).
+    computational domain range wave propagation error: 0.00058
+    'one wavelength' wave propagation error: 0.00036 
+  
+       Compartment "-Z":
+    computational domain size:  3.4 (wavelengths).
+    computational domain range wave propagation error: 0.011
+    'one wavelength' wave propagation error: 0.0091 
+
+Cell percentage per Finite Element degree
+  FEM degree  Cell percentage
+-----------------------------------------
+           3            100.0
+
+assembling problem (3320616 unknowns) ...  
+assembling problem done: 00:12:53.86 (cpu), 00:00:32.01 (total) (matrix entries/row = 121)
+solving discrete problem ... 
+solving discrete problem done: 03:18:58.95 (cpu), 00:09:47.66 (total), 85.09GB (mem)
+  *** A posteriori exterior domain quality check:
+       Compartment  "X": 0.038 (thickness level=0)
+       Compartment "-X": 0.015 (thickness level=1)
+       Compartment  "Y": 0.031 (thickness level=1)
+       Compartment "-Y": 0.029 (thickness level=1)
+       Compartment  "Z": 0.0053 (thickness level=1)
+       Compartment "-Z": 0.037 (thickness level=1)
+updating inner nodes ...
+updating inner nodes done: 00:00:30.70 (cpu), 00:00:01.30 (total)
+
+
+estimating field errors ...  
+estimating field errors: done 00:00:03.56 (cpu)
+
+   rel. error (FarField)  
+  level       est.error  ratio
+------------------------------
+    -/-             -/-    -/-
+      1  1.16656340e-02    -/-
+
+
+   rel. error (NearField)  
+  level       est.error  ratio
+------------------------------
+    -/-             -/-    -/-
+      1  1.67561980e-02    -/-
+
+
+*** Maximum number of refinement steps reached. *** 
+
+post process FourierTransform (output file: 'ft.jcm') ... done: 02:49:58.50 (cpu), 00:06:19.15 (total)
+post process Cartesian (output file: 'slice_yz.jcm') ... done: 00:04:31.30 (cpu), 00:04:26.10 (total)
+post process Cartesian (output file: 'slice_xz.jcm') ... done: 00:04:17.56 (cpu), 00:04:12.29 (total)
+
+######## x_interface=-200 gap=101 (2026-10-17 16:33:24)
+################################################
+Preparing 3D objects ... 
+Seedcount 4[4 ms]
+Generating 3D objects ... [2031 ms]
+Resort 3D objects and set mesh constraints ... [127 ms]
+Meshing 3D objects ... [645 ms]
+Generated surface mesh with 4841 triangles. [2808 ms]
+#############################################
+
+
+
+*** Solving /ddnA/work/coltonb/SNOM_JCM/Interface_LineScan_3D/project.jcmp on refinement level 0 ... 
+  *** A priori interior domain wave propagation characteristics (vacuum wavelength = 6.100 um):
+  
+       Compartment "X":
+    computational domain size:  2.7 (wavelengths).
+    computational domain range wave propagation error: 0.0087
+    'one wavelength' wave propagation error: 0.0059 
+  
+       Compartment "-X":
+    computational domain size:  2.7 (wavelengths).
+    computational domain range wave propagation error: 0.0094
+    'one wavelength' wave propagation error: 0.006 
+  
+       Compartment "Y":
+    computational domain size:  2.7 (wavelengths).
+    computational domain range wave propagation error: 0.0088
+    'one wavelength' wave propagation error: 0.0059 
+  
+       Compartment "-Y":
+    computational domain size:  2.7 (wavelengths).
+    computational domain range wave propagation error: 0.0091
+    'one wavelength' wave propagation error: 0.0059 
+  
+       Compartment "Z":
+    computational domain size:  2.5 (wavelengths).
+    computational domain range wave propagation error: 0.0022
+    'one wavelength' wave propagation error: 0.0014 
+  
+       Compartment "-Z":
+    computational domain size:  3.4 (wavelengths).
+    computational domain range wave propagation error: 0.011
+    'one wavelength' wave propagation error: 0.0091 
+
+Cell percentage per Finite Element degree
+  FEM degree  Cell percentage
+-----------------------------------------
+           3            100.0
+
+assembling problem (2083734 unknowns) ...  
+assembling problem done: 00:08:53.90 (cpu), 00:00:22.10 (total) (matrix entries/row = 116)
+solving discrete problem ... 
+solving discrete problem done: 01:16:03.97 (cpu), 00:04:19.49 (total), 46.75GB (mem)
+  *** A posteriori exterior domain quality check:
+       Compartment  "X": 0.038 (thickness level=0)
+       Compartment "-X": 0.0061 (thickness level=0)
+       Compartment  "Y": 0.087 (thickness level=0)
+       Compartment "-Y": 0.16 (thickness level=0)
+       Compartment  "Z": 0.011 (thickness level=0)
+       Compartment "-Z": 0.08 (thickness level=0)
+updating inner nodes ...
+updating inner nodes done: 00:00:19.47 (cpu), 00:00:00.88 (total)
+
+
+selecting cells for refinement ...  
+selecting cells for refinement: done 00:04:33.59 (cpu)
+
+refining grid ...  
+refining grid: done 00:00:08.34 (cpu)
+
+
+*** Solving /ddnA/work/coltonb/SNOM_JCM/Interface_LineScan_3D/project.jcmp on refinement level 1 ... 
+  *** A priori interior domain wave propagation characteristics (vacuum wavelength = 6.100 um):
+  
+       Compartment "X":
+    computational domain size:  2.7 (wavelengths).
+    computational domain range wave propagation error: 0.0075
+    'one wavelength' wave propagation error: 0.0049 
+  
+       Compartment "-X":
+    computational domain size:  2.7 (wavelengths).
+    computational domain range wave propagation error: 0.0064
+    'one wavelength' wave propagation error: 0.004 
+  
+       Compartment "Y":
+    computational domain size:  2.7 (wavelengths).
+    computational domain range wave propagation error: 0.0061
+    'one wavelength' wave propagation error: 0.0039 
+  
+       Compartment "-Y":
+    computational domain size:  2.7 (wavelengths).
+    computational domain range wave propagation error: 0.0063
+    'one wavelength' wave propagation error: 0.004 
+  
+       Compartment "Z":
+    computational domain size:  2.5 (wavelengths).
+    computational domain range wave propagation error: 0.00043
+    'one wavelength' wave propagation error: 0.00027 
+  
+       Compartment "-Z":
+    computational domain size:  3.4 (wavelengths).
+    computational domain range wave propagation error: 0.011
+    'one wavelength' wave propagation error: 0.0091 
+
+Cell percentage per Finite Element degree
+  FEM degree  Cell percentage
+-----------------------------------------
+           3            100.0
+
+assembling problem (3724527 unknowns) ...  
+assembling problem done: 00:13:52.88 (cpu), 00:00:34.83 (total) (matrix entries/row = 117)
+solving discrete problem ... 
+solving discrete problem done: 04:06:21.01 (cpu), 00:12:21.03 (total), 98.15GB (mem)
+  *** A posteriori exterior domain quality check:
+       Compartment  "X": 0.046 (thickness level=0)
+       Compartment "-X": 0.015 (thickness level=1)
+       Compartment  "Y": 0.036 (thickness level=1)
+       Compartment "-Y": 0.033 (thickness level=1)
+       Compartment  "Z": 0.0074 (thickness level=1)
+       Compartment "-Z": 0.08 (thickness level=0)
+updating inner nodes ...
+updating inner nodes done: 00:00:33.55 (cpu), 00:00:01.40 (total)
+
+
+estimating field errors ...  
+estimating field errors: done 00:00:03.72 (cpu)
+
+   rel. error (FarField)  
+  level       est.error  ratio
+------------------------------
+    -/-             -/-    -/-
+      1  1.15094686e-02    -/-
+
+
+   rel. error (NearField)  
+  level       est.error  ratio
+------------------------------
+    -/-             -/-    -/-
+      1  1.66805128e-02    -/-
+
+
+*** Maximum number of refinement steps reached. *** 
+
+post process FourierTransform (output file: 'ft.jcm') ... done: 03:14:02.86 (cpu), 00:07:12.19 (total)
+post process Cartesian (output file: 'slice_yz.jcm') ... done: 00:07:29.27 (cpu), 00:07:21.38 (total)
+post process Cartesian (output file: 'slice_xz.jcm') ... done: 00:07:51.38 (cpu), 00:07:45.79 (total)
+
+######## x_interface=-150 gap=101 (2026-10-17 17:02:46)
+################################################
+Preparing 3D objects ... 
+Seedcount 4[4 ms]
+Generating 3D objects ... [2030 ms]
+Resort 3D objects and set mesh constraints ... [126 ms]
+Meshing 3D objects ... [645 ms]
+Generated surface mesh with 4868 triangles. [2807 ms]
+#############################################
+
+
+
+*** Solving /ddnA/work/coltonb/SNOM_JCM/Interface_LineScan_3D/project.jcmp on refinement level 0 ... 
+  *** A priori interior domain wave propagation characteristics (vacuum wavelength = 6.100 um):
+  
+       Compartment "X":
+    computational domain size:  2.7 (wavelengths).
+    computational domain range wave propagation error: 0.0085
+    'one wavelength' wave propagation error: 0.0059 
+  
+       Compartment "-X":
+    computational domain size:  2.7 (wavelengths).
+    computational domain range wave propagation error: 0.0093
+    'one wavelength' wave propagation error: 0.006 
+  
+       Compartment "Y":
+    computational domain size:  2.7 (wavelengths).
+    computational domain range wave propagation error: 0.0092
+    'one wavelength' wave propagation error: 0.0059 
+  
+       Compartment "-Y":
+    computational domain size:  2.7 (wavelengths).
+    computational domain range wave propagation error: 0.0086
+    'one wavelength' wave propagation error: 0.0059 
+  
+       Compartment "Z":
+    computational domain size:  2.5 (wavelengths).
+    computational domain range wave propagation error: 0.0022
+    'one wavelength' wave propagation error: 0.0014 
+  
+       Compartment "-Z":
+    computational domain size:  3.4 (wavelengths).
+    computational domain range wave propagation error: 0.011
+    'one wavelength' wave propagation error: 0.0091 
+
+Cell percentage per Finite Element degree
+  FEM degree  Cell percentage
+-----------------------------------------
+           3            100.0
+
+assembling problem (1736331 unknowns) ...  
+assembling problem done: 00:08:52.80 (cpu), 00:00:21.57 (total) (matrix entries/row = 123)
+solving discrete problem ... 
+solving discrete problem done: 01:02:09.04 (cpu), 00:03:36.40 (total), 39.03GB (mem)
+  *** A posteriori exterior domain quality check:
+       Compartment  "X": 0.038 (thickness level=0)
+       Compartment "-X": 0.0062 (thickness level=0)
+       Compartment  "Y": 0.086 (thickness level=0)
+       Compartment "-Y": 0.11 (thickness level=0)
+       Compartment  "Z": 0.012 (thickness level=0)
+       Compartment "-Z": 0.076 (thickness level=0)
+updating inner nodes ...
+updating inner nodes done: 00:00:16.62 (cpu), 00:00:00.78 (total)
+
+
+selecting cells for refinement ...  
+selecting cells for refinement: done 00:03:15.16 (cpu)
+
+refining grid ...  
+refining grid: done 00:00:05.92 (cpu)
+
+
+*** Solving /ddnA/work/coltonb/SNOM_JCM/Interface_LineScan_3D/project.jcmp on refinement level 1 ... 
+  *** A priori interior domain wave propagation characteristics (vacuum wavelength = 6.100 um):
+  
+       Compartment "X":
+    computational domain size:  2.7 (wavelengths).
+    computational domain range wave propagation error: 0.0084
+    'one wavelength' wave propagation error: 0.0059 
+  
+       Compartment "-X":
+    computational domain size:  2.7 (wavelengths).
+    computational domain range wave propagation error: 0.0064
+    'one wavelength' wave propagation error: 0.004 
+  
+       Compartment "Y":
+    computational domain size:  2.7 (wavelengths).
+    computational domain range wave propagation error: 0.0083
+    'one wavelength' wave propagation error: 0.0054 
+  
+       Compartment "-Y":
+    computational domain size:  2.7 (wavelengths).
+    computational domain range wave propagation error: 0.0079
+    'one wavelength' wave propagation error: 0.0051 
+  
+       Compartment "Z":
+    computational domain size:  2.5 (wavelengths).
+    computational domain range wave propagation error: 0.00066
+    'one wavelength' wave propagation error: 0.00041 
+  
+       Compartment "-Z":
+    computational domain size:  3.4 (wavelengths).
+    computational domain range wave propagation error: 0.011
+    'one wavelength' wave propagation error: 0.0091 
+
+Cell percentage per Finite Element degree
+  FEM degree  Cell percentage
+-----------------------------------------
+           3            100.0
+
+assembling problem (2994966 unknowns) ...  
+assembling problem done: 00:12:29.12 (cpu), 00:00:30.78 (total) (matrix entries/row = 120)
+solving discrete problem ... 
+solving discrete problem done: 02:45:51.64 (cpu), 00:08:21.40 (total), 74.98GB (mem)
+  *** A posteriori exterior domain quality check:
+       Compartment  "X": 0.038 (thickness level=0)
+       Compartment "-X": 0.015 (thickness level=1)
+       Compartment  "Y": 0.026 (thickness level=1)
+       Compartment "-Y": 0.016 (thickness level=1)
+       Compartment  "Z": 0.41 (thickness level=0)
+       Compartment "-Z": 0.076 (thickness level=0)
+updating inner nodes ...
+updating inner nodes done: 00:00:28.02 (cpu), 00:00:01.20 (total)
+
+
+estimating field errors ...  
+estimating field errors: done 00:00:03.37 (cpu)
+
+   rel. error (FarField)  
+  level       est.error  ratio
+------------------------------
+    -/-             -/-    -/-
+      1  1.14198850e-02    -/-
+
+
+   rel. error (NearField)  
+  level       est.error  ratio
+------------------------------
+    -/-             -/-    -/-
+      1  1.64682582e-02    -/-
+
+
+*** Maximum number of refinement steps reached. *** 
+
+post process FourierTransform (output file: 'ft.jcm') ... done: 02:41:48.77 (cpu), 00:06:01.89 (total)
+post process Cartesian (output file: 'slice_yz.jcm') ... done: 00:04:29.53 (cpu), 00:04:25.17 (total)
+post process Cartesian (output file: 'slice_xz.jcm') ... done: 00:05:34.70 (cpu), 00:05:29.01 (total)
+
+######## x_interface=-100 gap=101 (2026-10-17 17:32:31)
+################################################
+Preparing 3D objects ... 
+Seedcount 4[4 ms]
+Generating 3D objects ... [2029 ms]
+Resort 3D objects and set mesh constraints ... [126 ms]
+Meshing 3D objects ... [643 ms]
+Generated surface mesh with 4867 triangles. [2803 ms]
+#############################################
+
+
+
+*** Solving /ddnA/work/coltonb/SNOM_JCM/Interface_LineScan_3D/project.jcmp on refinement level 0 ... 
+  *** A priori interior domain wave propagation characteristics (vacuum wavelength = 6.100 um):
+  
+       Compartment "X":
+    computational domain size:  2.7 (wavelengths).
+    computational domain range wave propagation error: 0.0085
+    'one wavelength' wave propagation error: 0.0059 
+  
+       Compartment "-X":
+    computational domain size:  2.7 (wavelengths).
+    computational domain range wave propagation error: 0.0095
+    'one wavelength' wave propagation error: 0.006 
+  
+       Compartment "Y":
+    computational domain size:  2.7 (wavelengths).
+    computational domain range wave propagation error: 0.0087
+    'one wavelength' wave propagation error: 0.0059 
+  
+       Compartment "-Y":
+    computational domain size:  2.7 (wavelengths).
+    computational domain range wave propagation error: 0.009
+    'one wavelength' wave propagation error: 0.0059 
+  
+       Compartment "Z":
+    computational domain size:  2.5 (wavelengths).
+    computational domain range wave propagation error: 0.0022
+    'one wavelength' wave propagation error: 0.0014 
+  
+       Compartment "-Z":
+    computational domain size:  3.4 (wavelengths).
+    computational domain range wave propagation error: 0.011
+    'one wavelength' wave propagation error: 0.0093 
+
+Cell percentage per Finite Element degree
+  FEM degree  Cell percentage
+-----------------------------------------
+           3            100.0
+
+assembling problem (1811712 unknowns) ...  
+assembling problem done: 00:08:38.46 (cpu), 00:00:21.07 (total) (matrix entries/row = 122)
+solving discrete problem ... 
+solving discrete problem done: 01:02:26.79 (cpu), 00:03:36.53 (total), 39.90GB (mem)
+  *** A posteriori exterior domain quality check:
+       Compartment  "X": 0.038 (thickness level=0)
+       Compartment "-X": 0.0061 (thickness level=0)
+       Compartment  "Y": 0.088 (thickness level=0)
+       Compartment "-Y": 0.11 (thickness level=0)
+       Compartment  "Z": 0.012 (thickness level=0)
+       Compartment "-Z": 0.073 (thickness level=0)
+updating inner nodes ...
+updating inner nodes done: 00:00:17.14 (cpu), 00:00:00.80 (total)
+
+
+selecting cells for refinement ...  
+selecting cells for refinement: done 00:03:30.71 (cpu)
+
+refining grid ...  
+refining grid: done 00:00:06.45 (cpu)
+
+
+*** Solving /ddnA/work/coltonb/SNOM_JCM/Interface_LineScan_3D/project.jcmp on refinement level 1 ... 
+  *** A priori interior domain wave propagation characteristics (vacuum wavelength = 6.100 um):
+  
+       Compartment "X":
+    computational domain size:  2.7 (wavelengths).
+    computational domain range wave propagation error: 0.0083
+    'one wavelength' wave propagation error: 0.0054 
+  
+       Compartment "-X":
+    computational domain size:  2.7 (wavelengths).
+    computational domain range wave propagation error: 0.0064
+    'one wavelength' wave propagation error: 0.004 
+  
+       Compartment "Y":
+    computational domain size:  2.7 (wavelengths).
+    computational domain range wave propagation error: 0.007
+    'one wavelength' wave propagation error: 0.0045 
+  
+       Compartment "-Y":
+    computational domain size:  2.7 (wavelengths).
+    computational domain range wave propagation error: 0.0071
+    'one wavelength' wave propagation error: 0.0046 
+  
+       Compartment "Z":
+    computational domain size:  2.5 (wavelengths).
+    computational domain range wave propagation error: 0.0006
+    'one wavelength' wave propagation error: 0.00037 
+  
+       Compartment "-Z":
+    computational domain size:  3.4 (wavelengths).
+    computational domain range wave propagation error: 0.011
+    'one wavelength' wave propagation error: 0.0091 
+
+Cell percentage per Finite Element degree
+  FEM degree  Cell percentage
+-----------------------------------------
+           3            100.0
+
+assembling problem (3202515 unknowns) ...  
+assembling problem done: 00:12:03.32 (cpu), 00:00:29.87 (total) (matrix entries/row = 121)
+solving discrete problem ... 
+solving discrete problem done: 03:04:26.87 (cpu), 00:09:08.75 (total), 80.83GB (mem)
+  *** A posteriori exterior domain quality check:
+       Compartment  "X": 0.041 (thickness level=0)
+       Compartment "-X": 0.015 (thickness level=1)
+       Compartment  "Y": 0.031 (thickness level=1)
+       Compartment "-Y": 0.029 (thickness level=1)
+       Compartment  "Z": 0.47 (thickness level=0)
+       Compartment "-Z": 0.064 (thickness level=1)
+updating inner nodes ...
+updating inner nodes done: 00:00:29.04 (cpu), 00:00:01.23 (total)
+
+
+estimating field errors ...  
+estimating field errors: done 00:00:03.58 (cpu)
+
+   rel. error (FarField)  
+  level       est.error  ratio
+------------------------------
+    -/-             -/-    -/-
+      1  1.17256881e-02    -/-
+
+
+   rel. error (NearField)  
+  level       est.error  ratio
+------------------------------
+    -/-             -/-    -/-
+      1  1.67888404e-02    -/-
+
+
+*** Maximum number of refinement steps reached. *** 
+
+post process FourierTransform (output file: 'ft.jcm') ... done: 02:50:15.59 (cpu), 00:06:20.30 (total)
+post process Cartesian (output file: 'slice_yz.jcm') ... done: 00:04:02.98 (cpu), 00:03:57.43 (total)
+post process Cartesian (output file: 'slice_xz.jcm') ... done: 00:05:19.77 (cpu), 00:05:14.36 (total)
+
+######## x_interface=-75 gap=101 (2026-10-17 18:15:48)
+################################################
+Preparing 3D objects ... 
+Seedcount 4[4 ms]
+Generating 3D objects ... [2037 ms]
+Resort 3D objects and set mesh constraints ... [127 ms]
+Meshing 3D objects ... [642 ms]
+Generated surface mesh with 4857 triangles. [2811 ms]
+#############################################
+
+
+
+*** Solving /ddnA/work/coltonb/SNOM_JCM/Interface_LineScan_3D/project.jcmp on refinement level 0 ... 
+  *** A priori interior domain wave propagation characteristics (vacuum wavelength = 6.100 um):
+  
+       Compartment "X":
+    computational domain size:  2.7 (wavelengths).
+    computational domain range wave propagation error: 0.0089
+    'one wavelength' wave propagation error: 0.0059 
+  
+       Compartment "-X":
+    computational domain size:  2.7 (wavelengths).
+    computational domain range wave propagation error: 0.0092
+    'one wavelength' wave propagation error: 0.0059 
+  
+       Compartment "Y":
+    computational domain size:  2.7 (wavelengths).
+    computational domain range wave propagation error: 0.0089
+    'one wavelength' wave propagation error: 0.0059 
+  
+       Compartment "-Y":
+    computational domain size:  2.7 (wavelengths).
+    computational domain range wave propagation error: 0.0084
+    'one wavelength' wave propagation error: 0.0059 
+  
+       Compartment "Z":
+    computational domain size:  2.5 (wavelengths).
+    computational domain range wave propagation error: 0.0022
+    'one wavelength' wave propagation error: 0.0014 
+  
+       Compartment "-Z":
+    computational domain size:  3.4 (wavelengths).
+    computational domain range wave propagation error: 0.011
+    'one wavelength' wave propagation error: 0.0092 
+
+Cell percentage per Finite Element degree
+  FEM degree  Cell percentage
+-----------------------------------------
+           3            100.0
+
+assembling problem (2021979 unknowns) ...  
+assembling problem done: 00:09:01.57 (cpu), 00:00:22.26 (total) (matrix entries/row = 116)
+solving discrete problem ... 
+solving discrete problem done: 01:06:50.89 (cpu), 00:04:02.25 (total), 43.82GB (mem)
+  *** A posteriori exterior domain quality check:
+       Compartment  "X": 0.038 (thickness level=0)
+       Compartment "-X":  0.1 (thickness level=0)
+       Compartment  "Y": 0.087 (thickness level=0)
+       Compartment "-Y": 0.11 (thickness level=0)
+       Compartment  "Z": 0.012 (thickness level=0)
+       Compartment "-Z": 0.07 (thickness level=0)
+updating inner nodes ...
+updating inner nodes done: 00:00:18.94 (cpu), 00:00:00.87 (total)
+
+
+selecting cells for refinement ...  
+selecting cells for refinement: done 00:04:29.61 (cpu)
+
+refining grid ...  
+refining grid: done 00:00:08.10 (cpu)
+
+
+*** Solving /ddnA/work/coltonb/SNOM_JCM/Interface_LineScan_3D/project.jcmp on refinement level 1 ... 
+  *** A priori interior domain wave propagation characteristics (vacuum wavelength = 6.100 um):
+  
+       Compartment "X":
+    computational domain size:  2.7 (wavelengths).
+    computational domain range wave propagation error: 0.0074
+    'one wavelength' wave propagation error: 0.0048 
+  
+       Compartment "-X":
+    computational domain size:  2.7 (wavelengths).
+    computational domain range wave propagation error: 0.0063
+    'one wavelength' wave propagation error: 0.004 
+  
+       Compartment "Y":
+    computational domain size:  2.7 (wavelengths).
+    computational domain range wave propagation error: 0.0061
+    'one wavelength' wave propagation error: 0.0039 
+  
+       Compartment "-Y":
+    computational domain size:  2.7 (wavelengths).
+    computational domain range wave propagation error: 0.0058
+    'one wavelength' wave propagation error: 0.0037 
+  
+       Compartment "Z":
+    computational domain size:  2.5 (wavelengths).
+    computational domain range wave propagation error: 0.00041
+    'one wavelength' wave propagation error: 0.00025 
+  
+       Compartment "-Z":
+    computational domain size:  3.4 (wavelengths).
+    computational domain range wave propagation error: 0.011
+    'one wavelength' wave propagation error: 0.0092 
+
+Cell percentage per Finite Element degree
+  FEM degree  Cell percentage
+-----------------------------------------
+           3            100.0
+
+assembling problem (3691416 unknowns) ...  
+assembling problem done: 00:14:32.31 (cpu), 00:00:35.96 (total) (matrix entries/row = 118)
+solving discrete problem ... 
+solving discrete problem done: 04:10:35.20 (cpu), 00:12:14.98 (total), 98.26GB (mem)
+  *** A posteriori exterior domain quality check:
+       Compartment  "X": 0.046 (thickness level=0)
+       Compartment "-X": 0.015 (thickness level=1)
+       Compartment  "Y": 0.036 (thickness level=1)
+       Compartment "-Y": 0.036 (thickness level=1)
+       Compartment  "Z": 0.0078 (thickness level=1)
+       Compartment "-Z": 0.07 (thickness level=0)
+updating inner nodes ...
+updating inner nodes done: 00:00:33.44 (cpu), 00:00:01.40 (total)
+
+
+estimating field errors ...  
+estimating field errors: done 00:00:03.68 (cpu)
+
+   rel. error (FarField)  
+  level       est.error  ratio
+------------------------------
+    -/-             -/-    -/-
+      1  1.16404887e-02    -/-
+
+
+   rel. error (NearField)  
+  level       est.error  ratio
+------------------------------
+    -/-             -/-    -/-
+      1  1.68181200e-02    -/-
+
+
+*** Maximum number of refinement steps reached. *** 
+
+post process FourierTransform (output file: 'ft.jcm') ... done: 03:13:02.18 (cpu), 00:07:10.20 (total)
+post process Cartesian (output file: 'slice_yz.jcm') ... done: 00:09:10.04 (cpu), 00:09:06.01 (total)
+post process Cartesian (output file: 'slice_xz.jcm') ... done: 00:09:05.30 (cpu), 00:09:01.33 (total)
+
+######## x_interface=-50 gap=101 (2026-10-17 18:49:20)
+################################################
+Preparing 3D objects ... 
+Seedcount 4[4 ms]
+Generating 3D objects ... [2043 ms]
+Resort 3D objects and set mesh constraints ... [125 ms]
+Meshing 3D objects ... [640 ms]
+Generated surface mesh with 4855 triangles. [2812 ms]
+#############################################
+
+
+
+*** Solving /ddnA/work/coltonb/SNOM_JCM/Interface_LineScan_3D/project.jcmp on refinement level 0 ... 
+  *** A priori interior domain wave propagation characteristics (vacuum wavelength = 6.100 um):
+  
+       Compartment "X":
+    computational domain size:  2.7 (wavelengths).
+    computational domain range wave propagation error: 0.0087
+    'one wavelength' wave propagation error: 0.0059 
+  
+       Compartment "-X":
+    computational domain size:  2.7 (wavelengths).
+    computational domain range wave propagation error: 0.0099
+    'one wavelength' wave propagation error: 0.0062 
+  
+       Compartment "Y":
+    computational domain size:  2.7 (wavelengths).
+    computational domain range wave propagation error: 0.0091
+    'one wavelength' wave propagation error: 0.0059 
+  
+       Compartment "-Y":
+    computational domain size:  2.7 (wavelengths).
+    computational domain range wave propagation error: 0.0087
+    'one wavelength' wave propagation error: 0.0059 
+  
+       Compartment "Z":
+    computational domain size:  2.5 (wavelengths).
+    computational domain range wave propagation error: 0.0022
+    'one wavelength' wave propagation error: 0.0013 
+  
+       Compartment "-Z":
+    computational domain size:  3.4 (wavelengths).
+    computational domain range wave propagation error: 0.011
+    'one wavelength' wave propagation error: 0.0092 
+
+Cell percentage per Finite Element degree
+  FEM degree  Cell percentage
+-----------------------------------------
+           3            100.0
+
+assembling problem (1841505 unknowns) ...  
+assembling problem done: 00:09:19.71 (cpu), 00:00:22.58 (total) (matrix entries/row = 121)
+solving discrete problem ... 
+solving discrete problem done: 01:06:04.94 (cpu), 00:03:46.51 (total), 41.04GB (mem)
+  *** A posteriori exterior domain quality check:
+       Compartment  "X": 0.038 (thickness level=0)
+       Compartment "-X": 0.006 (thickness level=0)
+       Compartment  "Y": 0.087 (thickness level=0)
+       Compartment "-Y": 0.11 (thickness level=0)
+       Compartment  "Z": 0.012 (thickness level=0)
+       Compartment "-Z": 0.077 (thickness level=0)
+updating inner nodes ...
+updating inner nodes done: 00:00:17.44 (cpu), 00:00:00.83 (total)
+
+
+selecting cells for refinement ...  
+selecting cells for refinement: done 00:03:55.14 (cpu)
+
+refining grid ...  
+refining grid: done 00:00:06.93 (cpu)
+
+
+*** Solving /ddnA/work/coltonb/SNOM_JCM/Interface_LineScan_3D/project.jcmp on refinement level 1 ... 
+  *** A priori interior domain wave propagation characteristics (vacuum wavelength = 6.100 um):
+  
+       Compartment "X":
+    computational domain size:  2.7 (wavelengths).
+    computational domain range wave propagation error: 0.0086
+    'one wavelength' wave propagation error: 0.0059 
+  
+       Compartment "-X":
+    computational domain size:  2.7 (wavelengths).
+    computational domain range wave propagation error: 0.0068
+    'one wavelength' wave propagation error: 0.0043 
+  
+       Compartment "Y":
+    computational domain size:  2.7 (wavelengths).
+    computational domain range wave propagation error: 0.0071
+    'one wavelength' wave propagation error: 0.0046 
+  
+       Compartment "-Y":
+    computational domain size:  2.7 (wavelengths).
+    computational domain range wave propagation error: 0.0068
+    'one wavelength' wave propagation error: 0.0042 
+  
+       Compartment "Z":
+    computational domain size:  2.5 (wavelengths).
+    computational domain range wave propagation error: 0.00062
+    'one wavelength' wave propagation error: 0.00038 
+  
+       Compartment "-Z":
+    computational domain size:  3.4 (wavelengths).
+    computational domain range wave propagation error: 0.011
+    'one wavelength' wave propagation error: 0.0092 
+
+Cell percentage per Finite Element degree
+  FEM degree  Cell percentage
+-----------------------------------------
+           3            100.0
+
+assembling problem (3174840 unknowns) ...  
+assembling problem done: 00:12:32.59 (cpu), 00:00:30.83 (total) (matrix entries/row = 119)
+solving discrete problem ... 
+solving discrete problem done: 03:10:54.09 (cpu), 00:09:27.84 (total), 83.09GB (mem)
+  *** A posteriori exterior domain quality check:
+       Compartment  "X": 0.038 (thickness level=0)
+       Compartment "-X": 0.014 (thickness level=1)
+       Compartment  "Y": 0.03 (thickness level=1)
+       Compartment "-Y": 0.031 (thickness level=1)
+       Compartment  "Z": 0.45 (thickness level=0)
+       Compartment "-Z": 0.077 (thickness level=0)
+updating inner nodes ...
+updating inner nodes done: 00:00:28.87 (cpu), 00:00:01.22 (total)
+
+
+estimating field errors ...  
+estimating field errors: done 00:00:03.52 (cpu)
+
+   rel. error (FarField)  
+  level       est.error  ratio
+------------------------------
+    -/-             -/-    -/-
+      1  1.15765950e-02    -/-
+
+
+   rel. error (NearField)  
+  level       est.error  ratio
+------------------------------
+    -/-             -/-    -/-
+      1  1.67265042e-02    -/-
+
+
+*** Maximum number of refinement steps reached. *** 
+
+post process FourierTransform (output file: 'ft.jcm') ... done: 02:49:29.89 (cpu), 00:06:18.26 (total)
+post process Cartesian (output file: 'slice_yz.jcm') ... done: 00:06:16.87 (cpu), 00:06:11.44 (total)
+post process Cartesian (output file: 'slice_xz.jcm') ... done: 00:06:20.81 (cpu), 00:06:16.09 (total)
