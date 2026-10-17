@@ -1,0 +1,12 @@
+
+######## beam_phi=0
+################################################
+Preparing 3D objects ... 
+Seedcount 4[4 ms]
+Generating 3D objects ... [2244 ms]
+Resort 3D objects and set mesh constraints ... [131 ms]
+Meshing 3D objects ... [606 ms]
+Generated surface mesh with 3428 triangles. [2987 ms]
+#############################################
+
+######## beam_phi=180
