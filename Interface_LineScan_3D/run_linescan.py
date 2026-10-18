@@ -67,8 +67,9 @@ HEIGHTS_DENSE = sorted(set(list(range(1, 11)) + list(range(12, 31, 2)) + list(ra
 
 # Interface positions (nm): 5 nm steps within +-50 nm, sparser out to +-300 nm
 X_SCAN = sorted(set([-300, -200, -150, -100, -75] + list(range(-50, 51, 5)) + [75, 100, 150, 200, 300]))
-# Oil / water-capped mesh runs: sparse, symmetric (11 positions, ~13 h for both heights)
-X_CAP = [-1000, -500, -250, -100, -50, 0, 50, 100, 250, 500, 1000]
+# Oil / water-capped mesh runs: sparse, symmetric, plus -800 / -700 / -600 to check whether the
+# -1000 anomaly (35 % more unknowns in the solver, outlier in E(5) - E(101)) is isolated
+X_CAP = [-1000, -800, -700, -600, -500, -250, -100, -50, 0, 50, 100, 250, 500, 1000]
 
 STAGES = {
     'converge':     dict(mesh='coarse_3steps', wvl=6.1, x=[0], gaps=[1, 2, 3, 4, 5, 6], save_fields=True),
