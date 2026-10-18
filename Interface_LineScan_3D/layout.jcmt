@@ -51,6 +51,7 @@ keys['oil_length'] = keys['patch_edge'] - keys['x_interface']
 keys['oil_width'] = 2*keys['patch_edge']
 keys['oil_cx'] = 0.5*(keys['patch_edge'] + keys['x_interface'])
 keys['oil_cz'] = -keys['t_SiN'] - 0.5*keys['oil_depth']
+keys['water_box'] = 2*keys['patch_edge']
 # oil_side: element size cap inside the oil Box.  With the global 1500 nm the mesher could put a
 # single ~1 um tetrahedron under the apex (x_interface = -1000: the near field in the oil was not
 # resolved).  500 nm lets the mesh grade down under the apex like the extruded water layer does
@@ -114,6 +115,22 @@ Layout3D {
       GlobalPosition = [%(oil_cx)e 0 %(oil_cz)e]
       MeshOptions {
         MaximumSideLength = %(oil_side)e
+      }
+    }
+    # water directly under the SiN as a 3D Box too, so both liquids get a capped element size
+    # (water_side; the extruded water layer alone allows max_side = 1500 nm away from the tip).
+    # Lower priority than OilBlock, which wins where they overlap.
+    Box {
+      Name = "WaterBlock"
+      DomainId = 2
+      Priority = 2
+      Port = Center
+      Length = %(water_box)e
+      Width = %(water_box)e
+      Height = %(oil_depth)e
+      GlobalPosition = [0 0 %(oil_cz)e]
+      MeshOptions {
+        MaximumSideLength = %(water_side)e
       }
     }
     SolidOfRevolution {

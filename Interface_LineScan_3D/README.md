@@ -126,7 +126,13 @@ Mesh problem found in the oil (fixed by `GEOMETRY['oil_side'] = 500`):
   ~1 um tetrahedron under the apex, so the near field in the oil was not resolved (blocky field,
   figures 8 / 10). Slices at -700 ... +1000 looked fine; the 31 points within +-300 nm have no slices.
 - Capping the oil Box at 500 nm gives 35 - 100 nm elements under the apex (like the extruded water)
-  for ~1.8x the elements; meshing time unchanged. 30 nm refinement boxes also worked but made
+  for ~1.8x the elements; meshing time unchanged.
+- The water directly under the SiN is also a 3D Box now (same +-7 um footprint, 1 um deep), capped at
+  800 nm (`GEOMETRY['water_side']`), so both liquids have a capped element size (~750 - 925 nm away from the
+  tip, 25 - 110 nm under the apex); +0 - 17 % elements on top of the oil cap.
+- The long-range drift of the raw backscatter is an interference fringe from the interface edge
+  (period lambda / (2 sin 60) = 3.5 um; s fits it at noise level). It is present on both sides;
+  for p its minimum is at x ~ -180 nm, which made the oil side look flat and the water side rise. 30 nm refinement boxes also worked but made
   meshing extremely slow and were dropped.
 
 What the Gaussian-beam runs showed so far:

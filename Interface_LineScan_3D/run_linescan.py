@@ -113,6 +113,7 @@ GEOMETRY = {
     'oil_depth': 1000,          # depth of the oil block (>> near-field reach of ~100 nm)
     'patch_margin': 1000,       # oil block stops this far from the side walls (layered exterior)
     'oil_side': 500,            # max element size in the oil block (1500 left ~1 um elements under the apex)
+    'water_side': 800,          # max element size in the water box under the SiN (same footprint / depth as the oil region)
     'cd_width': 16000,          # lateral size of the computational domain (x and y)
     'tip_radius': 75,           # apex radius: sphere tangent to the cone
     'tip_cap_height': 900,      # revolved apex section (must be < 1000, see layout.jcmt)
