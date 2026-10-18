@@ -21,6 +21,7 @@ be stopped and restarted (finished points are skipped):
     python run_linescan.py --stage linescan_h5_wide  # 5 nm scan extended to +-1 um (plateaus), saves fields
     python run_linescan.py --stage linescan_h5_oilcap    # 5 nm, -1000 ... +1000 (X_CAP) with the oil mesh cap
     python run_linescan.py --stage linescan_h101_oilcap  # 101 nm, same positions -> E(5) - E(101)
+    python run_linescan.py --stage demod_test            # height sweeps at x = -500 / 0 / +500 for demodulation
     python run_linescan.py --stage scan           # the line scan at 6.1 um
     python run_linescan.py --stage scan_5.5um     # the same line scan at 5.5 um
     python run_linescan.py --jcm [--coarse]       # only write the .jcm files for JCMcontrol
@@ -87,6 +88,9 @@ STAGES = {
     # same positions at the top of the tapping range: E(5) - E(101) cancels the height-independent
     # edge fringe (period lambda / (2 sin theta) ~ 3.5 um) -> plateaus (plot_linescan.py diff_cap)
     'linescan_h101_oilcap': dict(mesh='fine', wvl=6.1, x=X_CAP, gaps=[101]),
+    # height sweeps at three positions (oil / edge / water) for demodulation of the far field and of the
+    # local near field (slices saved); the 5 nm points come from linescan_h5_oilcap (same mesh)
+    'demod_test': dict(mesh='fine', wvl=6.1, x=[-500, 0, 500], gaps=[1, 2, 4, 8, 16, 32, 64, 101], save_fields=True),
     'zsweep':       dict(mesh='fine',   wvl=6.1, x=[0],                    gaps=HEIGHTS_DENSE),
     'coarse_check': dict(mesh='coarse', wvl=6.1, x=[0],                    gaps=HEIGHTS),
     'noise':        dict(mesh='fine',   wvl=6.1, x=[1000, 1003, 1006],     gaps=HEIGHTS),

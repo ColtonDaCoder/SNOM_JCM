@@ -10,6 +10,7 @@ Analysis of the stages written by run_linescan.py (results/<stage>.pkl).
     python plot_linescan.py linescan_h5     # raw signal vs interface position at a fixed 5 nm gap
     python plot_linescan.py diff            # E(5 nm) - E(101 nm) vs position (needs linescan_h5 + linescan_h101)
     python plot_linescan.py diff_cap        # same for the oil-capped runs linescan_h5_oilcap + linescan_h101_oilcap
+    python plot_linescan.py demod_test      # S_n of far field and local near field at x = -500 / 0 / +500
 
 Demodulation: the tip height follows z(t) = MIN_GAP + A/2 (1 + cos 2 pi t) over one period,
 E(z) is interpolated with a cubic spline through the simulated heights, and
@@ -229,6 +230,95 @@ def show_difference_cap(near='linescan_h5_oilcap', far='linescan_h101_oilcap'):
     plt.show()
 
 
+def show_demod_test(stage='demod_test', extra=('linescan_h5_oilcap',), z_local=-15.0, n_mc=400):
+    """
+    Demodulation test at x = -500 / 0 / +500 (oil / edge / water).  Two observables per height:
+      far field : backscattered E (p in / p out, s in / s out), as everywhere else
+      local     : E_z on the tip axis at z = z_local (10 nm into the liquid), from the saved slices
+    S_n (n = 1..4) from a cubic spline through E(gap) over the tapping cycle (min_gap ... min_gap + A).
+    Error bars: Monte-Carlo with the rms residual of a smooth fit to E(gap) (polynomial in log gap)
+    as the per-point noise -> shows whether oil / edge / water differ by more than the noise.
+    """
+    main = load(stage)
+    sett = main['settings']
+    recs = list(main['records'])
+    for e in extra:
+        try:
+            recs += [r for r in load(e)['records'] if r['x_interface'] in (-500, 0, 500)]
+        except FileNotFoundError:
+            pass
+    rng = np.random.default_rng(0)
+
+    def local_field(r, stage_of):
+        f = os.path.join(HERE, 'results', 'fields', f'{stage_of}_x{r["x_interface"]:+.0f}_g{r["gap"]:.0f}.npz')
+        if not os.path.exists(f):
+            return None
+        d = np.load(f)
+        X = d['slice_xz_X'][:, 0]*1e9; Z = d['slice_xz_Z'][0]*1e9
+        Ez = d['slice_xz_E'][1][np.argmin(abs(X)), :, 2]
+        return np.interp(z_local, Z, Ez.real) + 1j*np.interp(z_local, Z, Ez.imag)
+
+    data = {}
+    for r in recs:
+        st = stage if r in main['records'] else extra[0]
+        key = r['x_interface']
+        data.setdefault(key, {})[r['gap']] = {'p': r['p_in'][1], 's': r['s_in'][0], 'local': local_field(r, st)}
+
+    def demod_with_errors(gaps, E):
+        S = demodulate(gaps, E, sett, HARMONICS)
+        lg = np.log(gaps)
+        res = []
+        for part in (E.real, E.imag):
+            c = np.polyfit(lg, part, min(3, len(gaps) - 2)); res.append(part - np.polyval(c, lg))
+        sigma = np.sqrt(np.mean(np.concatenate(res)**2))
+        draws = [demodulate(gaps, E + sigma/np.sqrt(2)*(rng.standard_normal(len(E)) + 1j*rng.standard_normal(len(E))), sett, HARMONICS)
+                 for _ in range(n_mc)]
+        err = {n: np.std([abs(d[n]) for d in draws]) for n in HARMONICS}
+        perr = {n: np.std([np.angle(d[n]/S[n]) for d in draws]) for n in HARMONICS}
+        return S, err, perr, sigma
+
+    results = {}
+    for obs in ('p', 's', 'local'):
+        for x in sorted(data):
+            pts = sorted((g, v[obs]) for g, v in data[x].items() if v[obs] is not None)
+            if len(pts) < 5:
+                continue
+            g, E = np.array([p_[0] for p_ in pts], float), np.array([p_[1] for p_ in pts])
+            try:
+                results[(obs, x)] = demod_with_errors(g, E) + (len(g),)
+            except ValueError as ex:
+                print(f'{obs} x={x}: {ex}')
+    names = {'p': 'far field, p in / p out', 's': 'far field, s in / s out', 'local': f'local E_z at z = {z_local:g} nm (p)'}
+    fig, ax = plt.subplots(2, 3, figsize=(17, 8))
+    for col, obs in enumerate(('p', 's', 'local')):
+        if (obs, -500) not in results:
+            continue
+        S0, e0, pe0, sig0, n0 = results[(obs, -500)]
+        print(f'\n{names[obs]} ({n0} heights at x = -500; per-point noise estimate {sig0:.2e}, |E| ~ {abs(data[-500][1.0][obs]) if 1.0 in data[-500] else float("nan"):.3g})')
+        for k, x in enumerate((-500, 0, 500)):
+            if (obs, x) not in results:
+                continue
+            S, e, pe, sig, nh = results[(obs, x)]
+            amp = [(abs(S[n])/abs(S0[n]) - 1)*100 for n in HARMONICS[1:]]
+            amp_err = [100*np.hypot(e[n]/abs(S[n]), e0[n]/abs(S0[n]))*abs(S[n])/abs(S0[n]) for n in HARMONICS[1:]]
+            ph = [np.angle(S[n]/S0[n])*1e3 for n in HARMONICS[1:]]
+            ph_err = [np.hypot(pe[n], pe0[n])*1e3 for n in HARMONICS[1:]]
+            off = (k - 1)*0.12
+            ax[0, col].errorbar(np.array(HARMONICS[1:]) + off, amp, yerr=amp_err, fmt='o', ms=6, capsize=3, label=f'x = {x:+d}')
+            ax[1, col].errorbar(np.array(HARMONICS[1:]) + off, ph, yerr=ph_err, fmt='o', ms=6, capsize=3, label=f'x = {x:+d}')
+            for n, a_, ae, p_, pe_ in zip(HARMONICS[1:], amp, amp_err, ph, ph_err):
+                print(f'   x={x:+5d}  S{n}: |S| = {abs(S[n]):.3e} ({nh} heights), vs oil {a_:+7.2f} +- {ae:5.2f} %, phase {p_:+7.1f} +- {pe_:5.1f} mrad')
+        ax[0, col].set(title=names[obs], ylabel='|S_n| rel. x = -500 (oil) [%]', xticks=HARMONICS[1:])
+        ax[1, col].set(ylabel='phase of S_n rel. oil [mrad]', xlabel='harmonic n', xticks=HARMONICS[1:])
+        for a_ in ax[:, col]:
+            a_.axhline(0, color='grey', lw=0.8); a_.grid(alpha=0.3); a_.legend(fontsize=8)
+    fig.suptitle(f'Demodulation test (tapping {sett["tap_amplitude"]} nm from {sett["min_gap"]} nm): oil (-500) / edge (0) / water (+500); '
+                 'error bars = numerical-noise estimate')
+    plt.tight_layout()
+    fig.savefig(os.path.join(HERE, 'figures', 'fig13_demod_test.png'), dpi=110)
+    plt.show()
+
+
 def show_zsweep():
     data = load('zsweep')
     s = data['settings']
@@ -315,4 +405,4 @@ if __name__ == '__main__':
     {'zsweep': show_zsweep, 'coarse_check': show_coarse_check, 'noise': show_noise,
      'test': show_test, 'converge': show_converge,
      'linescan_h5': lambda: show_constant_height('linescan_h5'),
-     'diff': show_difference, 'diff_cap': show_difference_cap}.get(stage, lambda: show_scan(stage))()
+     'diff': show_difference, 'diff_cap': show_difference_cap, 'demod_test': show_demod_test}.get(stage, lambda: show_scan(stage))()
