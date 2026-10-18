@@ -9,6 +9,7 @@ Analysis of the stages written by run_linescan.py (results/<stage>.pkl).
     python plot_linescan.py converge        # gaps 1-6 with more refinement steps vs zsweep: is the noise gone?
     python plot_linescan.py linescan_h5     # raw signal vs interface position at a fixed 5 nm gap
     python plot_linescan.py diff            # E(5 nm) - E(101 nm) vs position (needs linescan_h5 + linescan_h101)
+    python plot_linescan.py diff_cap        # same for the oil-capped runs linescan_h5_oilcap + linescan_h101_oilcap
 
 Demodulation: the tip height follows z(t) = MIN_GAP + A/2 (1 + cos 2 pi t) over one period,
 E(z) is interpolated with a cubic spline through the simulated heights, and
@@ -185,6 +186,49 @@ def show_difference(near='linescan_h5', far='linescan_h101'):
     plt.show()
 
 
+def show_difference_cap(near='linescan_h5_oilcap', far='linescan_h101_oilcap'):
+    """
+    E(5 nm) - E(101 nm) on the oil-capped mesh, points only (no fits drawn).  Printed: plateau levels
+    (mean +- standard error for x <= -300 and x >= +300), their difference, and a step fit
+    (constant + logistic, amplitude and phase) for the centre and 10-90 % width.
+    """
+    from scipy.optimize import curve_fit
+    dn, df = load(near), load(far)
+    fig, ax = plt.subplots(2, 2, figsize=(13, 7.5), sharex=True)
+    for col, (pol, comp, label, c) in enumerate([('p_in', 1, 'p in / p out', '#0072B2'), ('s_in', 0, 's in / s out', '#D55E00')]):
+        En = {r['x_interface']: r[pol][comp] for r in dn['records']}
+        Ef = {r['x_interface']: r[pol][comp] for r in df['records']}
+        xs = np.array(sorted(set(En) & set(Ef)))
+        if len(xs) < 3:
+            print(f'{label}: only {len(xs)} positions with both heights so far'); continue
+        D = np.array([En[x] - Ef[x] for x in xs])
+        oil, water = xs <= -300, xs >= 300
+        ref = D[oil].mean() if oil.any() else D[0]
+        print(f'{label}: {len(xs)} positions with both heights; |E(5) - E(101)| = {abs(ref):.3e} on the oil side')
+        for row, (y, unit, name) in enumerate([((np.abs(D)/abs(ref) - 1)*100, '%', 'amplitude'), (np.angle(D/ref)*1e3, 'mrad', 'phase')]):
+            a_ = ax[row, col]
+            a_.plot(xs, y, 'o', color=c, ms=5)
+            a_.axvline(0, color='grey', ls=':'); a_.grid(alpha=0.3)
+            a_.set_ylabel(f'{name} of E(5) - E(101), rel. oil side [{unit}]')
+            if oil.sum() > 1 and water.sum() > 1:
+                mo, mw = y[oil].mean(), y[water].mean()
+                so, sw = y[oil].std(ddof=1)/np.sqrt(oil.sum()), y[water].std(ddof=1)/np.sqrt(water.sum())
+                print(f'   {name}: oil plateau {mo:+.2f} +- {so:.2f} {unit} ({oil.sum()} pts), water plateau {mw:+.2f} +- {sw:.2f} {unit} '
+                      f'({water.sum()} pts), step {mw - mo:+.2f} +- {np.hypot(so, sw):.2f} {unit}')
+                try:
+                    st = lambda x, a, b, x0, w: a + b/(1 + np.exp(-(x - x0)/w))
+                    p, cov = curve_fit(st, xs, y, p0=[mo, mw - mo, 0, 50], bounds=([-np.inf, -np.inf, -300, 10], [np.inf, np.inf, 300, 400]))
+                    e = np.sqrt(np.abs(np.diag(cov)))
+                    print(f'   {name}: step fit centre {p[2]:+.0f} +- {e[2]:.0f} nm, 10-90 % width {2*np.log(9)*p[3]:.0f} +- {2*np.log(9)*e[3]:.0f} nm')
+                except Exception as ex:
+                    print(f'   {name}: step fit failed ({ex})')
+        ax[0, col].set_title(f'{label}: E(5 nm) - E(101 nm)')
+    for a_ in ax[1]:
+        a_.set_xlabel('x_interface / nm   (tip over oil  <-  0  ->  tip over water)')
+    plt.tight_layout()
+    plt.show()
+
+
 def show_zsweep():
     data = load('zsweep')
     s = data['settings']
@@ -271,4 +315,4 @@ if __name__ == '__main__':
     {'zsweep': show_zsweep, 'coarse_check': show_coarse_check, 'noise': show_noise,
      'test': show_test, 'converge': show_converge,
      'linescan_h5': lambda: show_constant_height('linescan_h5'),
-     'diff': show_difference}.get(stage, lambda: show_scan(stage))()
+     'diff': show_difference, 'diff_cap': show_difference_cap}.get(stage, lambda: show_scan(stage))()

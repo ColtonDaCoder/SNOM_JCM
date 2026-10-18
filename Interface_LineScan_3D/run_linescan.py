@@ -19,7 +19,8 @@ be stopped and restarted (finished points are skipped):
     python run_linescan.py --stage linescan_h5    # raw signal across the interface at a fixed 5 nm gap
     python run_linescan.py --stage linescan_h101  # same positions at 101 nm; with linescan_h5 -> E(5) - E(101)
     python run_linescan.py --stage linescan_h5_wide  # 5 nm scan extended to +-1 um (plateaus), saves fields
-    python run_linescan.py --stage linescan_h5_oilcap  # oil side -1000 ... 0 (100 nm steps) with the oil mesh cap
+    python run_linescan.py --stage linescan_h5_oilcap    # 5 nm, -1000 ... +1000 (X_CAP) with the oil mesh cap
+    python run_linescan.py --stage linescan_h101_oilcap  # 101 nm, same positions -> E(5) - E(101)
     python run_linescan.py --stage scan           # the line scan at 6.1 um
     python run_linescan.py --stage scan_5.5um     # the same line scan at 5.5 um
     python run_linescan.py --jcm [--coarse]       # only write the .jcm files for JCMcontrol
@@ -63,6 +64,8 @@ HEIGHTS_DENSE = sorted(set(list(range(1, 11)) + list(range(12, 31, 2)) + list(ra
 
 # Interface positions (nm): 5 nm steps within +-50 nm, sparser out to +-300 nm
 X_SCAN = sorted(set([-300, -200, -150, -100, -75] + list(range(-50, 51, 5)) + [75, 100, 150, 200, 300]))
+# Oil-capped mesh runs: -1000 ... +1000 in 100 nm steps plus +-50, +-150 in the transition
+X_CAP = sorted(set(list(range(-1000, 1001, 100)) + [-150, -50, 50, 150]))
 
 STAGES = {
     'converge':     dict(mesh='coarse_3steps', wvl=6.1, x=[0], gaps=[1, 2, 3, 4, 5, 6], save_fields=True),
@@ -80,7 +83,10 @@ STAGES = {
                              gaps=[5], save_fields=True),
     # oil side re-solved with the 500 nm element cap in the oil block (GEOMETRY['oil_side']); before it,
     # x_interface = -1000 had a ~1 um tetrahedron in the oil under the apex
-    'linescan_h5_oilcap': dict(mesh='fine', wvl=6.1, x=list(range(-1000, 1, 100)), gaps=[5], save_fields=True),
+    'linescan_h5_oilcap': dict(mesh='fine', wvl=6.1, x=X_CAP, gaps=[5], save_fields=True),
+    # same positions at the top of the tapping range: E(5) - E(101) cancels the height-independent
+    # edge fringe (period lambda / (2 sin theta) ~ 3.5 um) -> plateaus (plot_linescan.py diff_cap)
+    'linescan_h101_oilcap': dict(mesh='fine', wvl=6.1, x=X_CAP, gaps=[101]),
     'zsweep':       dict(mesh='fine',   wvl=6.1, x=[0],                    gaps=HEIGHTS_DENSE),
     'coarse_check': dict(mesh='coarse', wvl=6.1, x=[0],                    gaps=HEIGHTS),
     'noise':        dict(mesh='fine',   wvl=6.1, x=[1000, 1003, 1006],     gaps=HEIGHTS),
