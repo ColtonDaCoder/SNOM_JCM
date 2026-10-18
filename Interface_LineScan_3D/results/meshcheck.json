@@ -1,0 +1,1912 @@
+{
+ "settings": {
+  "geometry": {
+   "t_SiN": 5,
+   "liquid_depth": 2000,
+   "oil_depth": 1000,
+   "patch_margin": 1000,
+   "oil_side": 500,
+   "water_side": 800,
+   "cd_width": 16000,
+   "tip_radius": 75,
+   "tip_cap_height": 900,
+   "tip_half_angle": 30.14,
+   "tip_length": 12940,
+   "air_above_tip": 500,
+   "max_side": 1500,
+   "tip_side": 1500,
+   "max_steps": 1
+  },
+  "host": "smic001",
+  "slurm_job": "646062",
+  "jcmroot": "/home/coltonb/software/JCMsuite_6_0_10"
+ },
+ "meshes": {
+  "x-1000_g5": {
+   "counts": {
+    "NBricks": 164,
+    "NPoints": 14116,
+    "NPrisms": 2510,
+    "NPyramids": 0,
+    "NTetrahedrons": 72643
+   },
+   "volume_um3": {
+    "1": 2670.916721912018,
+    "2": 400.38400000000007,
+    "3": 772.1197580879984,
+    "7": 1.280320000000025,
+    "9": 111.9999999999997
+   },
+   "element_under_apex": {
+    "apex_z-20": {
+     "longest_edge_nm": 35.76453042685825,
+     "domain": 9
+    },
+    "apex_z-50": {
+     "longest_edge_nm": 53.00588298160022,
+     "domain": 9
+    },
+    "apex_z-100": {
+     "longest_edge_nm": 100.83119555232706,
+     "domain": 9
+    },
+    "x+60_z-20": {
+     "longest_edge_nm": 37.67942549663694,
+     "domain": 9
+    },
+    "x-60_z-20": {
+     "longest_edge_nm": 79.04718744533098,
+     "domain": 9
+    },
+    "y+60_z-20": {
+     "longest_edge_nm": 52.10136600576963,
+     "domain": 9
+    }
+   },
+   "liquid_tets_within_200nm_of_apex": 657,
+   "mesh_time_s": 16.91169238090515,
+   "x_interface": -1000,
+   "gap": 5
+  },
+  "x-950_g5": {
+   "counts": {
+    "NBricks": 164,
+    "NPoints": 13836,
+    "NPrisms": 2498,
+    "NPyramids": 0,
+    "NTetrahedrons": 70938
+   },
+   "volume_um3": {
+    "1": 2670.916721912009,
+    "2": 401.0839999999987,
+    "3": 772.1197580879987,
+    "7": 1.280320000000025,
+    "9": 111.3000000000001
+   },
+   "element_under_apex": {
+    "apex_z-20": {
+     "longest_edge_nm": 32.81178980879217,
+     "domain": 9
+    },
+    "apex_z-50": {
+     "longest_edge_nm": 56.36037059517043,
+     "domain": 9
+    },
+    "apex_z-100": {
+     "longest_edge_nm": 94.16395856944158,
+     "domain": 9
+    },
+    "x+60_z-20": {
+     "longest_edge_nm": 29.52309473773136,
+     "domain": 9
+    },
+    "x-60_z-20": {
+     "longest_edge_nm": 66.5715971824414,
+     "domain": 9
+    },
+    "y+60_z-20": {
+     "longest_edge_nm": 38.04232213759606,
+     "domain": 9
+    }
+   },
+   "liquid_tets_within_200nm_of_apex": 878,
+   "mesh_time_s": 16.978744983673096,
+   "x_interface": -950,
+   "gap": 5
+  },
+  "x-900_g5": {
+   "counts": {
+    "NBricks": 164,
+    "NPoints": 13711,
+    "NPrisms": 2496,
+    "NPyramids": 0,
+    "NTetrahedrons": 70247
+   },
+   "volume_um3": {
+    "1": 2670.916721911993,
+    "2": 401.7839999999993,
+    "3": 772.1197580879998,
+    "7": 1.280320000000023,
+    "9": 110.59999999999982
+   },
+   "element_under_apex": {
+    "apex_z-20": {
+     "longest_edge_nm": 30.99083017116162,
+     "domain": 9
+    },
+    "apex_z-50": {
+     "longest_edge_nm": 82.88224981487903,
+     "domain": 9
+    },
+    "apex_z-100": {
+     "longest_edge_nm": 118.54472791700069,
+     "domain": 9
+    },
+    "x+60_z-20": {
+     "longest_edge_nm": 40.94643334088692,
+     "domain": 9
+    },
+    "x-60_z-20": {
+     "longest_edge_nm": 59.36464769893006,
+     "domain": 9
+    },
+    "y+60_z-20": {
+     "longest_edge_nm": 67.51521428806716,
+     "domain": 9
+    }
+   },
+   "liquid_tets_within_200nm_of_apex": 575,
+   "mesh_time_s": 16.770695447921753,
+   "x_interface": -900,
+   "gap": 5
+  },
+  "x-850_g5": {
+   "counts": {
+    "NBricks": 164,
+    "NPoints": 14270,
+    "NPrisms": 2494,
+    "NPyramids": 0,
+    "NTetrahedrons": 73684
+   },
+   "volume_um3": {
+    "1": 2670.9167219120204,
+    "2": 402.48400000000044,
+    "3": 772.1197580879991,
+    "7": 1.2803200000000223,
+    "9": 109.9000000000002
+   },
+   "element_under_apex": {
+    "apex_z-20": {
+     "longest_edge_nm": 29.837608534025676,
+     "domain": 9
+    },
+    "apex_z-50": {
+     "longest_edge_nm": 54.244800299343694,
+     "domain": 9
+    },
+    "apex_z-100": {
+     "longest_edge_nm": 112.77813052192485,
+     "domain": 9
+    },
+    "x+60_z-20": {
+     "longest_edge_nm": 45.975551853498715,
+     "domain": 9
+    },
+    "x-60_z-20": {
+     "longest_edge_nm": 53.35543051788175,
+     "domain": 9
+    },
+    "y+60_z-20": {
+     "longest_edge_nm": 39.00758903322004,
+     "domain": 9
+    }
+   },
+   "liquid_tets_within_200nm_of_apex": 670,
+   "mesh_time_s": 17.129095792770386,
+   "x_interface": -850,
+   "gap": 5
+  },
+  "x-800_g5": {
+   "counts": {
+    "NBricks": 164,
+    "NPoints": 14227,
+    "NPrisms": 2502,
+    "NPyramids": 0,
+    "NTetrahedrons": 73337
+   },
+   "volume_um3": {
+    "1": 2670.916721912023,
+    "2": 403.1840000000001,
+    "3": 772.1197580879962,
+    "7": 1.2803200000000279,
+    "9": 109.19999999999953
+   },
+   "element_under_apex": {
+    "apex_z-20": {
+     "longest_edge_nm": 31.610185056519096,
+     "domain": 9
+    },
+    "apex_z-50": {
+     "longest_edge_nm": 50.98991009362123,
+     "domain": 9
+    },
+    "apex_z-100": {
+     "longest_edge_nm": 133.84032137006307,
+     "domain": 9
+    },
+    "x+60_z-20": {
+     "longest_edge_nm": 35.155564181375134,
+     "domain": 9
+    },
+    "x-60_z-20": {
+     "longest_edge_nm": 61.005259056804256,
+     "domain": 9
+    },
+    "y+60_z-20": {
+     "longest_edge_nm": 55.218726265241685,
+     "domain": 9
+    }
+   },
+   "liquid_tets_within_200nm_of_apex": 667,
+   "mesh_time_s": 17.592986345291138,
+   "x_interface": -800,
+   "gap": 5
+  },
+  "x-750_g5": {
+   "counts": {
+    "NBricks": 164,
+    "NPoints": 14890,
+    "NPrisms": 2492,
+    "NPyramids": 0,
+    "NTetrahedrons": 77281
+   },
+   "volume_um3": {
+    "1": 2670.9167219120377,
+    "2": 403.8840000000006,
+    "3": 772.1197580879958,
+    "7": 1.2803200000000234,
+    "9": 108.49999999999984
+   },
+   "element_under_apex": {
+    "apex_z-20": {
+     "longest_edge_nm": 35.838737025391644,
+     "domain": 9
+    },
+    "apex_z-50": {
+     "longest_edge_nm": 43.218881774360334,
+     "domain": 9
+    },
+    "apex_z-100": {
+     "longest_edge_nm": 148.27137005080922,
+     "domain": 9
+    },
+    "x+60_z-20": {
+     "longest_edge_nm": 48.701728595641555,
+     "domain": 9
+    },
+    "x-60_z-20": {
+     "longest_edge_nm": 64.67766977065257,
+     "domain": 9
+    },
+    "y+60_z-20": {
+     "longest_edge_nm": 38.211936849466156,
+     "domain": 9
+    }
+   },
+   "liquid_tets_within_200nm_of_apex": 525,
+   "mesh_time_s": 17.426807403564453,
+   "x_interface": -750,
+   "gap": 5
+  },
+  "x-700_g5": {
+   "counts": {
+    "NBricks": 164,
+    "NPoints": 13943,
+    "NPrisms": 2500,
+    "NPyramids": 0,
+    "NTetrahedrons": 71580
+   },
+   "volume_um3": {
+    "1": 2670.9167219119927,
+    "2": 404.58400000000256,
+    "3": 772.1197580879988,
+    "7": 1.280320000000024,
+    "9": 107.79999999999987
+   },
+   "element_under_apex": {
+    "apex_z-20": {
+     "longest_edge_nm": 30.669144734409628,
+     "domain": 9
+    },
+    "apex_z-50": {
+     "longest_edge_nm": 47.02061053841315,
+     "domain": 9
+    },
+    "apex_z-100": {
+     "longest_edge_nm": 102.24315520216895,
+     "domain": 9
+    },
+    "x+60_z-20": {
+     "longest_edge_nm": 51.60606476468463,
+     "domain": 9
+    },
+    "x-60_z-20": {
+     "longest_edge_nm": 54.790332058472444,
+     "domain": 9
+    },
+    "y+60_z-20": {
+     "longest_edge_nm": 56.935744402982834,
+     "domain": 9
+    }
+   },
+   "liquid_tets_within_200nm_of_apex": 459,
+   "mesh_time_s": 16.34619116783142,
+   "x_interface": -700,
+   "gap": 5
+  },
+  "x-650_g5": {
+   "counts": {
+    "NBricks": 164,
+    "NPoints": 14517,
+    "NPrisms": 2488,
+    "NPyramids": 0,
+    "NTetrahedrons": 75037
+   },
+   "volume_um3": {
+    "1": 2670.9167219120136,
+    "2": 405.2839999999979,
+    "3": 772.1197580879984,
+    "7": 1.2803200000000208,
+    "9": 107.10000000000021
+   },
+   "element_under_apex": {
+    "apex_z-20": {
+     "longest_edge_nm": 29.232791718537555,
+     "domain": 9
+    },
+    "apex_z-50": {
+     "longest_edge_nm": 40.620091067763646,
+     "domain": 9
+    },
+    "apex_z-100": {
+     "longest_edge_nm": 95.02366001686192,
+     "domain": 9
+    },
+    "x+60_z-20": {
+     "longest_edge_nm": 35.748283817960015,
+     "domain": 9
+    },
+    "x-60_z-20": {
+     "longest_edge_nm": 41.91933221397015,
+     "domain": 9
+    },
+    "y+60_z-20": {
+     "longest_edge_nm": 31.100278288492326,
+     "domain": 9
+    }
+   },
+   "liquid_tets_within_200nm_of_apex": 838,
+   "mesh_time_s": 17.104555130004883,
+   "x_interface": -650,
+   "gap": 5
+  },
+  "x-600_g5": {
+   "counts": {
+    "NBricks": 164,
+    "NPoints": 14228,
+    "NPrisms": 2496,
+    "NPyramids": 0,
+    "NTetrahedrons": 73220
+   },
+   "volume_um3": {
+    "1": 2670.91672191199,
+    "2": 405.9839999999999,
+    "3": 772.119758087996,
+    "7": 1.280320000000024,
+    "9": 106.39999999999964
+   },
+   "element_under_apex": {
+    "apex_z-20": {
+     "longest_edge_nm": 27.817643389924147,
+     "domain": 9
+    },
+    "apex_z-50": {
+     "longest_edge_nm": 66.21518879227402,
+     "domain": 9
+    },
+    "apex_z-100": {
+     "longest_edge_nm": 94.0589895109825,
+     "domain": 9
+    },
+    "x+60_z-20": {
+     "longest_edge_nm": 42.00528728873125,
+     "domain": 9
+    },
+    "x-60_z-20": {
+     "longest_edge_nm": 29.779376548775538,
+     "domain": 9
+    },
+    "y+60_z-20": {
+     "longest_edge_nm": 46.97961286830591,
+     "domain": 9
+    }
+   },
+   "liquid_tets_within_200nm_of_apex": 762,
+   "mesh_time_s": 16.855453729629517,
+   "x_interface": -600,
+   "gap": 5
+  },
+  "x-550_g5": {
+   "counts": {
+    "NBricks": 164,
+    "NPoints": 14902,
+    "NPrisms": 2486,
+    "NPyramids": 0,
+    "NTetrahedrons": 77467
+   },
+   "volume_um3": {
+    "1": 2670.9167219120086,
+    "2": 406.6840000000003,
+    "3": 772.1197580879957,
+    "7": 1.2803200000000237,
+    "9": 105.7000000000005
+   },
+   "element_under_apex": {
+    "apex_z-20": {
+     "longest_edge_nm": 27.630422701026703,
+     "domain": 9
+    },
+    "apex_z-50": {
+     "longest_edge_nm": 48.08510389981093,
+     "domain": 9
+    },
+    "apex_z-100": {
+     "longest_edge_nm": 114.69814848552676,
+     "domain": 9
+    },
+    "x+60_z-20": {
+     "longest_edge_nm": 41.932127487638155,
+     "domain": 9
+    },
+    "x-60_z-20": {
+     "longest_edge_nm": 33.88999351786847,
+     "domain": 9
+    },
+    "y+60_z-20": {
+     "longest_edge_nm": 50.42728905749042,
+     "domain": 9
+    }
+   },
+   "liquid_tets_within_200nm_of_apex": 728,
+   "mesh_time_s": 17.26025390625,
+   "x_interface": -550,
+   "gap": 5
+  },
+  "x-500_g5": {
+   "counts": {
+    "NBricks": 164,
+    "NPoints": 13988,
+    "NPrisms": 2498,
+    "NPyramids": 0,
+    "NTetrahedrons": 71829
+   },
+   "volume_um3": {
+    "1": 2670.9166008332973,
+    "2": 407.3840000000002,
+    "3": 772.1198791667036,
+    "7": 1.2803200000000265,
+    "9": 104.99999999999916
+   },
+   "element_under_apex": {
+    "apex_z-20": {
+     "longest_edge_nm": 56.28057407873191,
+     "domain": 9
+    },
+    "apex_z-50": {
+     "longest_edge_nm": 60.306616978995834,
+     "domain": 9
+    },
+    "apex_z-100": {
+     "longest_edge_nm": 142.3369197237679,
+     "domain": 9
+    },
+    "x+60_z-20": {
+     "longest_edge_nm": 39.92069591676532,
+     "domain": 9
+    },
+    "x-60_z-20": {
+     "longest_edge_nm": 71.66222925132317,
+     "domain": 9
+    },
+    "y+60_z-20": {
+     "longest_edge_nm": 56.084039396326574,
+     "domain": 9
+    }
+   },
+   "liquid_tets_within_200nm_of_apex": 350,
+   "mesh_time_s": 16.264708518981934,
+   "x_interface": -500,
+   "gap": 5
+  },
+  "x-450_g5": {
+   "counts": {
+    "NBricks": 164,
+    "NPoints": 14766,
+    "NPrisms": 2494,
+    "NPyramids": 0,
+    "NTetrahedrons": 76566
+   },
+   "volume_um3": {
+    "1": 2670.916600833295,
+    "2": 408.0840000000024,
+    "3": 772.1198791667044,
+    "7": 1.2803200000000252,
+    "9": 104.29999999999994
+   },
+   "element_under_apex": {
+    "apex_z-20": {
+     "longest_edge_nm": 27.71786117165989,
+     "domain": 9
+    },
+    "apex_z-50": {
+     "longest_edge_nm": 67.72236506715845,
+     "domain": 9
+    },
+    "apex_z-100": {
+     "longest_edge_nm": 149.45049892996974,
+     "domain": 9
+    },
+    "x+60_z-20": {
+     "longest_edge_nm": 42.96733402939773,
+     "domain": 9
+    },
+    "x-60_z-20": {
+     "longest_edge_nm": 74.99702716416046,
+     "domain": 9
+    },
+    "y+60_z-20": {
+     "longest_edge_nm": 79.36823408150487,
+     "domain": 9
+    }
+   },
+   "liquid_tets_within_200nm_of_apex": 446,
+   "mesh_time_s": 17.382415533065796,
+   "x_interface": -450,
+   "gap": 5
+  },
+  "x-400_g5": {
+   "counts": {
+    "NBricks": 164,
+    "NPoints": 14516,
+    "NPrisms": 2484,
+    "NPyramids": 0,
+    "NTetrahedrons": 75145
+   },
+   "volume_um3": {
+    "1": 2670.9166008333113,
+    "2": 408.78400000000033,
+    "3": 772.1198791667011,
+    "7": 1.280320000000021,
+    "9": 103.59999999999985
+   },
+   "element_under_apex": {
+    "apex_z-20": {
+     "longest_edge_nm": 22.977328044989,
+     "domain": 9
+    },
+    "apex_z-50": {
+     "longest_edge_nm": 86.40755880842347,
+     "domain": 9
+    },
+    "apex_z-100": {
+     "longest_edge_nm": 102.17308019010562,
+     "domain": 9
+    },
+    "x+60_z-20": {
+     "longest_edge_nm": 50.515520272495195,
+     "domain": 9
+    },
+    "x-60_z-20": {
+     "longest_edge_nm": 37.1593013806099,
+     "domain": 9
+    },
+    "y+60_z-20": {
+     "longest_edge_nm": 56.77597033802312,
+     "domain": 9
+    }
+   },
+   "liquid_tets_within_200nm_of_apex": 607,
+   "mesh_time_s": 17.457003355026245,
+   "x_interface": -400,
+   "gap": 5
+  },
+  "x-350_g5": {
+   "counts": {
+    "NBricks": 164,
+    "NPoints": 14688,
+    "NPrisms": 2478,
+    "NPyramids": 0,
+    "NTetrahedrons": 76169
+   },
+   "volume_um3": {
+    "1": 2670.9166008333013,
+    "2": 409.48400000000106,
+    "3": 772.119879166705,
+    "7": 1.280320000000025,
+    "9": 102.89999999999912
+   },
+   "element_under_apex": {
+    "apex_z-20": {
+     "longest_edge_nm": 29.358218369690153,
+     "domain": 9
+    },
+    "apex_z-50": {
+     "longest_edge_nm": 46.70338664981778,
+     "domain": 9
+    },
+    "apex_z-100": {
+     "longest_edge_nm": 116.48751810148318,
+     "domain": 9
+    },
+    "x+60_z-20": {
+     "longest_edge_nm": 28.018576016281255,
+     "domain": 9
+    },
+    "x-60_z-20": {
+     "longest_edge_nm": 58.47349654105596,
+     "domain": 9
+    },
+    "y+60_z-20": {
+     "longest_edge_nm": 57.19764187607632,
+     "domain": 9
+    }
+   },
+   "liquid_tets_within_200nm_of_apex": 855,
+   "mesh_time_s": 17.310667037963867,
+   "x_interface": -350,
+   "gap": 5
+  },
+  "x-300_g5": {
+   "counts": {
+    "NBricks": 164,
+    "NPoints": 14274,
+    "NPrisms": 2510,
+    "NPyramids": 0,
+    "NTetrahedrons": 73631
+   },
+   "volume_um3": {
+    "1": 2670.9166008333,
+    "2": 410.18399999999934,
+    "3": 772.1198791667024,
+    "7": 1.2803200000000288,
+    "9": 102.20000000000027
+   },
+   "element_under_apex": {
+    "apex_z-20": {
+     "longest_edge_nm": 32.44432586546775,
+     "domain": 9
+    },
+    "apex_z-50": {
+     "longest_edge_nm": 63.00995519927184,
+     "domain": 9
+    },
+    "apex_z-100": {
+     "longest_edge_nm": 99.98014448778667,
+     "domain": 9
+    },
+    "x+60_z-20": {
+     "longest_edge_nm": 52.553645918253636,
+     "domain": 9
+    },
+    "x-60_z-20": {
+     "longest_edge_nm": 86.46312175633985,
+     "domain": 9
+    },
+    "y+60_z-20": {
+     "longest_edge_nm": 61.44894919905652,
+     "domain": 9
+    }
+   },
+   "liquid_tets_within_200nm_of_apex": 469,
+   "mesh_time_s": 16.40788722038269,
+   "x_interface": -300,
+   "gap": 5
+  },
+  "x-250_g5": {
+   "counts": {
+    "NBricks": 164,
+    "NPoints": 13695,
+    "NPrisms": 2482,
+    "NPyramids": 0,
+    "NTetrahedrons": 70055
+   },
+   "volume_um3": {
+    "1": 2670.9166008333154,
+    "2": 410.88400000000104,
+    "3": 772.1198791667035,
+    "7": 1.2803200000000243,
+    "9": 101.50000000000048
+   },
+   "element_under_apex": {
+    "apex_z-20": {
+     "longest_edge_nm": 36.70362869026846,
+     "domain": 9
+    },
+    "apex_z-50": {
+     "longest_edge_nm": 45.14462742185832,
+     "domain": 9
+    },
+    "apex_z-100": {
+     "longest_edge_nm": 113.6368449876484,
+     "domain": 9
+    },
+    "x+60_z-20": {
+     "longest_edge_nm": 34.26922915919483,
+     "domain": 9
+    },
+    "x-60_z-20": {
+     "longest_edge_nm": 80.35565804028028,
+     "domain": 9
+    },
+    "y+60_z-20": {
+     "longest_edge_nm": 54.486625621012976,
+     "domain": 9
+    }
+   },
+   "liquid_tets_within_200nm_of_apex": 617,
+   "mesh_time_s": 16.259788036346436,
+   "x_interface": -250,
+   "gap": 5
+  },
+  "x-200_g5": {
+   "counts": {
+    "NBricks": 164,
+    "NPoints": 15332,
+    "NPrisms": 2486,
+    "NPyramids": 0,
+    "NTetrahedrons": 79873
+   },
+   "volume_um3": {
+    "1": 2670.916600833309,
+    "2": 411.58400000000006,
+    "3": 772.1198791667019,
+    "7": 1.2803200000000223,
+    "9": 100.80000000000078
+   },
+   "element_under_apex": {
+    "apex_z-20": {
+     "longest_edge_nm": 27.600648538221662,
+     "domain": 9
+    },
+    "apex_z-50": {
+     "longest_edge_nm": 72.02457785785053,
+     "domain": 9
+    },
+    "apex_z-100": {
+     "longest_edge_nm": 93.10252448083277,
+     "domain": 9
+    },
+    "x+60_z-20": {
+     "longest_edge_nm": 41.71525249832739,
+     "domain": 9
+    },
+    "x-60_z-20": {
+     "longest_edge_nm": 50.56243804111321,
+     "domain": 9
+    },
+    "y+60_z-20": {
+     "longest_edge_nm": 49.39966209075345,
+     "domain": 9
+    }
+   },
+   "liquid_tets_within_200nm_of_apex": 577,
+   "mesh_time_s": 17.360965728759766,
+   "x_interface": -200,
+   "gap": 5
+  },
+  "x-150_g5": {
+   "counts": {
+    "NBricks": 164,
+    "NPoints": 14042,
+    "NPrisms": 2476,
+    "NPyramids": 0,
+    "NTetrahedrons": 72286
+   },
+   "volume_um3": {
+    "1": 2670.916600833296,
+    "2": 412.2840000000002,
+    "3": 772.119879166704,
+    "7": 1.2803200000000208,
+    "9": 100.10000000000059
+   },
+   "element_under_apex": {
+    "apex_z-20": {
+     "longest_edge_nm": 31.84887081275889,
+     "domain": 9
+    },
+    "apex_z-50": {
+     "longest_edge_nm": 35.390905267137555,
+     "domain": 9
+    },
+    "apex_z-100": {
+     "longest_edge_nm": 84.93609763971038,
+     "domain": 9
+    },
+    "x+60_z-20": {
+     "longest_edge_nm": 36.036267917625416,
+     "domain": 9
+    },
+    "x-60_z-20": {
+     "longest_edge_nm": 49.963404747212294,
+     "domain": 9
+    },
+    "y+60_z-20": {
+     "longest_edge_nm": 41.90872833252935,
+     "domain": 9
+    }
+   },
+   "liquid_tets_within_200nm_of_apex": 819,
+   "mesh_time_s": 16.579094171524048,
+   "x_interface": -150,
+   "gap": 5
+  },
+  "x-100_g5": {
+   "counts": {
+    "NBricks": 164,
+    "NPoints": 13915,
+    "NPrisms": 2486,
+    "NPyramids": 0,
+    "NTetrahedrons": 71507
+   },
+   "volume_um3": {
+    "1": 2670.916600833326,
+    "2": 412.98400000000066,
+    "3": 772.1198791667047,
+    "7": 1.280320000000021,
+    "9": 99.40000000000012
+   },
+   "element_under_apex": {
+    "apex_z-20": {
+     "longest_edge_nm": 23.28348731682144,
+     "domain": 9
+    },
+    "apex_z-50": {
+     "longest_edge_nm": 59.43126520584228,
+     "domain": 9
+    },
+    "apex_z-100": {
+     "longest_edge_nm": 85.69624600712484,
+     "domain": 9
+    },
+    "x+60_z-20": {
+     "longest_edge_nm": 47.67941928386667,
+     "domain": 9
+    },
+    "x-60_z-20": {
+     "longest_edge_nm": 73.50971233095461,
+     "domain": 9
+    },
+    "y+60_z-20": {
+     "longest_edge_nm": 42.96118551959606,
+     "domain": 9
+    }
+   },
+   "liquid_tets_within_200nm_of_apex": 819,
+   "mesh_time_s": 16.614574193954468,
+   "x_interface": -100,
+   "gap": 5
+  },
+  "x-50_g5": {
+   "counts": {
+    "NBricks": 164,
+    "NPoints": 15006,
+    "NPrisms": 2474,
+    "NPyramids": 0,
+    "NTetrahedrons": 78102
+   },
+   "volume_um3": {
+    "1": 2670.9166008333104,
+    "2": 413.6840000000001,
+    "3": 772.1198791667053,
+    "7": 1.2803200000000243,
+    "9": 98.69999999999939
+   },
+   "element_under_apex": {
+    "apex_z-20": {
+     "longest_edge_nm": 34.308782234563274,
+     "domain": 9
+    },
+    "apex_z-50": {
+     "longest_edge_nm": 69.26335352027287,
+     "domain": 9
+    },
+    "apex_z-100": {
+     "longest_edge_nm": 81.54094991523576,
+     "domain": 9
+    },
+    "x+60_z-20": {
+     "longest_edge_nm": 36.71257898497397,
+     "domain": 9
+    },
+    "x-60_z-20": {
+     "longest_edge_nm": 35.78385320562013,
+     "domain": 2
+    },
+    "y+60_z-20": {
+     "longest_edge_nm": 48.388038359842014,
+     "domain": 9
+    }
+   },
+   "liquid_tets_within_200nm_of_apex": 722,
+   "mesh_time_s": 16.756231546401978,
+   "x_interface": -50,
+   "gap": 5
+  },
+  "x+0_g5": {
+   "counts": {
+    "NBricks": 164,
+    "NPoints": 14223,
+    "NPrisms": 2458,
+    "NPyramids": 0,
+    "NTetrahedrons": 73283
+   },
+   "volume_um3": {
+    "1": 2670.916600833345,
+    "2": 414.38399999999905,
+    "3": 772.119879166704,
+    "7": 1.280320000000018,
+    "9": 98.0000000000004
+   },
+   "element_under_apex": {
+    "apex_z-20": {
+     "longest_edge_nm": 25.190048060993025,
+     "domain": 2
+    },
+    "apex_z-50": {
+     "longest_edge_nm": 35.38130547062391,
+     "domain": 2
+    },
+    "apex_z-100": {
+     "longest_edge_nm": 68.00384199046987,
+     "domain": 2
+    },
+    "x+60_z-20": {
+     "longest_edge_nm": 38.756658574903966,
+     "domain": 9
+    },
+    "x-60_z-20": {
+     "longest_edge_nm": 51.993599350646996,
+     "domain": 2
+    },
+    "y+60_z-20": {
+     "longest_edge_nm": 27.26230987634254,
+     "domain": 9
+    }
+   },
+   "liquid_tets_within_200nm_of_apex": 1023,
+   "mesh_time_s": 16.883166074752808,
+   "x_interface": 0,
+   "gap": 5
+  },
+  "x+50_g5": {
+   "counts": {
+    "NBricks": 164,
+    "NPoints": 14179,
+    "NPrisms": 2488,
+    "NPyramids": 0,
+    "NTetrahedrons": 73006
+   },
+   "volume_um3": {
+    "1": 2670.9166008332895,
+    "2": 415.0839999999997,
+    "3": 772.1198791667055,
+    "7": 1.280320000000027,
+    "9": 97.30000000000017
+   },
+   "element_under_apex": {
+    "apex_z-20": {
+     "longest_edge_nm": 37.65320641956038,
+     "domain": 2
+    },
+    "apex_z-50": {
+     "longest_edge_nm": 83.11552659267753,
+     "domain": 2
+    },
+    "apex_z-100": {
+     "longest_edge_nm": 84.35907848735967,
+     "domain": 2
+    },
+    "x+60_z-20": {
+     "longest_edge_nm": 30.05680051266531,
+     "domain": 9
+    },
+    "x-60_z-20": {
+     "longest_edge_nm": 59.79487308724548,
+     "domain": 2
+    },
+    "y+60_z-20": {
+     "longest_edge_nm": 59.59894239547305,
+     "domain": 2
+    }
+   },
+   "liquid_tets_within_200nm_of_apex": 698,
+   "mesh_time_s": 17.079590320587158,
+   "x_interface": 50,
+   "gap": 5
+  },
+  "x+100_g5": {
+   "counts": {
+    "NBricks": 164,
+    "NPoints": 13074,
+    "NPrisms": 2470,
+    "NPyramids": 0,
+    "NTetrahedrons": 66377
+   },
+   "volume_um3": {
+    "1": 2670.9166008332886,
+    "2": 415.7839999999994,
+    "3": 772.1198791667059,
+    "7": 1.2803200000000239,
+    "9": 96.60000000000083
+   },
+   "element_under_apex": {
+    "apex_z-20": {
+     "longest_edge_nm": 24.89456356059396,
+     "domain": 2
+    },
+    "apex_z-50": {
+     "longest_edge_nm": 71.42001347965562,
+     "domain": 2
+    },
+    "apex_z-100": {
+     "longest_edge_nm": 129.20673940131786,
+     "domain": 2
+    },
+    "x+60_z-20": {
+     "longest_edge_nm": 68.46086514414401,
+     "domain": 2
+    },
+    "x-60_z-20": {
+     "longest_edge_nm": 42.61912523292367,
+     "domain": 2
+    },
+    "y+60_z-20": {
+     "longest_edge_nm": 66.85446279639137,
+     "domain": 2
+    }
+   },
+   "liquid_tets_within_200nm_of_apex": 560,
+   "mesh_time_s": 15.475539207458496,
+   "x_interface": 100,
+   "gap": 5
+  },
+  "x+150_g5": {
+   "counts": {
+    "NBricks": 164,
+    "NPoints": 14555,
+    "NPrisms": 2486,
+    "NPyramids": 0,
+    "NTetrahedrons": 75352
+   },
+   "volume_um3": {
+    "1": 2670.9166008333127,
+    "2": 416.4840000000019,
+    "3": 772.1198791667051,
+    "7": 1.2803200000000243,
+    "9": 95.90000000000063
+   },
+   "element_under_apex": {
+    "apex_z-20": {
+     "longest_edge_nm": 19.80956826693337,
+     "domain": 2
+    },
+    "apex_z-50": {
+     "longest_edge_nm": 69.75323158488595,
+     "domain": 2
+    },
+    "apex_z-100": {
+     "longest_edge_nm": 78.78010220475898,
+     "domain": 2
+    },
+    "x+60_z-20": {
+     "longest_edge_nm": 59.41436869942678,
+     "domain": 2
+    },
+    "x-60_z-20": {
+     "longest_edge_nm": 56.50168355696341,
+     "domain": 2
+    },
+    "y+60_z-20": {
+     "longest_edge_nm": 38.2032883901192,
+     "domain": 2
+    }
+   },
+   "liquid_tets_within_200nm_of_apex": 846,
+   "mesh_time_s": 16.61659574508667,
+   "x_interface": 150,
+   "gap": 5
+  },
+  "x+200_g5": {
+   "counts": {
+    "NBricks": 164,
+    "NPoints": 14931,
+    "NPrisms": 2482,
+    "NPyramids": 0,
+    "NTetrahedrons": 77540
+   },
+   "volume_um3": {
+    "1": 2670.9166008333104,
+    "2": 417.184000000001,
+    "3": 772.119879166702,
+    "7": 1.280320000000019,
+    "9": 95.20000000000013
+   },
+   "element_under_apex": {
+    "apex_z-20": {
+     "longest_edge_nm": 30.40732443481353,
+     "domain": 2
+    },
+    "apex_z-50": {
+     "longest_edge_nm": 56.533473944519,
+     "domain": 2
+    },
+    "apex_z-100": {
+     "longest_edge_nm": 106.41101246750007,
+     "domain": 2
+    },
+    "x+60_z-20": {
+     "longest_edge_nm": 59.04433516677195,
+     "domain": 2
+    },
+    "x-60_z-20": {
+     "longest_edge_nm": 67.29218215281429,
+     "domain": 2
+    },
+    "y+60_z-20": {
+     "longest_edge_nm": 58.40774485280486,
+     "domain": 2
+    }
+   },
+   "liquid_tets_within_200nm_of_apex": 566,
+   "mesh_time_s": 17.436282634735107,
+   "x_interface": 200,
+   "gap": 5
+  },
+  "x+250_g5": {
+   "counts": {
+    "NBricks": 164,
+    "NPoints": 13515,
+    "NPrisms": 2472,
+    "NPyramids": 0,
+    "NTetrahedrons": 69129
+   },
+   "volume_um3": {
+    "1": 2670.9166008333,
+    "2": 417.8840000000007,
+    "3": 772.119879166701,
+    "7": 1.2803200000000217,
+    "9": 94.49999999999994
+   },
+   "element_under_apex": {
+    "apex_z-20": {
+     "longest_edge_nm": 26.929313948065463,
+     "domain": 2
+    },
+    "apex_z-50": {
+     "longest_edge_nm": 72.79213720787844,
+     "domain": 2
+    },
+    "apex_z-100": {
+     "longest_edge_nm": 79.53203707268217,
+     "domain": 2
+    },
+    "x+60_z-20": {
+     "longest_edge_nm": 36.42626570323957,
+     "domain": 2
+    },
+    "x-60_z-20": {
+     "longest_edge_nm": 55.40786299355348,
+     "domain": 2
+    },
+    "y+60_z-20": {
+     "longest_edge_nm": 38.70690041672247,
+     "domain": 2
+    }
+   },
+   "liquid_tets_within_200nm_of_apex": 617,
+   "mesh_time_s": 16.552512645721436,
+   "x_interface": 250,
+   "gap": 5
+  },
+  "x+300_g5": {
+   "counts": {
+    "NBricks": 164,
+    "NPoints": 13353,
+    "NPrisms": 2470,
+    "NPyramids": 0,
+    "NTetrahedrons": 68033
+   },
+   "volume_um3": {
+    "1": 2670.916600833281,
+    "2": 418.5840000000002,
+    "3": 772.1198791667031,
+    "7": 1.2803200000000237,
+    "9": 93.80000000000008
+   },
+   "element_under_apex": {
+    "apex_z-20": {
+     "longest_edge_nm": 25.6668583015665,
+     "domain": 2
+    },
+    "apex_z-50": {
+     "longest_edge_nm": 61.16666869134508,
+     "domain": 2
+    },
+    "apex_z-100": {
+     "longest_edge_nm": 106.0966832861373,
+     "domain": 2
+    },
+    "x+60_z-20": {
+     "longest_edge_nm": 58.683886861820966,
+     "domain": 2
+    },
+    "x-60_z-20": {
+     "longest_edge_nm": 39.090147129895854,
+     "domain": 2
+    },
+    "y+60_z-20": {
+     "longest_edge_nm": 68.5304607109211,
+     "domain": 2
+    }
+   },
+   "liquid_tets_within_200nm_of_apex": 627,
+   "mesh_time_s": 16.063859939575195,
+   "x_interface": 300,
+   "gap": 5
+  },
+  "x+350_g5": {
+   "counts": {
+    "NBricks": 164,
+    "NPoints": 13574,
+    "NPrisms": 2486,
+    "NPyramids": 0,
+    "NTetrahedrons": 69408
+   },
+   "volume_um3": {
+    "1": 2670.9166008333023,
+    "2": 419.28399999999976,
+    "3": 772.119879166701,
+    "7": 1.280320000000024,
+    "9": 93.09999999999998
+   },
+   "element_under_apex": {
+    "apex_z-20": {
+     "longest_edge_nm": 30.48116233378399,
+     "domain": 2
+    },
+    "apex_z-50": {
+     "longest_edge_nm": 58.230563893921435,
+     "domain": 2
+    },
+    "apex_z-100": {
+     "longest_edge_nm": 102.3504997458278,
+     "domain": 2
+    },
+    "x+60_z-20": {
+     "longest_edge_nm": 37.87492124148868,
+     "domain": 2
+    },
+    "x-60_z-20": {
+     "longest_edge_nm": 44.68386714465363,
+     "domain": 2
+    },
+    "y+60_z-20": {
+     "longest_edge_nm": 32.30864576717407,
+     "domain": 2
+    }
+   },
+   "liquid_tets_within_200nm_of_apex": 638,
+   "mesh_time_s": 16.49815797805786,
+   "x_interface": 350,
+   "gap": 5
+  },
+  "x+400_g5": {
+   "counts": {
+    "NBricks": 164,
+    "NPoints": 13191,
+    "NPrisms": 2480,
+    "NPyramids": 0,
+    "NTetrahedrons": 67168
+   },
+   "volume_um3": {
+    "1": 2670.9166008332872,
+    "2": 419.98400000000044,
+    "3": 772.119879166702,
+    "7": 1.2803200000000254,
+    "9": 92.4
+   },
+   "element_under_apex": {
+    "apex_z-20": {
+     "longest_edge_nm": 24.60912969107284,
+     "domain": 2
+    },
+    "apex_z-50": {
+     "longest_edge_nm": 56.00356490960813,
+     "domain": 2
+    },
+    "apex_z-100": {
+     "longest_edge_nm": 127.498545034343,
+     "domain": 2
+    },
+    "x+60_z-20": {
+     "longest_edge_nm": 38.63868347920759,
+     "domain": 2
+    },
+    "x-60_z-20": {
+     "longest_edge_nm": 46.902981480092976,
+     "domain": 2
+    },
+    "y+60_z-20": {
+     "longest_edge_nm": 48.543610230697084,
+     "domain": 2
+    }
+   },
+   "liquid_tets_within_200nm_of_apex": 552,
+   "mesh_time_s": 15.60896611213684,
+   "x_interface": 400,
+   "gap": 5
+  },
+  "x+450_g5": {
+   "counts": {
+    "NBricks": 164,
+    "NPoints": 13493,
+    "NPrisms": 2476,
+    "NPyramids": 0,
+    "NTetrahedrons": 68929
+   },
+   "volume_um3": {
+    "1": 2671.174056868224,
+    "2": 420.68399999999866,
+    "3": 771.8624231317929,
+    "7": 1.2803200000000223,
+    "9": 91.69999999999996
+   },
+   "element_under_apex": {
+    "apex_z-20": {
+     "longest_edge_nm": 37.9294170881153,
+     "domain": 2
+    },
+    "apex_z-50": {
+     "longest_edge_nm": 46.217483791781376,
+     "domain": 2
+    },
+    "apex_z-100": {
+     "longest_edge_nm": 140.83053010396432,
+     "domain": 2
+    },
+    "x+60_z-20": {
+     "longest_edge_nm": 46.399757416433424,
+     "domain": 2
+    },
+    "x-60_z-20": {
+     "longest_edge_nm": 62.692708245737016,
+     "domain": 2
+    },
+    "y+60_z-20": {
+     "longest_edge_nm": 91.62803271849128,
+     "domain": 2
+    }
+   },
+   "liquid_tets_within_200nm_of_apex": 632,
+   "mesh_time_s": 16.462621212005615,
+   "x_interface": 450,
+   "gap": 5
+  },
+  "x+500_g5": {
+   "counts": {
+    "NBricks": 164,
+    "NPoints": 13556,
+    "NPrisms": 2460,
+    "NPyramids": 0,
+    "NTetrahedrons": 69271
+   },
+   "volume_um3": {
+    "1": 2671.174056868223,
+    "2": 421.3840000000005,
+    "3": 771.8624231317941,
+    "7": 1.2803200000000212,
+    "9": 91.00000000000007
+   },
+   "element_under_apex": {
+    "apex_z-20": {
+     "longest_edge_nm": 31.873926842158223,
+     "domain": 2
+    },
+    "apex_z-50": {
+     "longest_edge_nm": 60.338912945598395,
+     "domain": 2
+    },
+    "apex_z-100": {
+     "longest_edge_nm": 136.5588190794682,
+     "domain": 2
+    },
+    "x+60_z-20": {
+     "longest_edge_nm": 49.83864906310213,
+     "domain": 2
+    },
+    "x-60_z-20": {
+     "longest_edge_nm": 39.99475702360138,
+     "domain": 2
+    },
+    "y+60_z-20": {
+     "longest_edge_nm": 76.5262986152998,
+     "domain": 2
+    }
+   },
+   "liquid_tets_within_200nm_of_apex": 436,
+   "mesh_time_s": 15.983540058135986,
+   "x_interface": 500,
+   "gap": 5
+  },
+  "x+550_g5": {
+   "counts": {
+    "NBricks": 164,
+    "NPoints": 14348,
+    "NPrisms": 2458,
+    "NPyramids": 0,
+    "NTetrahedrons": 74211
+   },
+   "volume_um3": {
+    "1": 2671.1740568682158,
+    "2": 422.0840000000018,
+    "3": 771.8624231317974,
+    "7": 1.2803200000000265,
+    "9": 90.29999999999997
+   },
+   "element_under_apex": {
+    "apex_z-20": {
+     "longest_edge_nm": 27.2555556841158,
+     "domain": 2
+    },
+    "apex_z-50": {
+     "longest_edge_nm": 66.09451623902814,
+     "domain": 2
+    },
+    "apex_z-100": {
+     "longest_edge_nm": 132.05893352209785,
+     "domain": 2
+    },
+    "x+60_z-20": {
+     "longest_edge_nm": 41.44466425864047,
+     "domain": 2
+    },
+    "x-60_z-20": {
+     "longest_edge_nm": 68.0679907878617,
+     "domain": 2
+    },
+    "y+60_z-20": {
+     "longest_edge_nm": 46.47099212982487,
+     "domain": 2
+    }
+   },
+   "liquid_tets_within_200nm_of_apex": 596,
+   "mesh_time_s": 16.519033193588257,
+   "x_interface": 550,
+   "gap": 5
+  },
+  "x+600_g5": {
+   "counts": {
+    "NBricks": 164,
+    "NPoints": 13563,
+    "NPrisms": 2452,
+    "NPyramids": 0,
+    "NTetrahedrons": 69554
+   },
+   "volume_um3": {
+    "1": 2671.1740568681907,
+    "2": 422.7840000000004,
+    "3": 771.862423131791,
+    "7": 1.2803200000000234,
+    "9": 89.60000000000021
+   },
+   "element_under_apex": {
+    "apex_z-20": {
+     "longest_edge_nm": 22.452936065864403,
+     "domain": 2
+    },
+    "apex_z-50": {
+     "longest_edge_nm": 63.615378900884515,
+     "domain": 2
+    },
+    "apex_z-100": {
+     "longest_edge_nm": 98.0353112098363,
+     "domain": 2
+    },
+    "x+60_z-20": {
+     "longest_edge_nm": 35.7430945204571,
+     "domain": 2
+    },
+    "x-60_z-20": {
+     "longest_edge_nm": 50.53863483589913,
+     "domain": 2
+    },
+    "y+60_z-20": {
+     "longest_edge_nm": 37.34426572224269,
+     "domain": 2
+    }
+   },
+   "liquid_tets_within_200nm_of_apex": 810,
+   "mesh_time_s": 15.689539909362793,
+   "x_interface": 600,
+   "gap": 5
+  },
+  "x+650_g5": {
+   "counts": {
+    "NBricks": 164,
+    "NPoints": 13434,
+    "NPrisms": 2450,
+    "NPyramids": 0,
+    "NTetrahedrons": 68595
+   },
+   "volume_um3": {
+    "1": 2671.1740568681994,
+    "2": 423.4840000000002,
+    "3": 771.8624231317928,
+    "7": 1.2803200000000217,
+    "9": 88.89999999999985
+   },
+   "element_under_apex": {
+    "apex_z-20": {
+     "longest_edge_nm": 24.010299981638497,
+     "domain": 2
+    },
+    "apex_z-50": {
+     "longest_edge_nm": 61.33160759210858,
+     "domain": 2
+    },
+    "apex_z-100": {
+     "longest_edge_nm": 72.05851064636259,
+     "domain": 2
+    },
+    "x+60_z-20": {
+     "longest_edge_nm": 29.61093030151257,
+     "domain": 2
+    },
+    "x-60_z-20": {
+     "longest_edge_nm": 58.23458117714786,
+     "domain": 2
+    },
+    "y+60_z-20": {
+     "longest_edge_nm": 42.95771674890438,
+     "domain": 2
+    }
+   },
+   "liquid_tets_within_200nm_of_apex": 900,
+   "mesh_time_s": 15.94736099243164,
+   "x_interface": 650,
+   "gap": 5
+  },
+  "x+700_g5": {
+   "counts": {
+    "NBricks": 164,
+    "NPoints": 14254,
+    "NPrisms": 2434,
+    "NPyramids": 0,
+    "NTetrahedrons": 73676
+   },
+   "volume_um3": {
+    "1": 2670.904169647834,
+    "2": 424.18399999999934,
+    "3": 772.1323103521743,
+    "7": 1.2803200000000254,
+    "9": 88.20000000000019
+   },
+   "element_under_apex": {
+    "apex_z-20": {
+     "longest_edge_nm": 27.050865429995472,
+     "domain": 2
+    },
+    "apex_z-50": {
+     "longest_edge_nm": 74.60374839306122,
+     "domain": 2
+    },
+    "apex_z-100": {
+     "longest_edge_nm": 101.13124786366416,
+     "domain": 2
+    },
+    "x+60_z-20": {
+     "longest_edge_nm": 43.115739643095374,
+     "domain": 2
+    },
+    "x-60_z-20": {
+     "longest_edge_nm": 36.52194449111104,
+     "domain": 2
+    },
+    "y+60_z-20": {
+     "longest_edge_nm": 38.370337231978404,
+     "domain": 2
+    }
+   },
+   "liquid_tets_within_200nm_of_apex": 820,
+   "mesh_time_s": 16.86414647102356,
+   "x_interface": 700,
+   "gap": 5
+  },
+  "x+750_g5": {
+   "counts": {
+    "NBricks": 164,
+    "NPoints": 14135,
+    "NPrisms": 2440,
+    "NPyramids": 0,
+    "NTetrahedrons": 72989
+   },
+   "volume_um3": {
+    "1": 2670.904169647819,
+    "2": 424.8840000000017,
+    "3": 772.132310352172,
+    "7": 1.280320000000028,
+    "9": 87.50000000000006
+   },
+   "element_under_apex": {
+    "apex_z-20": {
+     "longest_edge_nm": 33.63851554719823,
+     "domain": 2
+    },
+    "apex_z-50": {
+     "longest_edge_nm": 50.34448735339519,
+     "domain": 2
+    },
+    "apex_z-100": {
+     "longest_edge_nm": 85.68918687019388,
+     "domain": 2
+    },
+    "x+60_z-20": {
+     "longest_edge_nm": 44.658223140949964,
+     "domain": 2
+    },
+    "x-60_z-20": {
+     "longest_edge_nm": 64.9272246250313,
+     "domain": 2
+    },
+    "y+60_z-20": {
+     "longest_edge_nm": 50.73830018094652,
+     "domain": 2
+    }
+   },
+   "liquid_tets_within_200nm_of_apex": 719,
+   "mesh_time_s": 16.641725778579712,
+   "x_interface": 750,
+   "gap": 5
+  },
+  "x+800_g5": {
+   "counts": {
+    "NBricks": 164,
+    "NPoints": 13723,
+    "NPrisms": 2440,
+    "NPyramids": 0,
+    "NTetrahedrons": 70592
+   },
+   "volume_um3": {
+    "1": 2670.904169647818,
+    "2": 425.5839999999986,
+    "3": 772.1323103521693,
+    "7": 1.2803200000000257,
+    "9": 86.79999999999973
+   },
+   "element_under_apex": {
+    "apex_z-20": {
+     "longest_edge_nm": 33.445570152296284,
+     "domain": 2
+    },
+    "apex_z-50": {
+     "longest_edge_nm": 54.350314570114904,
+     "domain": 2
+    },
+    "apex_z-100": {
+     "longest_edge_nm": 118.26018619722922,
+     "domain": 2
+    },
+    "x+60_z-20": {
+     "longest_edge_nm": 42.85830260753249,
+     "domain": 2
+    },
+    "x-60_z-20": {
+     "longest_edge_nm": 49.685443344939834,
+     "domain": 2
+    },
+    "y+60_z-20": {
+     "longest_edge_nm": 72.74742682021423,
+     "domain": 2
+    }
+   },
+   "liquid_tets_within_200nm_of_apex": 579,
+   "mesh_time_s": 16.577556848526,
+   "x_interface": 800,
+   "gap": 5
+  },
+  "x+850_g5": {
+   "counts": {
+    "NBricks": 164,
+    "NPoints": 13445,
+    "NPrisms": 2414,
+    "NPyramids": 0,
+    "NTetrahedrons": 68908
+   },
+   "volume_um3": {
+    "1": 2670.90416964783,
+    "2": 426.28400000000033,
+    "3": 772.1323103521743,
+    "7": 1.280320000000018,
+    "9": 86.1
+   },
+   "element_under_apex": {
+    "apex_z-20": {
+     "longest_edge_nm": 30.52499470191879,
+     "domain": 2
+    },
+    "apex_z-50": {
+     "longest_edge_nm": 43.11999197682021,
+     "domain": 2
+    },
+    "apex_z-100": {
+     "longest_edge_nm": 106.24359570118105,
+     "domain": 2
+    },
+    "x+60_z-20": {
+     "longest_edge_nm": 31.307422485272635,
+     "domain": 2
+    },
+    "x-60_z-20": {
+     "longest_edge_nm": 53.98902456267252,
+     "domain": 2
+    },
+    "y+60_z-20": {
+     "longest_edge_nm": 40.47685344417368,
+     "domain": 2
+    }
+   },
+   "liquid_tets_within_200nm_of_apex": 728,
+   "mesh_time_s": 16.03067922592163,
+   "x_interface": 850,
+   "gap": 5
+  },
+  "x+900_g5": {
+   "counts": {
+    "NBricks": 164,
+    "NPoints": 13552,
+    "NPrisms": 2396,
+    "NPyramids": 0,
+    "NTetrahedrons": 69663
+   },
+   "volume_um3": {
+    "1": 2670.9041696478553,
+    "2": 426.9840000000012,
+    "3": 772.1323103521725,
+    "7": 1.2803200000000199,
+    "9": 85.40000000000002
+   },
+   "element_under_apex": {
+    "apex_z-20": {
+     "longest_edge_nm": 22.862062531794685,
+     "domain": 2
+    },
+    "apex_z-50": {
+     "longest_edge_nm": 47.74663891882064,
+     "domain": 2
+    },
+    "apex_z-100": {
+     "longest_edge_nm": 74.40105031767185,
+     "domain": 2
+    },
+    "x+60_z-20": {
+     "longest_edge_nm": 26.21155944763364,
+     "domain": 2
+    },
+    "x-60_z-20": {
+     "longest_edge_nm": 35.32651392333092,
+     "domain": 2
+    },
+    "y+60_z-20": {
+     "longest_edge_nm": 45.664707740512306,
+     "domain": 2
+    }
+   },
+   "liquid_tets_within_200nm_of_apex": 914,
+   "mesh_time_s": 16.351210355758667,
+   "x_interface": 900,
+   "gap": 5
+  },
+  "x+950_g5": {
+   "counts": {
+    "NBricks": 164,
+    "NPoints": 13922,
+    "NPrisms": 2442,
+    "NPyramids": 0,
+    "NTetrahedrons": 71672
+   },
+   "volume_um3": {
+    "1": 2670.9041696478434,
+    "2": 427.68400000000037,
+    "3": 772.1323103521754,
+    "7": 1.2803200000000245,
+    "9": 84.69999999999989
+   },
+   "element_under_apex": {
+    "apex_z-20": {
+     "longest_edge_nm": 25.048270635131345,
+     "domain": 2
+    },
+    "apex_z-50": {
+     "longest_edge_nm": 49.31868483174706,
+     "domain": 2
+    },
+    "apex_z-100": {
+     "longest_edge_nm": 89.62044836733301,
+     "domain": 2
+    },
+    "x+60_z-20": {
+     "longest_edge_nm": 41.26761049208805,
+     "domain": 2
+    },
+    "x-60_z-20": {
+     "longest_edge_nm": 42.1965877101902,
+     "domain": 2
+    },
+    "y+60_z-20": {
+     "longest_edge_nm": 36.43982811671133,
+     "domain": 2
+    }
+   },
+   "liquid_tets_within_200nm_of_apex": 611,
+   "mesh_time_s": 16.6911838054657,
+   "x_interface": 950,
+   "gap": 5
+  },
+  "x+1000_g5": {
+   "counts": {
+    "NBricks": 164,
+    "NPoints": 14356,
+    "NPrisms": 2434,
+    "NPyramids": 0,
+    "NTetrahedrons": 74282
+   },
+   "volume_um3": {
+    "1": 2670.904169647813,
+    "2": 428.3839999999999,
+    "3": 772.1323103521727,
+    "7": 1.2803200000000288,
+    "9": 84.00000000000017
+   },
+   "element_under_apex": {
+    "apex_z-20": {
+     "longest_edge_nm": 26.26858011672237,
+     "domain": 2
+    },
+    "apex_z-50": {
+     "longest_edge_nm": 60.494096048519935,
+     "domain": 2
+    },
+    "apex_z-100": {
+     "longest_edge_nm": 89.4264117409683,
+     "domain": 2
+    },
+    "x+60_z-20": {
+     "longest_edge_nm": 45.06060860254136,
+     "domain": 2
+    },
+    "x-60_z-20": {
+     "longest_edge_nm": 36.40652260476979,
+     "domain": 2
+    },
+    "y+60_z-20": {
+     "longest_edge_nm": 51.05554936545135,
+     "domain": 2
+    }
+   },
+   "liquid_tets_within_200nm_of_apex": 899,
+   "mesh_time_s": 16.802734851837158,
+   "x_interface": 1000,
+   "gap": 5
+  }
+ }
+}
