@@ -98,7 +98,7 @@ GEOMETRY = {
 # No local refinement regions: the start mesh grades smoothly from the geometry (apex rounding,
 # 5 nm SiN) and HAdaptive refines where JCM's error estimate asks for it.
 MESH = {
-    'fine':     {'max_side': 600,  'fe_degree': 4, 'max_steps': 5, 'ft_refinements': 5},
+    'fine':     {'max_side': 600,  'fe_degree': 4, 'max_steps': 3, 'ft_refinements': 5},
     'veryfine': {'max_side': 300,  'fe_degree': 5, 'max_steps': 7, 'ft_refinements': 5},
     'coarse':   {'max_side': 1500, 'fe_degree': 3, 'max_steps': 2, 'ft_refinements': 5},
 }
