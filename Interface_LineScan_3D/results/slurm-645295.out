@@ -1,0 +1,11 @@
+job 645295 on smic381, 28 cores, stages: linescan_h5_wide
+JCMROOT=/home/coltonb/software/JCMsuite_6_0_10
+=== stage linescan_h5_wide on smic381 (2026-10-17 20:26:14): 8 solves to run, 0 already done, fine mesh, 6.1 um
+[1/8] x=-1000 nm gap=5 nm  |Ep|(p_in)=1.6978e+00 arg=-2.621  2764 dirs  unknowns=[1509981, 2570976]  mem=[34.95126342773438, 65.91769027709961] GB  1184 s  est.err FarField=[(1, 0.0117512853)]  PML(+X)=(0.047, 0)
+[2/8] x=-700 nm gap=5 nm  |Ep|(p_in)=1.6971e+00 arg=-2.622  2764 dirs  unknowns=[1598661, 2644026]  mem=[39.10271835327148, 69.80324935913086] GB  1405 s  est.err FarField=[(1, 0.0117123256)]  PML(+X)=(0.044, 0)
+[3/8] x=-500 nm gap=5 nm  |Ep|(p_in)=1.6964e+00 arg=-2.622  2764 dirs  unknowns=[1621635, 2767434]  mem=[38.43283462524414, 72.68466567993164] GB  1333 s  est.err FarField=[(1, 0.0115904955)]  PML(+X)=(0.043, 0)
+[4/8] x=-400 nm gap=5 nm  |Ep|(p_in)=1.6963e+00 arg=-2.622  2764 dirs  unknowns=[1505811, 2563740]  mem=[35.34860992431641, 66.74297714233398] GB  1263 s  est.err FarField=[(1, 0.01164844)]  PML(+X)=(0.043, 0)
+[5/8] x=+400 nm gap=5 nm  |Ep|(p_in)=1.6982e+00 arg=-2.625  2764 dirs  unknowns=[1522992, 2605158]  mem=[34.44290924072266, 69.81181335449219] GB  1327 s  est.err FarField=[(1, 0.0114766144)]  PML(+X)=(0.043, 0)
+[6/8] x=+500 nm gap=5 nm  |Ep|(p_in)=1.6987e+00 arg=-2.625  2764 dirs  unknowns=[1578648, 2602893]  mem=[38.5215950012207, 66.66263580322266] GB  1389 s  est.err FarField=[(1, 0.0113260164)]  PML(+X)=(0.043, 0)
+[7/8] x=+700 nm gap=5 nm  |Ep|(p_in)=1.6994e+00 arg=-2.625  2764 dirs  unknowns=[1326648, 2291958]  mem=[29.99421691894531, 55.96411895751953] GB  1044 s  est.err FarField=[(1, 0.0113198969)]  PML(+X)=(0.083, 0)
+[8/8] x=+1000 nm gap=5 nm  |Ep|(p_in)=1.7008e+00 arg=-2.626  2764 dirs  unknowns=[1418394, 2333613]  mem=[33.09979248046875, 58.82939147949219] GB  1143 s  est.err FarField=[(1, 0.0112677675)]  PML(+X)=(0.083, 0)
