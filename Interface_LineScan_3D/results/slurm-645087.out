@@ -7,3 +7,5 @@ JCMROOT=/home/coltonb/software/JCMsuite_6_0_10
 [4/31] x=-100 nm gap=101 nm  |Ep|(p_in)=1.6996e+00 arg=-2.622  2764 dirs  unknowns=[1811712, 3202515]  mem=[42.30138397216797, 85.55542755126953] GB  1785 s  est.err FarField=[(1, 0.0117256881)]  PML(+X)=(0.041, 0)
 [5/31] x=-75 nm gap=101 nm  |Ep|(p_in)=1.6996e+00 arg=-2.622  2764 dirs  unknowns=[2021979, 3691416]  mem=[46.4288215637207, 103.4936332702637] GB  2596 s  est.err FarField=[(1, 0.0116404887)]  PML(+X)=(0.046, 0)
 [6/31] x=-50 nm gap=101 nm  |Ep|(p_in)=1.6995e+00 arg=-2.622  2764 dirs  unknowns=[1841505, 3174840]  mem=[43.49053573608398, 87.6807632446289] GB  2012 s  est.err FarField=[(1, 0.011576595)]  PML(+X)=(0.038, 0)
+[7/31] x=-45 nm gap=101 nm  |Ep|(p_in)=1.6996e+00 arg=-2.622  2764 dirs  unknowns=[1958991, 3488064]  mem=[46.14034271240234, 96.70786666870117] GB  2185 s  est.err FarField=[(1, 0.0116594566)]  PML(+X)=(0.041, 0)
+[8/31] x=-40 nm gap=101 nm  |Ep|(p_in)=1.6996e+00 arg=-2.622  2764 dirs  unknowns=[1800357, 3185202]  mem=[41.45477294921875, 88.59676361083984] GB  1811 s  est.err FarField=[(1, 0.0116020419)]  PML(+X)=(0.038, 0)
