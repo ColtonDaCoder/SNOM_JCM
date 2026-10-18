@@ -11,6 +11,7 @@ The work is split into stages (see STAGES); each stage writes its own results fi
 be stopped and restarted (finished points are skipped):
 
     python run_linescan.py --stage beamcheck      # incident Gaussian beam only: direction, s/p, spot position
+    python run_linescan.py --stage meshcheck      # mesh only, -1000 ... +1000 nm in 50 nm steps at gaps 5 / 101: element counts
     python run_linescan.py --stage converge       # gaps 1-6 nm with 3 refinement steps: is the noise gone?
     python run_linescan.py --stage test           # 1 coarse solve: does it run, cost, far-field sampling
     python run_linescan.py --stage zsweep         # dense height sweep at one position (validates HEIGHTS)
@@ -181,6 +182,123 @@ def source_keys(wvl, theta_deg, beam=None):
     b = beam or beam_convention()
     keys.update(beam_phi=float(b['beam_phi']), sp_s=np.array(b['sp_s'], float), sp_p=np.array(b['sp_p'], float))
     return keys
+
+
+MESHCHECK_X = list(range(-1000, 1001, 50))
+MESHCHECK_GAPS = [5, 101]
+
+
+def grid_stats(path):
+    """Element counts, per-domain volumes and element sizes under the apex from a JCMgeo grid.jcm."""
+    L = open(path).read().splitlines()
+    head = {}
+    for line in L[:200]:
+        m = re.match(r'<I>(?:SubGrid\d+:)?(N(?:Tetrahedrons|Prisms|Bricks|Pyramids|Points))=(\d+)', line)
+        if m:
+            head[m.group(1)] = head.get(m.group(1), 0) + int(m.group(2))
+        if line.startswith('*/'):
+            break
+    i = L.index('# Points      (n, x, y, z)') + 1
+    P = {}
+    while not L[i].startswith('# Tetra'):
+        if L[i] == '# P':
+            n, x, y, z = L[i+1:i+5]
+            P[int(n)] = (float(x)*1e9, float(y)*1e9, float(z)*1e9)
+            i += 5
+        else:
+            i += 1
+    vol, tets = {}, []
+    j = L.index('# Tetrahedrons (p1, p2, p3, p4, id)') + 1
+    while j < len(L) and L[j] == '#Te':
+        t = np.array([P[int(v)] for v in L[j+1:j+5]]); d = int(L[j+5])
+        vol[d] = vol.get(d, 0.0) + abs(np.dot(t[1] - t[0], np.cross(t[2] - t[0], t[3] - t[0])))/6
+        tets.append((t, d)); j += 6
+    for sec, n in (('# Prisms (p1, p2, p3, p4, p5, p6, id)', 6), ('# Bricks (p1, p2, p3, p4, p5, p6, p7, p8, id)', 8)):
+        if sec not in L:
+            continue
+        j = L.index(sec) + 1
+        while j < len(L) and L[j].startswith('#') and not L[j].startswith('# '):
+            q = np.array([P[int(v)] for v in L[j+1:j+1+n]]); d = int(L[j+1+n])
+            if n == 6:
+                a, b, c, d2, e, f = q
+                v = sum(abs(np.dot(y - x, np.cross(z - x, w - x)))/6 for x, y, z, w in ((a, b, c, d2), (b, c, d2, e), (c, d2, e, f)))
+            else:
+                v = 0.5*abs(np.cross(q[2] - q[0], q[3] - q[1])[2])*abs(q[4][2] - q[0][2])
+            vol[d] = vol.get(d, 0.0) + v
+            j += n + 2
+
+    def containing(q):
+        q = np.asarray(q, float)
+        for t, d in tets:
+            if not (t[:, 0].min() <= q[0] <= t[:, 0].max() and t[:, 2].min() <= q[2] <= t[:, 2].max()
+                    and t[:, 1].min() <= q[1] <= t[:, 1].max()):
+                continue
+            M = np.column_stack([t[1] - t[0], t[2] - t[0], t[3] - t[0]])
+            try:
+                l = np.linalg.solve(M, q - t[0])
+            except np.linalg.LinAlgError:
+                continue
+            if l.min() >= -1e-9 and l.sum() <= 1 + 1e-9:
+                return float(max(np.linalg.norm(t[a] - t[b]) for a in range(4) for b in range(a + 1, 4))), d
+        return None, None
+    probes = {'apex_z-20': (0, 0, -20), 'apex_z-50': (0, 0, -50), 'apex_z-100': (0, 0, -100),
+              'x+60_z-20': (60, 0, -20), 'x-60_z-20': (-60, 0, -20), 'y+60_z-20': (0, 60, -20)}
+    sizes = {k: containing(v) for k, v in probes.items()}
+    near = sum(1 for t, d in tets if d in (2, 9) and np.hypot(t[:, 0].mean(), t[:, 1].mean()) < 200 and -205 < t[:, 2].mean() < -5)
+    return {'counts': head, 'volume_um3': {str(k): v/1e9 for k, v in sorted(vol.items())},
+            'element_under_apex': {k: {'longest_edge_nm': e, 'domain': d} for k, (e, d) in sizes.items()},
+            'liquid_tets_within_200nm_of_apex': near}
+
+
+def run_meshcheck():
+    """
+    Mesh only (JCMgeo, no solve, no license needed) for MESHCHECK_X x MESHCHECK_GAPS with the 'fine'
+    preset and the current geometry, each in its own folder under results/meshcheck/ so a running
+    solve in this folder is not touched.  Per mesh: element counts, mesh time, per-domain volumes,
+    element size under the apex -> results/meshcheck.json and results/meshcheck_log.txt.
+    The grid files are deleted after the statistics are taken.
+    """
+    os.chdir(HERE)
+    base = os.path.join(RESULTS, 'meshcheck')
+    os.makedirs(base, exist_ok=True)
+    out = os.path.join(RESULTS, 'meshcheck.json')
+    data = json.load(open(out)) if os.path.exists(out) else {'settings': {}, 'meshes': {}}
+    data['settings'] = {'geometry': dict(GEOMETRY, **MESH['fine']), 'host': socket.gethostname(),
+                        'slurm_job': os.environ.get('SLURM_JOB_ID'), 'jcmroot': os.environ.get('JCMROOT')}
+    logf = os.path.join(RESULTS, 'meshcheck_log.txt')
+    for gap in MESHCHECK_GAPS:
+        for x in MESHCHECK_X:
+            key = f'x{x:+d}_g{gap}'
+            if key in data['meshes']:
+                continue
+            d = os.path.join(base, key)
+            os.makedirs(d, exist_ok=True)
+            keys = dict(GEOMETRY, **MESH['fine'], x_interface=float(x), gap=float(gap))
+            jcmwave.jcmt2jcm(os.path.join(HERE, 'layout.jcmt'), keys, outputfile=os.path.join(d, 'layout.jcm'))
+            t0 = time.time()
+            try:
+                jcmwave.geo(d)
+                st = grid_stats(os.path.join(d, 'grid.jcm'))
+                st['mesh_time_s'] = time.time() - t0
+            except Exception as ex:
+                st = {'error': repr(ex), 'mesh_time_s': time.time() - t0}
+            for f in ('grid.jcm',):
+                try:
+                    os.remove(os.path.join(d, f))
+                except OSError:
+                    pass
+            data['meshes'][key] = dict(st, x_interface=x, gap=gap)
+            with open(out, 'w') as f:
+                json.dump(data, f, indent=1)
+            c = st.get('counts', {})
+            ap = st.get('element_under_apex', {}).get('apex_z-20', {})
+            line = (f'{key:12s} tets {c.get("NTetrahedrons")} prisms {c.get("NPrisms")} points {c.get("NPoints")} '
+                    f'| apex element {ap.get("longest_edge_nm")} nm (dom {ap.get("domain")}) '
+                    f'| liquid tets near apex {st.get("liquid_tets_within_200nm_of_apex")} | {st["mesh_time_s"]:.0f} s'
+                    + (f' | ERROR {st["error"]}' if 'error' in st else ''))
+            print(line, flush=True)
+            with open(logf, 'a') as f:
+                f.write(line + '\n')
 
 
 def run_beamcheck():
@@ -462,6 +580,6 @@ if __name__ == '__main__':
         write_jcm('coarse' if '--coarse' in sys.argv else 'fine')
     elif '--stage' in sys.argv:
         stage = sys.argv[sys.argv.index('--stage') + 1]
-        run_beamcheck() if stage == 'beamcheck' else run_stage(stage)
+        {'beamcheck': run_beamcheck, 'meshcheck': run_meshcheck}.get(stage, lambda: run_stage(stage))()
     else:
         print(__doc__)
