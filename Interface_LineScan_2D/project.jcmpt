@@ -1,0 +1,103 @@
+<?
+# ---------------------------------------------------------------------------
+# 2D project template (jcmwave.solve('project.jcmpt', keys, working_dir=...)).
+# Lengths in the export grids are in metres; y = 0 is the SiN top surface.
+#
+# Always exported (small, stored in the pkl of every solve):
+#   line_axis   : x = 0, from 300 nm deep in the liquid up to the tip apex
+#                 (0.5 nm steps in SiN / liquid near the surface, 40 points across the gap)
+#   line_liquid : y = -15 nm (10 nm below the SiN), x = -1000 ... 1000 nm, 2 nm steps
+#   line_gap    : y = gap / 2 (middle of the gap), x = -300 ... 300 nm, 1 nm steps
+# Optional (save_slice = 1): x-y slice around the apex, like the 3D slice_xz.
+# ---------------------------------------------------------------------------
+import numpy as np
+g = keys['gap']
+t = keys['t_SiN']
+y_liq = np.concatenate([np.arange(-300.0, -50.0, 2.0), np.arange(-50.0, -t, 0.5)])
+y_sin = np.linspace(-t, 0.0, 11)[1:-1]
+y_gap = (np.arange(40) + 0.5)/40*g
+keys['axis_y'] = np.concatenate([y_liq, y_sin, y_gap])*1e-9
+keys['liq_x'] = np.arange(-1000.0, 1000.1, 2.0)*1e-9
+keys['gap_x'] = np.arange(-300.0, 300.1, 1.0)*1e-9
+keys['gap_mid'] = 0.5*g*1e-9
+keys['liq_y'] = (-t - 10.0)*1e-9
+slice_block = ''
+if keys.get('save_slice', 0):
+    sx = np.concatenate([np.arange(-1000, -150, 10), np.arange(-150, 150, 1), np.arange(150, 1001, 10)])*1e-9
+    sy = np.concatenate([np.arange(-305, -50, 5), np.arange(-50, 250, 1), np.arange(250, 1001, 10)])*1e-9
+    slice_block = ('PostProcess {\n  ExportFields {\n    FieldBagPath = "project_results/fieldbag.jcm"\n'
+                   '    OutputFileName = "project_results/slice_xy.jcm"\n    OutputQuantity = ElectricFieldStrength\n'
+                   '    Cartesian {\n      GridPointsX = [' + ' '.join('%.6e' % v for v in sx) + ']\n'
+                   '      GridPointsY = [' + ' '.join('%.6e' % v for v in sy) + ']\n    }\n  }\n}\n')
+keys['slice_block'] = slice_block
+?>
+Project {
+  Electromagnetics {
+    TimeHarmonic {
+      Scattering {
+        FieldComponents = Electric
+        Accuracy {
+          FiniteElementDegree = %(fe_degree)i
+          Refinement {
+            Strategy = HAdaptive
+            MaxNumberSteps = %(max_steps)i
+            Adaptivity {
+              MinimumRefinementFraction = 0.05
+            }
+          }
+          Precision = 1e-5
+        }
+      }
+    }
+  }
+}
+
+# Far field of the scattered light in the upper (air) half plane; the NA window around the
+# backscatter direction is selected in python (run_2d.py -> collect_backscatter).
+PostProcess {
+  FourierTransform {
+    FieldBagPath = "project_results/fieldbag.jcm"
+    OutputFileName = "project_results/ft.jcm"
+    NormalDirection = Y
+    ScatteredFieldOnly = yes
+    NRefinements = %(ft_refinements)i
+  }
+}
+
+PostProcess {
+  ExportFields {
+    FieldBagPath = "project_results/fieldbag.jcm"
+    OutputFileName = "project_results/line_axis.jcm"
+    OutputQuantity = ElectricFieldStrength
+    Cartesian {
+      GridPointsX = 0
+      GridPointsY = %(axis_y)e
+    }
+  }
+}
+
+PostProcess {
+  ExportFields {
+    FieldBagPath = "project_results/fieldbag.jcm"
+    OutputFileName = "project_results/line_liquid.jcm"
+    OutputQuantity = ElectricFieldStrength
+    Cartesian {
+      GridPointsX = %(liq_x)e
+      GridPointsY = %(liq_y)e
+    }
+  }
+}
+
+PostProcess {
+  ExportFields {
+    FieldBagPath = "project_results/fieldbag.jcm"
+    OutputFileName = "project_results/line_gap.jcm"
+    OutputQuantity = ElectricFieldStrength
+    Cartesian {
+      GridPointsX = %(gap_x)e
+      GridPointsY = %(gap_mid)e
+    }
+  }
+}
+
+%(slice_block)s

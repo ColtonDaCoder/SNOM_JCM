@@ -1,0 +1,10 @@
+# regenerated on every solve (write them for JCMcontrol with: python run_2d.py --jcm)
+project_results/
+grid.jcm
+layout.jcm
+materials.jcm
+sources.jcm
+project.jcmp
+beamcheck.jcmp
+__pycache__/
+work/

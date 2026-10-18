@@ -1,0 +1,43 @@
+# Focused Gaussian beam from the air side (same as 3D): focus on the SiN top surface at x = 0,
+# waist = lambda / (pi NA), angular spectrum limited to NA 0.4, theta from the surface normal.
+# 3DTo2D = yes: ThetaPhi / SP are given as for a 3D stack along z and mapped to the 2D layout
+# (stack along y, invariant along z), as in the older 2D projects of this repository.
+# beam_phi and the SP vectors are set by the beam check (run_2d.py --stage beamcheck):
+# beam travelling along +x (backscatter towards -x), source 1 = s (E along z, out of plane),
+# source 2 = p (E in the x-y plane).
+SourceBag {
+  Source {
+    ElectricFieldStrength {
+      GaussianBeam {
+        Lambda0 = %(wvl)e
+        ThetaPhi = [%(theta)e %(beam_phi)e]
+        Incidence = FromAbove
+        3DTo2D = yes
+        SP = %(sp_s)e
+        Waist = %(waist)e
+        Focus = [0 0 0]
+        OpticalSystem {
+          NumericalAperture = %(beam_na)e
+        }
+      }
+    }
+  }
+}
+SourceBag {
+  Source {
+    ElectricFieldStrength {
+      GaussianBeam {
+        Lambda0 = %(wvl)e
+        ThetaPhi = [%(theta)e %(beam_phi)e]
+        Incidence = FromAbove
+        3DTo2D = yes
+        SP = %(sp_p)e
+        Waist = %(waist)e
+        Focus = [0 0 0]
+        OpticalSystem {
+          NumericalAperture = %(beam_na)e
+        }
+      }
+    }
+  }
+}
