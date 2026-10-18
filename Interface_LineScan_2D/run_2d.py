@@ -15,6 +15,7 @@ s = E along z (perpendicular to the plane of incidence), p = E in the x-y plane.
     python run_2d.py --stage beamcheck      # incident beam only: direction, s/p, spot (seconds)
     python run_2d.py --stage meshcheck      # mesh only (JCMgeo, no license): element counts per position
     python run_2d.py --stage test           # 1 solve: does it run, cost, far-field sampling
+    python run_2d.py --stage exportbench    # time small field exports on the test field bag (no solve)
     python run_2d.py --stage converge_fine      # 3 positions x 3 gaps, 'fine' mesh
     python run_2d.py --stage converge_veryfine  # the same 9 points on 'veryfine' -> mesh convergence
     python run_2d.py --stage scan_h5        # -1000 ... 1000 nm every 10 nm at a 5 nm gap (field slices saved every 100 nm)
@@ -239,6 +240,52 @@ def run_meshcheck(mesh='fine'):
         json.dump({'mesh': mesh, 'geometry': dict(GEOMETRY, **MESH[mesh]), 'meshes': out}, f, indent=1)
 
 
+def run_exportbench():
+    """
+    Time JCM's Cartesian field export on the field bag already written by the test stage
+    (work/test/project_results/fieldbag.jcm, no re-solve): which kind of point set is slow?
+    Each variant is its own post-process-only project; times -> results/exportbench.json.
+    """
+    fb = os.path.join(WORK, 'test', 'project_results', 'fieldbag.jcm')
+    if not os.path.exists(fb):
+        raise SystemExit(f'{fb} not found: the test stage must have finished its solve first')
+    gap = STAGES['test']['gaps'][0]
+    t = GEOMETRY['t_SiN']
+    ax_uneven = np.concatenate([np.arange(-50.0, -t, 2.5), np.linspace(-t, 0, 6)[1:-1], (np.arange(10) + 0.5)/10*gap])
+    variants = {
+        'axis_20_uneven':    ([0.0], ax_uneven[::max(1, len(ax_uneven)//20)][:20]),
+        'axis_20_even_liq':  ([0.0], np.linspace(-100, -10, 20)),
+        'air_20_away':       ([3000.0], np.linspace(500, 600, 20)),
+        'liquid_20_far':     (np.linspace(-1000, -800, 20), [-t - 10.0]),
+        'liquid_20_under':   (np.linspace(-50, 50, 20), [-t - 10.0]),
+        'block_5x5_far_air': (np.linspace(4000, 4100, 5), np.linspace(2000, 2100, 5)),
+        'single_point_gap':  ([0.0], [gap/2]),
+        'single_point_far':  ([5000.0], [3000.0]),
+    }
+    bd = os.path.join(WORK, 'exportbench')
+    os.makedirs(os.path.join(bd, 'project_results'), exist_ok=True)
+    out = {}
+    for name, (xs, ys) in variants.items():
+        fmt = lambda v: '[' + ' '.join('%.6e' % (1e-9*float(a)) for a in v) + ']'
+        with open(os.path.join(bd, 'bench.jcmp'), 'w') as f:
+            f.write('PostProcess {\n  ExportFields {\n    FieldBagPath = "%s"\n'
+                    '    OutputFileName = "project_results/bench.jcm"\n    OutputQuantity = ElectricFieldStrength\n'
+                    '    Cartesian {\n      GridPointsX = %s\n      GridPointsY = %s\n    }\n  }\n}\n'
+                    % (fb.replace('\\', '/'), fmt(xs), fmt(ys)))
+        t0 = time.time()
+        try:
+            jcmwave.solve(os.path.join(bd, 'bench.jcmp'), logfile=os.path.join(bd, 'bench.log'), working_dir=bd)
+            err = None
+        except Exception as ex:
+            err = repr(ex)
+        dt = time.time() - t0
+        n = len(xs)*len(ys)
+        out[name] = {'points': n, 'seconds': dt, 'seconds_per_point': dt/n, 'error': err}
+        print(f'{name:20s} {n:4d} points  {dt:8.1f} s  ({dt/n:.2f} s/point)' + (f'  ERROR {err}' if err else ''), flush=True)
+        with open(os.path.join(RESULTS, 'exportbench.json'), 'w') as f:
+            json.dump(out, f, indent=1)
+
+
 def scan_keys(mesh, wvl):
     keys = dict(GEOMETRY, **MESH[mesh])
     keys.update(material_keys(wvl))
@@ -459,6 +506,8 @@ if __name__ == '__main__':
         part = tuple(int(v) for v in p.split('/')) if p else None
         if stage == 'beamcheck':
             run_beamcheck()
+        elif stage == 'exportbench':
+            run_exportbench()
         elif stage == 'meshcheck':
             run_meshcheck(arg('--mesh', 'fine'))
         else:
