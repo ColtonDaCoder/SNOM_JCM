@@ -3,33 +3,28 @@
 # 2D project template (jcmwave.solve('project.jcmpt', keys, working_dir=...)).
 # Lengths in the export grids are in metres; y = 0 is the SiN top surface.
 #
-# Always exported (small, stored in the pkl of every solve):
-#   line_axis   : x = 0, from 300 nm deep in the liquid up to the tip apex
-#                 (0.5 nm steps in SiN / liquid near the surface, 40 points across the gap)
-#   line_liquid : y = -15 nm (10 nm below the SiN), x = -1000 ... 1000 nm, 2 nm steps
-#   line_gap    : y = gap / 2 (middle of the gap), x = -300 ... 300 nm, 1 nm steps
-# Optional (save_slice = 1): x-y slice around the apex, like the 3D slice_xz.
+# JCM's Cartesian export took ~4 s per point here (17 min for 263 points), far longer than the
+# solve, so the exports are kept small:
+#   line_axis   (always): x = 0; 20 points across the gap (midpoints -> gap integral) and
+#               3 points 10 / 30 / 100 nm below the SiN
+#   line_liquid (extra_lines = 1): y = -15 nm, x = -500 ... 500 nm, 10 nm steps (101 points)
+#   line_gap    (extra_lines = 1): y = gap / 2, x = -200 ... 200 nm, 10 nm steps (41 points)
 # ---------------------------------------------------------------------------
 import numpy as np
 g = keys['gap']
 t = keys['t_SiN']
-y_liq = np.concatenate([np.arange(-300.0, -50.0, 2.0), np.arange(-50.0, -t, 0.5)])
-y_sin = np.linspace(-t, 0.0, 11)[1:-1]
-y_gap = (np.arange(40) + 0.5)/40*g
-keys['axis_y'] = np.concatenate([y_liq, y_sin, y_gap])*1e-9
-keys['liq_x'] = np.arange(-1000.0, 1000.1, 2.0)*1e-9
-keys['gap_x'] = np.arange(-300.0, 300.1, 1.0)*1e-9
-keys['gap_mid'] = 0.5*g*1e-9
-keys['liq_y'] = (-t - 10.0)*1e-9
-slice_block = ''
-if keys.get('save_slice', 0):
-    sx = np.concatenate([np.arange(-1000, -150, 10), np.arange(-150, 150, 1), np.arange(150, 1001, 10)])*1e-9
-    sy = np.concatenate([np.arange(-305, -50, 5), np.arange(-50, 250, 1), np.arange(250, 1001, 10)])*1e-9
-    slice_block = ('PostProcess {\n  ExportFields {\n    FieldBagPath = "project_results/fieldbag.jcm"\n'
-                   '    OutputFileName = "project_results/slice_xy.jcm"\n    OutputQuantity = ElectricFieldStrength\n'
-                   '    Cartesian {\n      GridPointsX = [' + ' '.join('%.6e' % v for v in sx) + ']\n'
-                   '      GridPointsY = [' + ' '.join('%.6e' % v for v in sy) + ']\n    }\n  }\n}\n')
-keys['slice_block'] = slice_block
+y_liq = np.array([-t - 100.0, -t - 30.0, -t - 10.0])
+y_gap = (np.arange(20) + 0.5)/20*g
+keys['axis_y'] = np.concatenate([y_liq, y_gap])*1e-9
+extra = ''
+if keys.get('extra_lines', 0):
+    lx = ' '.join('%.6e' % v for v in np.arange(-500.0, 500.1, 10.0)*1e-9)
+    gx = ' '.join('%.6e' % v for v in np.arange(-200.0, 200.1, 10.0)*1e-9)
+    for name, xs, yv in (('line_liquid', lx, (-t - 10.0)*1e-9), ('line_gap', gx, 0.5*g*1e-9)):
+        extra += ('PostProcess {\n  ExportFields {\n    FieldBagPath = "project_results/fieldbag.jcm"\n'
+                  '    OutputFileName = "project_results/' + name + '.jcm"\n    OutputQuantity = ElectricFieldStrength\n'
+                  '    Cartesian {\n      GridPointsX = [' + xs + ']\n      GridPointsY = %.6e\n    }\n  }\n}\n' % yv)
+keys['extra_block'] = extra
 ?>
 Project {
   Electromagnetics {
@@ -76,28 +71,4 @@ PostProcess {
   }
 }
 
-PostProcess {
-  ExportFields {
-    FieldBagPath = "project_results/fieldbag.jcm"
-    OutputFileName = "project_results/line_liquid.jcm"
-    OutputQuantity = ElectricFieldStrength
-    Cartesian {
-      GridPointsX = %(liq_x)e
-      GridPointsY = %(liq_y)e
-    }
-  }
-}
-
-PostProcess {
-  ExportFields {
-    FieldBagPath = "project_results/fieldbag.jcm"
-    OutputFileName = "project_results/line_gap.jcm"
-    OutputQuantity = ElectricFieldStrength
-    Cartesian {
-      GridPointsX = %(gap_x)e
-      GridPointsY = %(gap_mid)e
-    }
-  }
-}
-
-%(slice_block)s
+%(extra_block)s
