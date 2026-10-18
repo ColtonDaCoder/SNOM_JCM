@@ -18,7 +18,7 @@ s = E along z (perpendicular to the plane of incidence), p = E in the x-y plane.
     python run_2d.py --stage exportbench    # time small field exports on the test field bag (no solve)
     python run_2d.py --stage converge_fine      # 3 positions x 3 gaps, 'fine' mesh
     python run_2d.py --stage converge_veryfine  # the same 9 points on 'veryfine' -> mesh convergence
-    python run_2d.py --stage scan_h5        # -1000 ... 1000 nm every 10 nm at a 5 nm gap (liquid / gap lines saved every 100 nm)
+    python run_2d.py --stage scan_h5        # -1000 ... 1000 nm every 10 nm at a 5 nm gap (gap line saved every 100 nm)
     python run_2d.py --stage scan_wide      # -5000 ... 5000 nm every 250 nm at 5 and 101 nm (edge fringe / plateaus)
     python run_2d.py --stage scan_demod     # -1000 ... 1000 nm every 25 nm x 14 heights -> S2, S3
     python run_2d.py --stage scan_demod --part 2/4   # only every 4th point starting at the 2nd (parallel jobs)
@@ -26,8 +26,7 @@ s = E along z (perpendicular to the plane of incidence), p = E in the x-y plane.
 
 Per solve (results/<stage>[.partIofN].pkl): backscattered far field in the NA window for s and p
 incidence, the near field on the tip axis (20 points across the gap -> gap integral, and 10 / 30 /
-100 nm into the liquid); save_fields points also get a line 10 nm into the liquid and one through
-the middle of the gap (JCM's point export is slow here, ~4 s per point, so exports are kept small),
+100 nm into the liquid); save_fields points also get a line through the middle of the gap (JCM's point export is slow here, ~4 s per point, so exports are kept small),
 JCM's error estimates and costs.  Summary per solve in results/run_log.txt, JCM's console
 output in results/jcm_<stage>.log.  Stages are resumable (finished points are skipped).
 """
@@ -368,9 +367,8 @@ def near_field(wd, gap, extra_lines=False):
         i = int(np.argmin(np.abs(ya - (-GEOMETRY['t_SiN'] - depth))))
         out[f'E_liquid_{depth}nm'] = Ea[:, i, :]
     if extra_lines:
-        xl, _, El = load_line(wd, 'line_liquid')
         xg, _, Eg = load_line(wd, 'line_gap')
-        out.update(liquid_x=xl.astype(np.float32), liquid_E=El, gapline_x=xg.astype(np.float32), gapline_E=Eg)
+        out.update(gapline_x=xg.astype(np.float32), gapline_E=Eg)
     return out
 
 

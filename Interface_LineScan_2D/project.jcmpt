@@ -7,7 +7,6 @@
 # solve, so the exports are kept small:
 #   line_axis   (always): x = 0; 20 points across the gap (midpoints -> gap integral) and
 #               3 points 10 / 30 / 100 nm below the SiN
-#   line_liquid (extra_lines = 1): y = -15 nm, x = -500 ... 500 nm, 10 nm steps (101 points)
 #   line_gap    (extra_lines = 1): y = gap / 2, x = -200 ... 200 nm, 10 nm steps (41 points)
 # ---------------------------------------------------------------------------
 import numpy as np
@@ -18,9 +17,8 @@ y_gap = (np.arange(20) + 0.5)/20*g
 keys['axis_y'] = np.concatenate([y_liq, y_gap])*1e-9
 extra = ''
 if keys.get('extra_lines', 0):
-    lx = ' '.join('%.6e' % v for v in np.arange(-500.0, 500.1, 10.0)*1e-9)
     gx = ' '.join('%.6e' % v for v in np.arange(-200.0, 200.1, 10.0)*1e-9)
-    for name, xs, yv in (('line_liquid', lx, (-t - 10.0)*1e-9), ('line_gap', gx, 0.5*g*1e-9)):
+    for name, xs, yv in (('line_gap', gx, 0.5*g*1e-9),):
         extra += ('PostProcess {\n  ExportFields {\n    FieldBagPath = "project_results/fieldbag.jcm"\n'
                   '    OutputFileName = "project_results/' + name + '.jcm"\n    OutputQuantity = ElectricFieldStrength\n'
                   '    Cartesian {\n      GridPointsX = [' + xs + ']\n      GridPointsY = %.6e\n    }\n  }\n}\n' % yv)
