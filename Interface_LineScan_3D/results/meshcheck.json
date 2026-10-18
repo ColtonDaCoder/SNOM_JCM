@@ -1907,6 +1907,1892 @@
    "mesh_time_s": 16.802734851837158,
    "x_interface": 1000,
    "gap": 5
+  },
+  "x-1000_g101": {
+   "counts": {
+    "NBricks": 158,
+    "NPoints": 18514,
+    "NPrisms": 2420,
+    "NPyramids": 0,
+    "NTetrahedrons": 99807
+   },
+   "volume_um3": {
+    "1": 2695.690379366531,
+    "2": 400.3840000000001,
+    "3": 771.9282446334786,
+    "7": 1.2803199999999837,
+    "9": 112.00000000000053
+   },
+   "element_under_apex": {
+    "apex_z-20": {
+     "longest_edge_nm": 122.25993598775582,
+     "domain": 9
+    },
+    "apex_z-50": {
+     "longest_edge_nm": 122.25993598775582,
+     "domain": 9
+    },
+    "apex_z-100": {
+     "longest_edge_nm": 158.30825467224662,
+     "domain": 9
+    },
+    "x+60_z-20": {
+     "longest_edge_nm": 136.47676902420565,
+     "domain": 9
+    },
+    "x-60_z-20": {
+     "longest_edge_nm": 155.45919995781605,
+     "domain": 9
+    },
+    "y+60_z-20": {
+     "longest_edge_nm": 136.64886063714852,
+     "domain": 9
+    }
+   },
+   "liquid_tets_within_200nm_of_apex": 96,
+   "mesh_time_s": 20.842958450317383,
+   "x_interface": -1000,
+   "gap": 101
+  },
+  "x-950_g101": {
+   "counts": {
+    "NBricks": 158,
+    "NPoints": 16351,
+    "NPrisms": 2400,
+    "NPyramids": 0,
+    "NTetrahedrons": 86632
+   },
+   "volume_um3": {
+    "1": 2695.690379366548,
+    "2": 401.0840000000007,
+    "3": 771.928244633478,
+    "7": 1.2803199999999755,
+    "9": 111.30000000000074
+   },
+   "element_under_apex": {
+    "apex_z-20": {
+     "longest_edge_nm": 108.94909590293044,
+     "domain": 9
+    },
+    "apex_z-50": {
+     "longest_edge_nm": 123.77733948146195,
+     "domain": 9
+    },
+    "apex_z-100": {
+     "longest_edge_nm": 128.00465518777924,
+     "domain": 9
+    },
+    "x+60_z-20": {
+     "longest_edge_nm": 98.90415343958828,
+     "domain": 9
+    },
+    "x-60_z-20": {
+     "longest_edge_nm": 133.23345073501508,
+     "domain": 9
+    },
+    "y+60_z-20": {
+     "longest_edge_nm": 126.01096955362937,
+     "domain": 9
+    }
+   },
+   "liquid_tets_within_200nm_of_apex": 125,
+   "mesh_time_s": 18.037588119506836,
+   "x_interface": -950,
+   "gap": 101
+  },
+  "x-900_g101": {
+   "counts": {
+    "NBricks": 158,
+    "NPoints": 17483,
+    "NPrisms": 2402,
+    "NPyramids": 0,
+    "NTetrahedrons": 93488
+   },
+   "volume_um3": {
+    "1": 2695.6903793665106,
+    "2": 401.7840000000002,
+    "3": 771.9282446334765,
+    "7": 1.28031999999998,
+    "9": 110.60000000000016
+   },
+   "element_under_apex": {
+    "apex_z-20": {
+     "longest_edge_nm": 86.03948435725772,
+     "domain": 9
+    },
+    "apex_z-50": {
+     "longest_edge_nm": 86.03948435725772,
+     "domain": 9
+    },
+    "apex_z-100": {
+     "longest_edge_nm": 147.4977134351492,
+     "domain": 9
+    },
+    "x+60_z-20": {
+     "longest_edge_nm": 98.15229801548844,
+     "domain": 9
+    },
+    "x-60_z-20": {
+     "longest_edge_nm": 93.10388576182136,
+     "domain": 9
+    },
+    "y+60_z-20": {
+     "longest_edge_nm": 120.77111510295441,
+     "domain": 9
+    }
+   },
+   "liquid_tets_within_200nm_of_apex": 149,
+   "mesh_time_s": 19.302796363830566,
+   "x_interface": -900,
+   "gap": 101
+  },
+  "x-850_g101": {
+   "counts": {
+    "NBricks": 158,
+    "NPoints": 18515,
+    "NPrisms": 2418,
+    "NPyramids": 0,
+    "NTetrahedrons": 99555
+   },
+   "volume_um3": {
+    "1": 2695.6903793665524,
+    "2": 402.484,
+    "3": 771.9282446334788,
+    "7": 1.2803199999999817,
+    "9": 109.9000000000003
+   },
+   "element_under_apex": {
+    "apex_z-20": {
+     "longest_edge_nm": 115.18445223374775,
+     "domain": 9
+    },
+    "apex_z-50": {
+     "longest_edge_nm": 124.94120284943298,
+     "domain": 9
+    },
+    "apex_z-100": {
+     "longest_edge_nm": 128.5041981579566,
+     "domain": 9
+    },
+    "x+60_z-20": {
+     "longest_edge_nm": 127.60147183444165,
+     "domain": 9
+    },
+    "x-60_z-20": {
+     "longest_edge_nm": 142.21779760411616,
+     "domain": 9
+    },
+    "y+60_z-20": {
+     "longest_edge_nm": 130.22368662816183,
+     "domain": 9
+    }
+   },
+   "liquid_tets_within_200nm_of_apex": 101,
+   "mesh_time_s": 21.041557550430298,
+   "x_interface": -850,
+   "gap": 101
+  },
+  "x-800_g101": {
+   "counts": {
+    "NBricks": 159,
+    "NPoints": 16647,
+    "NPrisms": 2408,
+    "NPyramids": 0,
+    "NTetrahedrons": 88388
+   },
+   "volume_um3": {
+    "1": 2695.6903793665324,
+    "2": 403.18400000000065,
+    "3": 771.9282446334769,
+    "7": 1.280319999999985,
+    "9": 109.19999999999999
+   },
+   "element_under_apex": {
+    "apex_z-20": {
+     "longest_edge_nm": 178.58723880881908,
+     "domain": 9
+    },
+    "apex_z-50": {
+     "longest_edge_nm": 178.58723880881908,
+     "domain": 9
+    },
+    "apex_z-100": {
+     "longest_edge_nm": 178.58723880881908,
+     "domain": 9
+    },
+    "x+60_z-20": {
+     "longest_edge_nm": 147.57602348025767,
+     "domain": 9
+    },
+    "x-60_z-20": {
+     "longest_edge_nm": 174.50001635690506,
+     "domain": 9
+    },
+    "y+60_z-20": {
+     "longest_edge_nm": 127.9914219729964,
+     "domain": 9
+    }
+   },
+   "liquid_tets_within_200nm_of_apex": 59,
+   "mesh_time_s": 17.68720245361328,
+   "x_interface": -800,
+   "gap": 101
+  },
+  "x-750_g101": {
+   "counts": {
+    "NBricks": 158,
+    "NPoints": 17468,
+    "NPrisms": 2378,
+    "NPyramids": 0,
+    "NTetrahedrons": 93530
+   },
+   "volume_um3": {
+    "1": 2695.69037936653,
+    "2": 403.8840000000001,
+    "3": 771.9282446334777,
+    "7": 1.2803199999999795,
+    "9": 108.49999999999967
+   },
+   "element_under_apex": {
+    "apex_z-20": {
+     "longest_edge_nm": 134.5439229815158,
+     "domain": 9
+    },
+    "apex_z-50": {
+     "longest_edge_nm": 134.5439229815158,
+     "domain": 9
+    },
+    "apex_z-100": {
+     "longest_edge_nm": 136.05274046145948,
+     "domain": 9
+    },
+    "x+60_z-20": {
+     "longest_edge_nm": 142.73866635076033,
+     "domain": 9
+    },
+    "x-60_z-20": {
+     "longest_edge_nm": 109.44674888162311,
+     "domain": 9
+    },
+    "y+60_z-20": {
+     "longest_edge_nm": 147.1469424038672,
+     "domain": 9
+    }
+   },
+   "liquid_tets_within_200nm_of_apex": 120,
+   "mesh_time_s": 19.516208171844482,
+   "x_interface": -750,
+   "gap": 101
+  },
+  "x-700_g101": {
+   "counts": {
+    "NBricks": 158,
+    "NPoints": 15219,
+    "NPrisms": 2350,
+    "NPyramids": 0,
+    "NTetrahedrons": 80015
+   },
+   "volume_um3": {
+    "1": 2695.6903793665356,
+    "2": 404.58400000000086,
+    "3": 771.9282446334763,
+    "7": 1.2803199999999797,
+    "9": 107.80000000000041
+   },
+   "element_under_apex": {
+    "apex_z-20": {
+     "longest_edge_nm": 130.2805236298471,
+     "domain": 9
+    },
+    "apex_z-50": {
+     "longest_edge_nm": 130.2805236298471,
+     "domain": 9
+    },
+    "apex_z-100": {
+     "longest_edge_nm": 149.88609481180254,
+     "domain": 9
+    },
+    "x+60_z-20": {
+     "longest_edge_nm": 129.05463363961644,
+     "domain": 9
+    },
+    "x-60_z-20": {
+     "longest_edge_nm": 110.45342323298568,
+     "domain": 9
+    },
+    "y+60_z-20": {
+     "longest_edge_nm": 185.05261014312777,
+     "domain": 9
+    }
+   },
+   "liquid_tets_within_200nm_of_apex": 65,
+   "mesh_time_s": 17.478114366531372,
+   "x_interface": -700,
+   "gap": 101
+  },
+  "x-650_g101": {
+   "counts": {
+    "NBricks": 158,
+    "NPoints": 19095,
+    "NPrisms": 2350,
+    "NPyramids": 0,
+    "NTetrahedrons": 103401
+   },
+   "volume_um3": {
+    "1": 2695.6903793665615,
+    "2": 405.28400000000204,
+    "3": 771.9282446334772,
+    "7": 1.280319999999986,
+    "9": 107.10000000000025
+   },
+   "element_under_apex": {
+    "apex_z-20": {
+     "longest_edge_nm": 134.5214314596681,
+     "domain": 9
+    },
+    "apex_z-50": {
+     "longest_edge_nm": 200.5300355138413,
+     "domain": 9
+    },
+    "apex_z-100": {
+     "longest_edge_nm": 297.9217416965309,
+     "domain": 9
+    },
+    "x+60_z-20": {
+     "longest_edge_nm": 116.24522366499241,
+     "domain": 9
+    },
+    "x-60_z-20": {
+     "longest_edge_nm": 237.1893234631079,
+     "domain": 9
+    },
+    "y+60_z-20": {
+     "longest_edge_nm": 185.3065082287836,
+     "domain": 9
+    }
+   },
+   "liquid_tets_within_200nm_of_apex": 74,
+   "mesh_time_s": 20.025331735610962,
+   "x_interface": -650,
+   "gap": 101
+  },
+  "x-600_g101": {
+   "counts": {
+    "NBricks": 158,
+    "NPoints": 15586,
+    "NPrisms": 2382,
+    "NPyramids": 0,
+    "NTetrahedrons": 82109
+   },
+   "volume_um3": {
+    "1": 2695.690379366545,
+    "2": 405.9840000000024,
+    "3": 771.9282446334778,
+    "7": 1.280319999999977,
+    "9": 106.39999999999988
+   },
+   "element_under_apex": {
+    "apex_z-20": {
+     "longest_edge_nm": 94.8146737065187,
+     "domain": 9
+    },
+    "apex_z-50": {
+     "longest_edge_nm": 106.2278225331467,
+     "domain": 9
+    },
+    "apex_z-100": {
+     "longest_edge_nm": 156.47399291692852,
+     "domain": 9
+    },
+    "x+60_z-20": {
+     "longest_edge_nm": 65.61789891998541,
+     "domain": 9
+    },
+    "x-60_z-20": {
+     "longest_edge_nm": 118.6547879432447,
+     "domain": 9
+    },
+    "y+60_z-20": {
+     "longest_edge_nm": 144.438325454162,
+     "domain": 9
+    }
+   },
+   "liquid_tets_within_200nm_of_apex": 128,
+   "mesh_time_s": 17.27628231048584,
+   "x_interface": -600,
+   "gap": 101
+  },
+  "x-550_g101": {
+   "counts": {
+    "NBricks": 158,
+    "NPoints": 15632,
+    "NPrisms": 2394,
+    "NPyramids": 0,
+    "NTetrahedrons": 82284
+   },
+   "volume_um3": {
+    "1": 2695.690379366503,
+    "2": 406.6839999999988,
+    "3": 771.9282446334802,
+    "7": 1.2803199999999793,
+    "9": 105.70000000000066
+   },
+   "element_under_apex": {
+    "apex_z-20": {
+     "longest_edge_nm": 194.46322102257977,
+     "domain": 9
+    },
+    "apex_z-50": {
+     "longest_edge_nm": 219.1992737270313,
+     "domain": 9
+    },
+    "apex_z-100": {
+     "longest_edge_nm": 240.69377285009958,
+     "domain": 9
+    },
+    "x+60_z-20": {
+     "longest_edge_nm": 160.81956509480085,
+     "domain": 9
+    },
+    "x-60_z-20": {
+     "longest_edge_nm": 268.55306969767435,
+     "domain": 9
+    },
+    "y+60_z-20": {
+     "longest_edge_nm": 178.99127652240452,
+     "domain": 9
+    }
+   },
+   "liquid_tets_within_200nm_of_apex": 60,
+   "mesh_time_s": 18.315622806549072,
+   "x_interface": -550,
+   "gap": 101
+  },
+  "x-500_g101": {
+   "counts": {
+    "NBricks": 158,
+    "NPoints": 15760,
+    "NPrisms": 2382,
+    "NPyramids": 0,
+    "NTetrahedrons": 83125
+   },
+   "volume_um3": {
+    "1": 2695.705859688423,
+    "2": 407.38400000000047,
+    "3": 771.912764311577,
+    "7": 1.2803199999999786,
+    "9": 104.99999999999989
+   },
+   "element_under_apex": {
+    "apex_z-20": {
+     "longest_edge_nm": 126.0049470039532,
+     "domain": 9
+    },
+    "apex_z-50": {
+     "longest_edge_nm": 147.35488222267904,
+     "domain": 9
+    },
+    "apex_z-100": {
+     "longest_edge_nm": 147.35488222267904,
+     "domain": 9
+    },
+    "x+60_z-20": {
+     "longest_edge_nm": 153.16839076553504,
+     "domain": 9
+    },
+    "x-60_z-20": {
+     "longest_edge_nm": 158.6172782298471,
+     "domain": 9
+    },
+    "y+60_z-20": {
+     "longest_edge_nm": 147.35488222267904,
+     "domain": 9
+    }
+   },
+   "liquid_tets_within_200nm_of_apex": 115,
+   "mesh_time_s": 18.014645099639893,
+   "x_interface": -500,
+   "gap": 101
+  },
+  "x-450_g101": {
+   "counts": {
+    "NBricks": 158,
+    "NPoints": 15456,
+    "NPrisms": 2380,
+    "NPyramids": 0,
+    "NTetrahedrons": 81299
+   },
+   "volume_um3": {
+    "1": 2695.7058596883903,
+    "2": 408.084,
+    "3": 771.9127643115778,
+    "7": 1.2803199999999793,
+    "9": 104.30000000000028
+   },
+   "element_under_apex": {
+    "apex_z-20": {
+     "longest_edge_nm": 93.80140171325544,
+     "domain": 9
+    },
+    "apex_z-50": {
+     "longest_edge_nm": 119.44147085082253,
+     "domain": 9
+    },
+    "apex_z-100": {
+     "longest_edge_nm": 108.71844298591554,
+     "domain": 9
+    },
+    "x+60_z-20": {
+     "longest_edge_nm": 128.887682625854,
+     "domain": 9
+    },
+    "x-60_z-20": {
+     "longest_edge_nm": 110.54299012357316,
+     "domain": 9
+    },
+    "y+60_z-20": {
+     "longest_edge_nm": 124.35385381019273,
+     "domain": 9
+    }
+   },
+   "liquid_tets_within_200nm_of_apex": 167,
+   "mesh_time_s": 17.740525007247925,
+   "x_interface": -450,
+   "gap": 101
+  },
+  "x-400_g101": {
+   "counts": {
+    "NBricks": 159,
+    "NPoints": 17125,
+    "NPrisms": 2390,
+    "NPyramids": 0,
+    "NTetrahedrons": 91515
+   },
+   "volume_um3": {
+    "1": 2695.7058596884435,
+    "2": 408.78400000000255,
+    "3": 771.912764311576,
+    "7": 1.2803199999999835,
+    "9": 103.6000000000007
+   },
+   "element_under_apex": {
+    "apex_z-20": {
+     "longest_edge_nm": 137.1715487770744,
+     "domain": 9
+    },
+    "apex_z-50": {
+     "longest_edge_nm": 137.1715487770744,
+     "domain": 9
+    },
+    "apex_z-100": {
+     "longest_edge_nm": 140.26513711606808,
+     "domain": 9
+    },
+    "x+60_z-20": {
+     "longest_edge_nm": 113.77033247565896,
+     "domain": 9
+    },
+    "x-60_z-20": {
+     "longest_edge_nm": 116.49651013411292,
+     "domain": 9
+    },
+    "y+60_z-20": {
+     "longest_edge_nm": 170.67357770746415,
+     "domain": 9
+    }
+   },
+   "liquid_tets_within_200nm_of_apex": 121,
+   "mesh_time_s": 18.538044929504395,
+   "x_interface": -400,
+   "gap": 101
+  },
+  "x-350_g101": {
+   "counts": {
+    "NBricks": 158,
+    "NPoints": 16533,
+    "NPrisms": 2362,
+    "NPyramids": 0,
+    "NTetrahedrons": 87932
+   },
+   "volume_um3": {
+    "1": 2695.7058596884553,
+    "2": 409.484,
+    "3": 771.9127643115789,
+    "7": 1.280319999999981,
+    "9": 102.89999999999961
+   },
+   "element_under_apex": {
+    "apex_z-20": {
+     "longest_edge_nm": 187.22601947970955,
+     "domain": 9
+    },
+    "apex_z-50": {
+     "longest_edge_nm": 235.12115971370753,
+     "domain": 9
+    },
+    "apex_z-100": {
+     "longest_edge_nm": 235.12115971370753,
+     "domain": 9
+    },
+    "x+60_z-20": {
+     "longest_edge_nm": 168.31350225164016,
+     "domain": 9
+    },
+    "x-60_z-20": {
+     "longest_edge_nm": 235.12115971370753,
+     "domain": 9
+    },
+    "y+60_z-20": {
+     "longest_edge_nm": 214.32022857567472,
+     "domain": 9
+    }
+   },
+   "liquid_tets_within_200nm_of_apex": 56,
+   "mesh_time_s": 17.988903760910034,
+   "x_interface": -350,
+   "gap": 101
+  },
+  "x-300_g101": {
+   "counts": {
+    "NBricks": 158,
+    "NPoints": 17336,
+    "NPrisms": 2366,
+    "NPyramids": 0,
+    "NTetrahedrons": 92694
+   },
+   "volume_um3": {
+    "1": 2695.705859688453,
+    "2": 410.18400000000116,
+    "3": 771.9127643115754,
+    "7": 1.2803199999999821,
+    "9": 102.19999999999997
+   },
+   "element_under_apex": {
+    "apex_z-20": {
+     "longest_edge_nm": 185.0602965156386,
+     "domain": 9
+    },
+    "apex_z-50": {
+     "longest_edge_nm": 185.0602965156386,
+     "domain": 9
+    },
+    "apex_z-100": {
+     "longest_edge_nm": 203.73624272342343,
+     "domain": 9
+    },
+    "x+60_z-20": {
+     "longest_edge_nm": 169.46229389674156,
+     "domain": 9
+    },
+    "x-60_z-20": {
+     "longest_edge_nm": 110.44925880753104,
+     "domain": 9
+    },
+    "y+60_z-20": {
+     "longest_edge_nm": 185.0602965156386,
+     "domain": 9
+    }
+   },
+   "liquid_tets_within_200nm_of_apex": 86,
+   "mesh_time_s": 18.480180740356445,
+   "x_interface": -300,
+   "gap": 101
+  },
+  "x-250_g101": {
+   "counts": {
+    "NBricks": 158,
+    "NPoints": 16077,
+    "NPrisms": 2358,
+    "NPyramids": 0,
+    "NTetrahedrons": 85243
+   },
+   "volume_um3": {
+    "1": 2695.7055459337726,
+    "2": 410.8839999999995,
+    "3": 771.9130780662402,
+    "7": 1.2803199999999826,
+    "9": 101.5
+   },
+   "element_under_apex": {
+    "apex_z-20": {
+     "longest_edge_nm": 107.56249506445342,
+     "domain": 9
+    },
+    "apex_z-50": {
+     "longest_edge_nm": 112.04455853767087,
+     "domain": 9
+    },
+    "apex_z-100": {
+     "longest_edge_nm": 159.6993267317801,
+     "domain": 9
+    },
+    "x+60_z-20": {
+     "longest_edge_nm": 143.13518797851023,
+     "domain": 9
+    },
+    "x-60_z-20": {
+     "longest_edge_nm": 124.12958844313926,
+     "domain": 9
+    },
+    "y+60_z-20": {
+     "longest_edge_nm": 107.56249506445342,
+     "domain": 9
+    }
+   },
+   "liquid_tets_within_200nm_of_apex": 115,
+   "mesh_time_s": 17.54483723640442,
+   "x_interface": -250,
+   "gap": 101
+  },
+  "x-200_g101": {
+   "counts": {
+    "NBricks": 158,
+    "NPoints": 16198,
+    "NPrisms": 2382,
+    "NPyramids": 0,
+    "NTetrahedrons": 85879
+   },
+   "volume_um3": {
+    "1": 2695.705545933782,
+    "2": 411.5839999999994,
+    "3": 771.913078066237,
+    "7": 1.2803199999999804,
+    "9": 100.80000000000011
+   },
+   "element_under_apex": {
+    "apex_z-20": {
+     "longest_edge_nm": 195.6150212006532,
+     "domain": 9
+    },
+    "apex_z-50": {
+     "longest_edge_nm": 195.6150212006532,
+     "domain": 9
+    },
+    "apex_z-100": {
+     "longest_edge_nm": 195.6150212006532,
+     "domain": 9
+    },
+    "x+60_z-20": {
+     "longest_edge_nm": 146.20157235600777,
+     "domain": 9
+    },
+    "x-60_z-20": {
+     "longest_edge_nm": 215.19628452391396,
+     "domain": 9
+    },
+    "y+60_z-20": {
+     "longest_edge_nm": 202.30343350695,
+     "domain": 9
+    }
+   },
+   "liquid_tets_within_200nm_of_apex": 56,
+   "mesh_time_s": 17.430299520492554,
+   "x_interface": -200,
+   "gap": 101
+  },
+  "x-150_g101": {
+   "counts": {
+    "NBricks": 158,
+    "NPoints": 17369,
+    "NPrisms": 2382,
+    "NPyramids": 0,
+    "NTetrahedrons": 92899
+   },
+   "volume_um3": {
+    "1": 2695.7055459337703,
+    "2": 412.2840000000012,
+    "3": 771.9130780662355,
+    "7": 1.2803199999999781,
+    "9": 100.09999999999995
+   },
+   "element_under_apex": {
+    "apex_z-20": {
+     "longest_edge_nm": 191.76581477658996,
+     "domain": 9
+    },
+    "apex_z-50": {
+     "longest_edge_nm": 191.76581477658996,
+     "domain": 9
+    },
+    "apex_z-100": {
+     "longest_edge_nm": 191.76581477658996,
+     "domain": 9
+    },
+    "x+60_z-20": {
+     "longest_edge_nm": 146.16459078448887,
+     "domain": 9
+    },
+    "x-60_z-20": {
+     "longest_edge_nm": 181.60518406378765,
+     "domain": 9
+    },
+    "y+60_z-20": {
+     "longest_edge_nm": 174.4446252671677,
+     "domain": 9
+    }
+   },
+   "liquid_tets_within_200nm_of_apex": 82,
+   "mesh_time_s": 19.325112342834473,
+   "x_interface": -150,
+   "gap": 101
+  },
+  "x-100_g101": {
+   "counts": {
+    "NBricks": 158,
+    "NPoints": 17412,
+    "NPrisms": 2378,
+    "NPyramids": 0,
+    "NTetrahedrons": 93169
+   },
+   "volume_um3": {
+    "1": 2695.7055459337817,
+    "2": 412.9840000000003,
+    "3": 771.9130780662359,
+    "7": 1.280319999999978,
+    "9": 99.39999999999927
+   },
+   "element_under_apex": {
+    "apex_z-20": {
+     "longest_edge_nm": 95.1949282076837,
+     "domain": 9
+    },
+    "apex_z-50": {
+     "longest_edge_nm": 122.85710435452562,
+     "domain": 9
+    },
+    "apex_z-100": {
+     "longest_edge_nm": 157.83452125990144,
+     "domain": 9
+    },
+    "x+60_z-20": {
+     "longest_edge_nm": 92.15986591108009,
+     "domain": 9
+    },
+    "x-60_z-20": {
+     "longest_edge_nm": 121.58918040328626,
+     "domain": 9
+    },
+    "y+60_z-20": {
+     "longest_edge_nm": 130.99202469319897,
+     "domain": 9
+    }
+   },
+   "liquid_tets_within_200nm_of_apex": 146,
+   "mesh_time_s": 19.408926248550415,
+   "x_interface": -100,
+   "gap": 101
+  },
+  "x-50_g101": {
+   "counts": {
+    "NBricks": 158,
+    "NPoints": 14326,
+    "NPrisms": 2394,
+    "NPyramids": 0,
+    "NTetrahedrons": 74374
+   },
+   "volume_um3": {
+    "1": 2695.70554593374,
+    "2": 413.68399999999986,
+    "3": 771.9130780662407,
+    "7": 1.2803199999999826,
+    "9": 98.70000000000009
+   },
+   "element_under_apex": {
+    "apex_z-20": {
+     "longest_edge_nm": 106.22109791721837,
+     "domain": 9
+    },
+    "apex_z-50": {
+     "longest_edge_nm": 106.22109791721837,
+     "domain": 9
+    },
+    "apex_z-100": {
+     "longest_edge_nm": 113.45676768547678,
+     "domain": 9
+    },
+    "x+60_z-20": {
+     "longest_edge_nm": 123.57445232552867,
+     "domain": 9
+    },
+    "x-60_z-20": {
+     "longest_edge_nm": 119.62337917143381,
+     "domain": 2
+    },
+    "y+60_z-20": {
+     "longest_edge_nm": 136.5137675419783,
+     "domain": 9
+    }
+   },
+   "liquid_tets_within_200nm_of_apex": 130,
+   "mesh_time_s": 16.83292508125305,
+   "x_interface": -50,
+   "gap": 101
+  },
+  "x+0_g101": {
+   "counts": {
+    "NBricks": 159,
+    "NPoints": 16371,
+    "NPrisms": 2374,
+    "NPyramids": 0,
+    "NTetrahedrons": 86837
+   },
+   "volume_um3": {
+    "1": 2695.798475581147,
+    "2": 414.3840000000011,
+    "3": 771.8201484188537,
+    "7": 1.280319999999988,
+    "9": 98.00000000000007
+   },
+   "element_under_apex": {
+    "apex_z-20": {
+     "longest_edge_nm": 95.21956314548166,
+     "domain": 9
+    },
+    "apex_z-50": {
+     "longest_edge_nm": 95.21956314548166,
+     "domain": 9
+    },
+    "apex_z-100": {
+     "longest_edge_nm": 124.08075330038602,
+     "domain": 9
+    },
+    "x+60_z-20": {
+     "longest_edge_nm": 115.94780116678925,
+     "domain": 9
+    },
+    "x-60_z-20": {
+     "longest_edge_nm": 104.07185804727062,
+     "domain": 2
+    },
+    "y+60_z-20": {
+     "longest_edge_nm": 103.70767736215583,
+     "domain": 2
+    }
+   },
+   "liquid_tets_within_200nm_of_apex": 199,
+   "mesh_time_s": 17.44832444190979,
+   "x_interface": 0,
+   "gap": 101
+  },
+  "x+50_g101": {
+   "counts": {
+    "NBricks": 159,
+    "NPoints": 16627,
+    "NPrisms": 2374,
+    "NPyramids": 0,
+    "NTetrahedrons": 88406
+   },
+   "volume_um3": {
+    "1": 2695.798475581125,
+    "2": 415.0839999999992,
+    "3": 771.820148418849,
+    "7": 1.2803199999999817,
+    "9": 97.3000000000003
+   },
+   "element_under_apex": {
+    "apex_z-20": {
+     "longest_edge_nm": 121.08010644357793,
+     "domain": 2
+    },
+    "apex_z-50": {
+     "longest_edge_nm": 121.08010644357793,
+     "domain": 2
+    },
+    "apex_z-100": {
+     "longest_edge_nm": 135.32056434327765,
+     "domain": 2
+    },
+    "x+60_z-20": {
+     "longest_edge_nm": 94.89037014318671,
+     "domain": 9
+    },
+    "x-60_z-20": {
+     "longest_edge_nm": 107.92627305021469,
+     "domain": 2
+    },
+    "y+60_z-20": {
+     "longest_edge_nm": 121.08010644357793,
+     "domain": 2
+    }
+   },
+   "liquid_tets_within_200nm_of_apex": 161,
+   "mesh_time_s": 19.173117876052856,
+   "x_interface": 50,
+   "gap": 101
+  },
+  "x+100_g101": {
+   "counts": {
+    "NBricks": 158,
+    "NPoints": 16267,
+    "NPrisms": 2404,
+    "NPyramids": 0,
+    "NTetrahedrons": 86116
+   },
+   "volume_um3": {
+    "1": 2695.7984755811963,
+    "2": 415.7839999999994,
+    "3": 771.820148418852,
+    "7": 1.2803199999999795,
+    "9": 96.6000000000003
+   },
+   "element_under_apex": {
+    "apex_z-20": {
+     "longest_edge_nm": 101.68622279769552,
+     "domain": 2
+    },
+    "apex_z-50": {
+     "longest_edge_nm": 108.83800100112458,
+     "domain": 2
+    },
+    "apex_z-100": {
+     "longest_edge_nm": 123.57459857754057,
+     "domain": 2
+    },
+    "x+60_z-20": {
+     "longest_edge_nm": 121.37509076360529,
+     "domain": 2
+    },
+    "x-60_z-20": {
+     "longest_edge_nm": 82.9766324791086,
+     "domain": 2
+    },
+    "y+60_z-20": {
+     "longest_edge_nm": 106.18344574574526,
+     "domain": 2
+    }
+   },
+   "liquid_tets_within_200nm_of_apex": 170,
+   "mesh_time_s": 18.227914094924927,
+   "x_interface": 100,
+   "gap": 101
+  },
+  "x+150_g101": {
+   "counts": {
+    "NBricks": 158,
+    "NPoints": 16445,
+    "NPrisms": 2378,
+    "NPyramids": 0,
+    "NTetrahedrons": 87289
+   },
+   "volume_um3": {
+    "1": 2695.798475581177,
+    "2": 416.48399999999856,
+    "3": 771.8201484188519,
+    "7": 1.2803199999999864,
+    "9": 95.8999999999994
+   },
+   "element_under_apex": {
+    "apex_z-20": {
+     "longest_edge_nm": 149.18638111466893,
+     "domain": 2
+    },
+    "apex_z-50": {
+     "longest_edge_nm": 149.18638111466893,
+     "domain": 2
+    },
+    "apex_z-100": {
+     "longest_edge_nm": 176.16746091244627,
+     "domain": 2
+    },
+    "x+60_z-20": {
+     "longest_edge_nm": 126.55565082265129,
+     "domain": 2
+    },
+    "x-60_z-20": {
+     "longest_edge_nm": 95.73061889817903,
+     "domain": 2
+    },
+    "y+60_z-20": {
+     "longest_edge_nm": 211.3741079335757,
+     "domain": 2
+    }
+   },
+   "liquid_tets_within_200nm_of_apex": 104,
+   "mesh_time_s": 18.566818952560425,
+   "x_interface": 150,
+   "gap": 101
+  },
+  "x+200_g101": {
+   "counts": {
+    "NBricks": 158,
+    "NPoints": 15751,
+    "NPrisms": 2374,
+    "NPyramids": 0,
+    "NTetrahedrons": 83021
+   },
+   "volume_um3": {
+    "1": 2695.7984755811685,
+    "2": 417.1840000000023,
+    "3": 771.8201484188522,
+    "7": 1.28031999999998,
+    "9": 95.19999999999987
+   },
+   "element_under_apex": {
+    "apex_z-20": {
+     "longest_edge_nm": 108.11529047778792,
+     "domain": 2
+    },
+    "apex_z-50": {
+     "longest_edge_nm": 142.40560427005593,
+     "domain": 2
+    },
+    "apex_z-100": {
+     "longest_edge_nm": 164.7561354195316,
+     "domain": 2
+    },
+    "x+60_z-20": {
+     "longest_edge_nm": 180.44412321127373,
+     "domain": 2
+    },
+    "x-60_z-20": {
+     "longest_edge_nm": 152.8992853588494,
+     "domain": 2
+    },
+    "y+60_z-20": {
+     "longest_edge_nm": 180.43760376289526,
+     "domain": 2
+    }
+   },
+   "liquid_tets_within_200nm_of_apex": 94,
+   "mesh_time_s": 17.13518786430359,
+   "x_interface": 200,
+   "gap": 101
+  },
+  "x+250_g101": {
+   "counts": {
+    "NBricks": 158,
+    "NPoints": 15144,
+    "NPrisms": 2356,
+    "NPyramids": 0,
+    "NTetrahedrons": 79595
+   },
+   "volume_um3": {
+    "1": 2695.7984755811517,
+    "2": 417.88400000000115,
+    "3": 771.8201484188515,
+    "7": 1.280319999999983,
+    "9": 94.49999999999987
+   },
+   "element_under_apex": {
+    "apex_z-20": {
+     "longest_edge_nm": 127.35821891575691,
+     "domain": 2
+    },
+    "apex_z-50": {
+     "longest_edge_nm": 129.88760857803646,
+     "domain": 2
+    },
+    "apex_z-100": {
+     "longest_edge_nm": 129.88760857803646,
+     "domain": 2
+    },
+    "x+60_z-20": {
+     "longest_edge_nm": 175.46285743619922,
+     "domain": 2
+    },
+    "x-60_z-20": {
+     "longest_edge_nm": 95.17296581305038,
+     "domain": 2
+    },
+    "y+60_z-20": {
+     "longest_edge_nm": 109.82081421882076,
+     "domain": 2
+    }
+   },
+   "liquid_tets_within_200nm_of_apex": 101,
+   "mesh_time_s": 17.264286279678345,
+   "x_interface": 250,
+   "gap": 101
+  },
+  "x+300_g101": {
+   "counts": {
+    "NBricks": 158,
+    "NPoints": 15875,
+    "NPrisms": 2388,
+    "NPyramids": 0,
+    "NTetrahedrons": 83843
+   },
+   "volume_um3": {
+    "1": 2695.79847558116,
+    "2": 418.5839999999995,
+    "3": 771.820148418852,
+    "7": 1.280319999999979,
+    "9": 93.79999999999987
+   },
+   "element_under_apex": {
+    "apex_z-20": {
+     "longest_edge_nm": 124.58267925758558,
+     "domain": 2
+    },
+    "apex_z-50": {
+     "longest_edge_nm": 147.45782021118748,
+     "domain": 2
+    },
+    "apex_z-100": {
+     "longest_edge_nm": 162.75511375151254,
+     "domain": 2
+    },
+    "x+60_z-20": {
+     "longest_edge_nm": 145.86676333591856,
+     "domain": 2
+    },
+    "x-60_z-20": {
+     "longest_edge_nm": 108.32704421671541,
+     "domain": 2
+    },
+    "y+60_z-20": {
+     "longest_edge_nm": 156.33006365387047,
+     "domain": 2
+    }
+   },
+   "liquid_tets_within_200nm_of_apex": 117,
+   "mesh_time_s": 18.27642059326172,
+   "x_interface": 300,
+   "gap": 101
+  },
+  "x+350_g101": {
+   "counts": {
+    "NBricks": 158,
+    "NPoints": 15029,
+    "NPrisms": 2374,
+    "NPyramids": 0,
+    "NTetrahedrons": 78728
+   },
+   "volume_um3": {
+    "1": 2695.798475581142,
+    "2": 419.2840000000002,
+    "3": 771.8201484188526,
+    "7": 1.280319999999981,
+    "9": 93.09999999999988
+   },
+   "element_under_apex": {
+    "apex_z-20": {
+     "longest_edge_nm": 102.69961444295693,
+     "domain": 2
+    },
+    "apex_z-50": {
+     "longest_edge_nm": 102.69961444295693,
+     "domain": 2
+    },
+    "apex_z-100": {
+     "longest_edge_nm": 159.18066924110576,
+     "domain": 2
+    },
+    "x+60_z-20": {
+     "longest_edge_nm": 105.15115602246806,
+     "domain": 2
+    },
+    "x-60_z-20": {
+     "longest_edge_nm": 130.12242304076386,
+     "domain": 2
+    },
+    "y+60_z-20": {
+     "longest_edge_nm": 92.75177592567084,
+     "domain": 2
+    }
+   },
+   "liquid_tets_within_200nm_of_apex": 122,
+   "mesh_time_s": 16.672943353652954,
+   "x_interface": 350,
+   "gap": 101
+  },
+  "x+400_g101": {
+   "counts": {
+    "NBricks": 158,
+    "NPoints": 16527,
+    "NPrisms": 2378,
+    "NPyramids": 0,
+    "NTetrahedrons": 87737
+   },
+   "volume_um3": {
+    "1": 2695.79847558113,
+    "2": 419.9840000000007,
+    "3": 771.820148418852,
+    "7": 1.2803199999999875,
+    "9": 92.39999999999988
+   },
+   "element_under_apex": {
+    "apex_z-20": {
+     "longest_edge_nm": 96.65885657464995,
+     "domain": 2
+    },
+    "apex_z-50": {
+     "longest_edge_nm": 96.65885657464995,
+     "domain": 2
+    },
+    "apex_z-100": {
+     "longest_edge_nm": 138.60984094610393,
+     "domain": 2
+    },
+    "x+60_z-20": {
+     "longest_edge_nm": 93.13981683982189,
+     "domain": 2
+    },
+    "x-60_z-20": {
+     "longest_edge_nm": 108.30661346596168,
+     "domain": 2
+    },
+    "y+60_z-20": {
+     "longest_edge_nm": 109.05863092576342,
+     "domain": 2
+    }
+   },
+   "liquid_tets_within_200nm_of_apex": 119,
+   "mesh_time_s": 17.79730224609375,
+   "x_interface": 400,
+   "gap": 101
+  },
+  "x+450_g101": {
+   "counts": {
+    "NBricks": 159,
+    "NPoints": 17790,
+    "NPrisms": 2352,
+    "NPyramids": 0,
+    "NTetrahedrons": 95533
+   },
+   "volume_um3": {
+    "1": 2695.8745230190516,
+    "2": 420.6840000000023,
+    "3": 771.7441009809448,
+    "7": 1.2803199999999855,
+    "9": 91.70000000000026
+   },
+   "element_under_apex": {
+    "apex_z-20": {
+     "longest_edge_nm": 87.99286224131997,
+     "domain": 2
+    },
+    "apex_z-50": {
+     "longest_edge_nm": 89.94409448096206,
+     "domain": 2
+    },
+    "apex_z-100": {
+     "longest_edge_nm": 99.42421011827084,
+     "domain": 2
+    },
+    "x+60_z-20": {
+     "longest_edge_nm": 136.36185290844514,
+     "domain": 2
+    },
+    "x-60_z-20": {
+     "longest_edge_nm": 99.05719098690336,
+     "domain": 2
+    },
+    "y+60_z-20": {
+     "longest_edge_nm": 100.30673648137562,
+     "domain": 2
+    }
+   },
+   "liquid_tets_within_200nm_of_apex": 115,
+   "mesh_time_s": 18.895543813705444,
+   "x_interface": 450,
+   "gap": 101
+  },
+  "x+500_g101": {
+   "counts": {
+    "NBricks": 159,
+    "NPoints": 16622,
+    "NPrisms": 2354,
+    "NPyramids": 0,
+    "NTetrahedrons": 88601
+   },
+   "volume_um3": {
+    "1": 2695.8745230190552,
+    "2": 421.38399999999905,
+    "3": 771.7441009809432,
+    "7": 1.2803199999999764,
+    "9": 91.00000000000055
+   },
+   "element_under_apex": {
+    "apex_z-20": {
+     "longest_edge_nm": 140.15389217237117,
+     "domain": 2
+    },
+    "apex_z-50": {
+     "longest_edge_nm": 140.15389217237117,
+     "domain": 2
+    },
+    "apex_z-100": {
+     "longest_edge_nm": 160.1596416085106,
+     "domain": 2
+    },
+    "x+60_z-20": {
+     "longest_edge_nm": 160.1596416085106,
+     "domain": 2
+    },
+    "x-60_z-20": {
+     "longest_edge_nm": 155.46329267824015,
+     "domain": 2
+    },
+    "y+60_z-20": {
+     "longest_edge_nm": 160.40858856820378,
+     "domain": 2
+    }
+   },
+   "liquid_tets_within_200nm_of_apex": 72,
+   "mesh_time_s": 17.063944339752197,
+   "x_interface": 500,
+   "gap": 101
+  },
+  "x+550_g101": {
+   "counts": {
+    "NBricks": 158,
+    "NPoints": 15393,
+    "NPrisms": 2372,
+    "NPyramids": 0,
+    "NTetrahedrons": 80928
+   },
+   "volume_um3": {
+    "1": 2695.874523019038,
+    "2": 422.0840000000007,
+    "3": 771.7441009809446,
+    "7": 1.280319999999982,
+    "9": 90.29999999999973
+   },
+   "element_under_apex": {
+    "apex_z-20": {
+     "longest_edge_nm": 106.5068885951982,
+     "domain": 2
+    },
+    "apex_z-50": {
+     "longest_edge_nm": 106.5068885951982,
+     "domain": 2
+    },
+    "apex_z-100": {
+     "longest_edge_nm": 147.26519680125253,
+     "domain": 2
+    },
+    "x+60_z-20": {
+     "longest_edge_nm": 119.8668956176138,
+     "domain": 2
+    },
+    "x-60_z-20": {
+     "longest_edge_nm": 140.3104728035219,
+     "domain": 2
+    },
+    "y+60_z-20": {
+     "longest_edge_nm": 145.02370052111252,
+     "domain": 2
+    }
+   },
+   "liquid_tets_within_200nm_of_apex": 117,
+   "mesh_time_s": 16.75543737411499,
+   "x_interface": 550,
+   "gap": 101
+  },
+  "x+600_g101": {
+   "counts": {
+    "NBricks": 158,
+    "NPoints": 16133,
+    "NPrisms": 2376,
+    "NPyramids": 0,
+    "NTetrahedrons": 85450
+   },
+   "volume_um3": {
+    "1": 2695.874523019014,
+    "2": 422.78399999999954,
+    "3": 771.7441009809436,
+    "7": 1.2803199999999848,
+    "9": 89.6000000000001
+   },
+   "element_under_apex": {
+    "apex_z-20": {
+     "longest_edge_nm": 143.57865191479098,
+     "domain": 2
+    },
+    "apex_z-50": {
+     "longest_edge_nm": 143.57865191479098,
+     "domain": 2
+    },
+    "apex_z-100": {
+     "longest_edge_nm": 128.02002112309765,
+     "domain": 2
+    },
+    "x+60_z-20": {
+     "longest_edge_nm": 143.42401288351985,
+     "domain": 2
+    },
+    "x-60_z-20": {
+     "longest_edge_nm": 128.02002112309765,
+     "domain": 2
+    },
+    "y+60_z-20": {
+     "longest_edge_nm": 184.08663003864635,
+     "domain": 2
+    }
+   },
+   "liquid_tets_within_200nm_of_apex": 97,
+   "mesh_time_s": 18.84732985496521,
+   "x_interface": 600,
+   "gap": 101
+  },
+  "x+650_g101": {
+   "counts": {
+    "NBricks": 158,
+    "NPoints": 15976,
+    "NPrisms": 2374,
+    "NPyramids": 0,
+    "NTetrahedrons": 84390
+   },
+   "volume_um3": {
+    "1": 2695.8745230190734,
+    "2": 423.48399999999873,
+    "3": 771.7441009809455,
+    "7": 1.2803199999999817,
+    "9": 88.90000000000003
+   },
+   "element_under_apex": {
+    "apex_z-20": {
+     "longest_edge_nm": 126.14134996414988,
+     "domain": 2
+    },
+    "apex_z-50": {
+     "longest_edge_nm": 126.14134996414988,
+     "domain": 2
+    },
+    "apex_z-100": {
+     "longest_edge_nm": 148.02363958188758,
+     "domain": 2
+    },
+    "x+60_z-20": {
+     "longest_edge_nm": 109.60333046974556,
+     "domain": 2
+    },
+    "x-60_z-20": {
+     "longest_edge_nm": 145.09102058115474,
+     "domain": 2
+    },
+    "y+60_z-20": {
+     "longest_edge_nm": 109.36834071685766,
+     "domain": 2
+    }
+   },
+   "liquid_tets_within_200nm_of_apex": 127,
+   "mesh_time_s": 18.746920585632324,
+   "x_interface": 650,
+   "gap": 101
+  },
+  "x+700_g101": {
+   "counts": {
+    "NBricks": 158,
+    "NPoints": 16206,
+    "NPrisms": 2334,
+    "NPyramids": 0,
+    "NTetrahedrons": 86022
+   },
+   "volume_um3": {
+    "1": 2695.8745230190752,
+    "2": 424.18399999999923,
+    "3": 771.7441009809438,
+    "7": 1.2803199999999813,
+    "9": 88.19999999999995
+   },
+   "element_under_apex": {
+    "apex_z-20": {
+     "longest_edge_nm": 136.16645727605143,
+     "domain": 2
+    },
+    "apex_z-50": {
+     "longest_edge_nm": 131.06521463235242,
+     "domain": 2
+    },
+    "apex_z-100": {
+     "longest_edge_nm": 131.06521463235242,
+     "domain": 2
+    },
+    "x+60_z-20": {
+     "longest_edge_nm": 140.7597363061203,
+     "domain": 2
+    },
+    "x-60_z-20": {
+     "longest_edge_nm": 141.9371427702271,
+     "domain": 2
+    },
+    "y+60_z-20": {
+     "longest_edge_nm": 131.06521463235242,
+     "domain": 2
+    }
+   },
+   "liquid_tets_within_200nm_of_apex": 107,
+   "mesh_time_s": 16.81966781616211,
+   "x_interface": 700,
+   "gap": 101
+  },
+  "x+750_g101": {
+   "counts": {
+    "NBricks": 158,
+    "NPoints": 17781,
+    "NPrisms": 2334,
+    "NPyramids": 0,
+    "NTetrahedrons": 95661
+   },
+   "volume_um3": {
+    "1": 2695.874523019057,
+    "2": 424.8839999999996,
+    "3": 771.7441009809431,
+    "7": 1.280319999999981,
+    "9": 87.50000000000017
+   },
+   "element_under_apex": {
+    "apex_z-20": {
+     "longest_edge_nm": 129.88706054897295,
+     "domain": 2
+    },
+    "apex_z-50": {
+     "longest_edge_nm": 129.88706054897295,
+     "domain": 2
+    },
+    "apex_z-100": {
+     "longest_edge_nm": 158.24847179654017,
+     "domain": 2
+    },
+    "x+60_z-20": {
+     "longest_edge_nm": 129.77304741502147,
+     "domain": 2
+    },
+    "x-60_z-20": {
+     "longest_edge_nm": 129.1698388940721,
+     "domain": 2
+    },
+    "y+60_z-20": {
+     "longest_edge_nm": 142.1301501289963,
+     "domain": 2
+    }
+   },
+   "liquid_tets_within_200nm_of_apex": 113,
+   "mesh_time_s": 18.567325353622437,
+   "x_interface": 750,
+   "gap": 101
+  },
+  "x+800_g101": {
+   "counts": {
+    "NBricks": 158,
+    "NPoints": 15181,
+    "NPrisms": 2340,
+    "NPyramids": 0,
+    "NTetrahedrons": 79730
+   },
+   "volume_um3": {
+    "1": 2695.874523019029,
+    "2": 425.5840000000018,
+    "3": 771.7441009809437,
+    "7": 1.2803199999999821,
+    "9": 86.8
+   },
+   "element_under_apex": {
+    "apex_z-20": {
+     "longest_edge_nm": 147.14153933258095,
+     "domain": 2
+    },
+    "apex_z-50": {
+     "longest_edge_nm": 188.8244711159838,
+     "domain": 2
+    },
+    "apex_z-100": {
+     "longest_edge_nm": 188.8244711159838,
+     "domain": 2
+    },
+    "x+60_z-20": {
+     "longest_edge_nm": 156.11880374317096,
+     "domain": 2
+    },
+    "x-60_z-20": {
+     "longest_edge_nm": 139.68559773545422,
+     "domain": 2
+    },
+    "y+60_z-20": {
+     "longest_edge_nm": 147.14153933258095,
+     "domain": 2
+    }
+   },
+   "liquid_tets_within_200nm_of_apex": 66,
+   "mesh_time_s": 17.308789253234863,
+   "x_interface": 800,
+   "gap": 101
+  },
+  "x+850_g101": {
+   "counts": {
+    "NBricks": 159,
+    "NPoints": 16657,
+    "NPrisms": 2344,
+    "NPyramids": 0,
+    "NTetrahedrons": 88741
+   },
+   "volume_um3": {
+    "1": 2695.8745230190475,
+    "2": 426.28400000000045,
+    "3": 771.7441009809418,
+    "7": 1.2803199999999817,
+    "9": 86.10000000000011
+   },
+   "element_under_apex": {
+    "apex_z-20": {
+     "longest_edge_nm": 137.45683709280178,
+     "domain": 2
+    },
+    "apex_z-50": {
+     "longest_edge_nm": 142.81572040901992,
+     "domain": 2
+    },
+    "apex_z-100": {
+     "longest_edge_nm": 142.8157204090199,
+     "domain": 2
+    },
+    "x+60_z-20": {
+     "longest_edge_nm": 149.37175626074958,
+     "domain": 2
+    },
+    "x-60_z-20": {
+     "longest_edge_nm": 117.49585897829976,
+     "domain": 2
+    },
+    "y+60_z-20": {
+     "longest_edge_nm": 153.12530404158247,
+     "domain": 2
+    }
+   },
+   "liquid_tets_within_200nm_of_apex": 107,
+   "mesh_time_s": 17.75944209098816,
+   "x_interface": 850,
+   "gap": 101
+  },
+  "x+900_g101": {
+   "counts": {
+    "NBricks": 159,
+    "NPoints": 15229,
+    "NPrisms": 2344,
+    "NPyramids": 0,
+    "NTetrahedrons": 79979
+   },
+   "volume_um3": {
+    "1": 2695.874523019051,
+    "2": 426.9839999999994,
+    "3": 771.7441009809445,
+    "7": 1.2803199999999813,
+    "9": 85.3999999999999
+   },
+   "element_under_apex": {
+    "apex_z-20": {
+     "longest_edge_nm": 136.6530623016326,
+     "domain": 2
+    },
+    "apex_z-50": {
+     "longest_edge_nm": 136.6530623016326,
+     "domain": 2
+    },
+    "apex_z-100": {
+     "longest_edge_nm": 136.6530623016326,
+     "domain": 2
+    },
+    "x+60_z-20": {
+     "longest_edge_nm": 163.20586817309461,
+     "domain": 2
+    },
+    "x-60_z-20": {
+     "longest_edge_nm": 134.40275828359378,
+     "domain": 2
+    },
+    "y+60_z-20": {
+     "longest_edge_nm": 158.05435444437242,
+     "domain": 2
+    }
+   },
+   "liquid_tets_within_200nm_of_apex": 101,
+   "mesh_time_s": 16.496575593948364,
+   "x_interface": 900,
+   "gap": 101
+  },
+  "x+950_g101": {
+   "counts": {
+    "NBricks": 158,
+    "NPoints": 17979,
+    "NPrisms": 2356,
+    "NPyramids": 0,
+    "NTetrahedrons": 96725
+   },
+   "volume_um3": {
+    "1": 2695.8745230191007,
+    "2": 427.68399999999883,
+    "3": 771.7441009809435,
+    "7": 1.2803199999999817,
+    "9": 84.7
+   },
+   "element_under_apex": {
+    "apex_z-20": {
+     "longest_edge_nm": 89.90116816313598,
+     "domain": 2
+    },
+    "apex_z-50": {
+     "longest_edge_nm": 117.912691156756,
+     "domain": 2
+    },
+    "apex_z-100": {
+     "longest_edge_nm": 131.96311226769058,
+     "domain": 2
+    },
+    "x+60_z-20": {
+     "longest_edge_nm": 131.4798482620009,
+     "domain": 2
+    },
+    "x-60_z-20": {
+     "longest_edge_nm": 117.912691156756,
+     "domain": 2
+    },
+    "y+60_z-20": {
+     "longest_edge_nm": 110.96148511910467,
+     "domain": 2
+    }
+   },
+   "liquid_tets_within_200nm_of_apex": 101,
+   "mesh_time_s": 18.626791954040527,
+   "x_interface": 950,
+   "gap": 101
+  },
+  "x+1000_g101": {
+   "counts": {
+    "NBricks": 158,
+    "NPoints": 16912,
+    "NPrisms": 2360,
+    "NPyramids": 0,
+    "NTetrahedrons": 90302
+   },
+   "volume_um3": {
+    "1": 2695.874523019028,
+    "2": 428.38399999999865,
+    "3": 771.7441009809428,
+    "7": 1.28031999999998,
+    "9": 84.00000000000024
+   },
+   "element_under_apex": {
+    "apex_z-20": {
+     "longest_edge_nm": 106.60048006243906,
+     "domain": 2
+    },
+    "apex_z-50": {
+     "longest_edge_nm": 115.73658005286534,
+     "domain": 2
+    },
+    "apex_z-100": {
+     "longest_edge_nm": 115.73658005286534,
+     "domain": 2
+    },
+    "x+60_z-20": {
+     "longest_edge_nm": 123.05429432924001,
+     "domain": 2
+    },
+    "x-60_z-20": {
+     "longest_edge_nm": 110.81787221098567,
+     "domain": 2
+    },
+    "y+60_z-20": {
+     "longest_edge_nm": 105.26687963939308,
+     "domain": 2
+    }
+   },
+   "liquid_tets_within_200nm_of_apex": 136,
+   "mesh_time_s": 18.041678428649902,
+   "x_interface": 1000,
+   "gap": 101
   }
  }
 }
