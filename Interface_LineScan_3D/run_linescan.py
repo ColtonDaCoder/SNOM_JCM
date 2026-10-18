@@ -22,6 +22,7 @@ be stopped and restarted (finished points are skipped):
     python run_linescan.py --stage linescan_h5_oilcap    # 5 nm, -1000 ... +1000 (X_CAP) with the oil mesh cap
     python run_linescan.py --stage linescan_h101_oilcap  # 101 nm, same positions -> E(5) - E(101)
     python run_linescan.py --stage demod_test            # height sweeps at x = -500 / 0 / +500 for demodulation
+    python run_linescan.py --stage refine2_test          # one solve with 2 refinement steps (memory / accuracy pilot)
     python run_linescan.py --stage scan           # the line scan at 6.1 um
     python run_linescan.py --stage scan_5.5um     # the same line scan at 5.5 um
     python run_linescan.py --jcm [--coarse]       # only write the .jcm files for JCMcontrol
@@ -91,6 +92,9 @@ STAGES = {
     # height sweeps at three positions (oil / edge / water) for demodulation of the far field and of the
     # local near field (slices saved); the 5 nm points come from linescan_h5_oilcap (same mesh)
     'demod_test': dict(mesh='fine', wvl=6.1, x=[-500, 0, 500], gaps=[1, 2, 4, 8, 16, 32, 64, 101], save_fields=True),
+    # pilot for the second refinement step: the position with the largest element jumps under the apex
+    # (x = -500, up to 8.7 % in the y-z slice with 1 step); compare memory, time and the discontinuity map
+    'refine2_test': dict(mesh='fine_2steps', wvl=6.1, x=[-500], gaps=[5], save_fields=True),
     'zsweep':       dict(mesh='fine',   wvl=6.1, x=[0],                    gaps=HEIGHTS_DENSE),
     'coarse_check': dict(mesh='coarse', wvl=6.1, x=[0],                    gaps=HEIGHTS),
     'noise':        dict(mesh='fine',   wvl=6.1, x=[1000, 1003, 1006],     gaps=HEIGHTS),
@@ -133,6 +137,8 @@ MESH = {
     'coarse':        {'max_side': 3000, 'tip_side': 3000, 'max_steps': 1},
     # same start mesh as coarse, but JCM refines 3 times (mesh and PML) towards Precision
     'coarse_3steps': {'max_side': 3000, 'tip_side': 3000, 'max_steps': 3},
+    # fine start mesh with a second HAdaptive step (expected ~2x unknowns of 'fine'; check memory first)
+    'fine_2steps':   {'max_side': 1500, 'tip_side': 1500, 'max_steps': 2},
 }
 
 
