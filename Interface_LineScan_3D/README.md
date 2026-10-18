@@ -109,6 +109,8 @@ Stages are resumable: if the job hits the time limit, submit again and it contin
 | `beamcheck` | 0 (incident beam only) | beam direction, s / p assignment, spot on the focus; writes `results/beamcheck.json` |
 | `linescan_h5` | 31 | exploratory: raw (not demodulated) signal across the interface at a fixed 5 nm gap, fine mesh, 1 refinement step (~3 % mesh noise expected) |
 | `linescan_h101` | 31 | same positions at 101 nm (top of the tapping range); `plot_linescan.py diff` shows E(5 nm) - E(101 nm), which cancels the height-independent far-field drift |
+| `linescan_h5_wide` | 8 | 5 nm scan extended to +-400 ... +-1000 nm, saves field slices |
+| `linescan_h5_oilcap` | 11 | oil side -1000 ... 0 nm (100 nm steps) re-solved with the 500 nm oil element cap, saves slices |
 | `converge` | 6 | gaps 1 - 6 nm with 3 HAdaptive refinement steps (coarse start), saves field slices: does the mesh-to-mesh noise of the 1-step runs go away? |
 | `test` | 1 | does it run (coarse mesh), cost per solve, far-field sampling (stops if < 50 directions in the cone) |
 | `zsweep` | 35 | dense height sweep at the interface: are the 14 heights enough for S_n? |
@@ -118,6 +120,14 @@ Stages are resumable: if the job hits the time limit, submit again and it contin
 | `scan_5.5um` | 434 | the same scan at 5.5 um (water contrast from n only, k small) |
 
 **Next run:** `sbatch submit.sbatch linescan_h101` (on `bigmem`, ~11 h).
+
+Mesh problem found in the oil (fixed by `GEOMETRY['oil_side'] = 500`):
+- The oil Box inherited the global 1500 nm element size. At x_interface = -1000 the mesher put a single
+  ~1 um tetrahedron under the apex, so the near field in the oil was not resolved (blocky field,
+  figures 8 / 10). Slices at -700 ... +1000 looked fine; the 31 points within +-300 nm have no slices.
+- Capping the oil Box at 500 nm gives 35 - 100 nm elements under the apex (like the extruded water)
+  for ~1.8x the elements; meshing time unchanged. 30 nm refinement boxes also worked but made
+  meshing extremely slow and were dropped.
 
 What the Gaussian-beam runs showed so far:
 - `beamcheck`: `ThetaPhi` 180 travels +x, `SP [1 0]` = s, `[0 1]` = p; spot within 150 nm of the focus.

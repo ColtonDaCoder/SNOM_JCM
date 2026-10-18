@@ -19,6 +19,7 @@ be stopped and restarted (finished points are skipped):
     python run_linescan.py --stage linescan_h5    # raw signal across the interface at a fixed 5 nm gap
     python run_linescan.py --stage linescan_h101  # same positions at 101 nm; with linescan_h5 -> E(5) - E(101)
     python run_linescan.py --stage linescan_h5_wide  # 5 nm scan extended to +-1 um (plateaus), saves fields
+    python run_linescan.py --stage linescan_h5_oilcap  # oil side -1000 ... 0 (100 nm steps) with the oil mesh cap
     python run_linescan.py --stage scan           # the line scan at 6.1 um
     python run_linescan.py --stage scan_5.5um     # the same line scan at 5.5 um
     python run_linescan.py --jcm [--coarse]       # only write the .jcm files for JCMcontrol
@@ -77,6 +78,9 @@ STAGES = {
     # field over pure oil (x_interface = -1000) and pure water (+1000)
     'linescan_h5_wide': dict(mesh='fine', wvl=6.1, x=[-1000, -700, -500, -400, 400, 500, 700, 1000],
                              gaps=[5], save_fields=True),
+    # oil side re-solved with the 500 nm element cap in the oil block (GEOMETRY['oil_side']); before it,
+    # x_interface = -1000 had a ~1 um tetrahedron in the oil under the apex
+    'linescan_h5_oilcap': dict(mesh='fine', wvl=6.1, x=list(range(-1000, 1, 100)), gaps=[5], save_fields=True),
     'zsweep':       dict(mesh='fine',   wvl=6.1, x=[0],                    gaps=HEIGHTS_DENSE),
     'coarse_check': dict(mesh='coarse', wvl=6.1, x=[0],                    gaps=HEIGHTS),
     'noise':        dict(mesh='fine',   wvl=6.1, x=[1000, 1003, 1006],     gaps=HEIGHTS),
@@ -102,6 +106,7 @@ GEOMETRY = {
     'liquid_depth': 2000,       # water below the SiN, into the bottom boundary
     'oil_depth': 1000,          # depth of the oil block (>> near-field reach of ~100 nm)
     'patch_margin': 1000,       # oil block stops this far from the side walls (layered exterior)
+    'oil_side': 500,            # max element size in the oil block (1500 left ~1 um elements under the apex)
     'cd_width': 16000,          # lateral size of the computational domain (x and y)
     'tip_radius': 75,           # apex radius: sphere tangent to the cone
     'tip_cap_height': 900,      # revolved apex section (must be < 1000, see layout.jcmt)

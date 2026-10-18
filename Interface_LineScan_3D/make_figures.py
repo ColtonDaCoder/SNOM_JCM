@@ -295,43 +295,60 @@ def fig_wide(show=False):
     recs = base['records'] + (wide['records'] if wide else [])
     recs = sorted({r['x_interface']: r for r in recs}.values(), key=lambda q: q['x_interface'])
     x = np.array([q['x_interface'] for q in recs])
+    bad = x == -1000                       # oil under the apex meshed with ~1 um tetrahedra (fig 8 / 10)
+    ref_i = np.argmin(abs(x + 700))       # reference: last well-meshed point on the oil side
+
+    def scatter(a, y, c):
+        a.plot(x[~bad], y[~bad], 'o', color=c, ms=4, label=f'simulation, gap 5 nm ({(~bad).sum()} positions)')
+        if bad.any():
+            a.plot(x[bad], y[bad], 'o', mfc='none', mec=c, ms=6, label='x = -1000: oil mesh too coarse (unreliable)')
+        a.axvline(0, color=C_GREY, ls=':'); a.grid(alpha=0.3); a.legend(fontsize=7, loc='best')
+
     fig, ax = plt.subplots(2, 2, figsize=(14, 8), sharex=True)
     lines = []
     for col, (pol, comp, lab, c) in enumerate([('p_in', 1, 'p in / p out (near field active)', C_P),
                                                ('s_in', 0, 's in / s out (no near-field hot spot)', C_S)]):
-        E = np.array([q[pol][comp] for q in recs]); ref = E[np.argmin(abs(x - x.min()))]
+        E = np.array([q[pol][comp] for q in recs]); ref = E[ref_i]
         for row, (y, unit, name) in enumerate([((np.abs(E)/abs(ref) - 1)*1e4, 'x1e-4', 'amplitude'),
                                                (np.angle(E/ref)*1e3, 'mrad', 'phase')]):
-            a = ax[row, col]
-            r = fit_line_vs_step(x, y)
-            xx = np.linspace(x.min(), x.max(), 800)
-            a.plot(x, y, 'o', color=c, ms=4, label=f'simulation, gap 5 nm ({len(x)} positions)')
-            a.plot(xx, np.polyval(r['base'], xx/1000), '--', color=C_GREY, lw=1.2, label='smooth far-field drift only (quadratic)')
+            scatter(ax[row, col], y, c)
+            ax[row, col].set_ylabel(f'{name} rel. x = {x[ref_i]:.0f} nm [{unit}]')
+            r = fit_line_vs_step(x[~bad], y[~bad])            # statistics only, not drawn
             pp, ee = r['p'], r['err']
-            w = 2*np.log(9)*pp[5]
-            a.plot(xx, r['model'](xx, *pp), '-', color='k', lw=1.4,
-                   label=f'drift + step: {pp[3]:+.2f} {unit}, centre {pp[4]:+.0f}+-{ee[4]:.0f} nm, 10-90% {w:.0f} nm')
-            verdict = 'step significant' if r['p_value'] < 0.01 else 'no significant step'
-            a.text(0.02, 0.04, f'F-test drift+step vs drift: p = {r["p_value"]:.1e} ({verdict}); noise {r["noise"]:.2f} {unit}',
-                   transform=a.transAxes, fontsize=8)
-            a.axvline(0, color=C_GREY, ls=':'); a.grid(alpha=0.3)
-            a.set_ylabel(f'{name} rel. x = {x.min():.0f} nm [{unit}]'); a.legend(fontsize=7, loc='upper left')
-            lines.append(f'{lab:40s} {name:9s}: step {pp[3]:+.3g}+-{ee[3]:.2g} {unit}, centre {pp[4]:+.0f}+-{ee[4]:.0f} nm, '
-                         f'10-90 % {w:.0f} nm, F-test p = {r["p_value"]:.2e}, noise {r["noise"]:.3g} {unit}')
+            lines.append(f'{lab:40s} {name:9s}: drift+step vs drift F-test p = {r["p_value"]:.2e}; step {pp[3]:+.3g}+-{ee[3]:.2g} {unit}, '
+                         f'centre {pp[4]:+.0f}+-{ee[4]:.0f} nm, 10-90 % {2*np.log(9)*pp[5]:.0f} nm, noise {r["noise"]:.3g} {unit}')
         ax[0, col].set_title(lab)
     for a in ax[1]:
         a.set_xlabel('x_interface / nm   (tip over oil  <-  0  ->  tip over water)')
-    fig.suptitle('Proof of concept: is there a near-field step on top of the far-field drift in the raw backscattered light?\n'
-                 'gap 5 nm; smooth (quadratic) far-field drift vs drift + physical step (centre within +-150 nm, width >= 90 nm)')
+    fig.suptitle('Raw backscattered light at a 5 nm gap across the water | oil interface (+-1 um)')
     save(fig, 'fig6_plateau_test.png')
+
+    # total collected field, combining BOTH incident polarizations (per incidence the cross-polarized
+    # part is only ~1e-4 of the main channel, so sqrt(|Es|^2 + |Ep|^2) alone equals the main channel)
+    def comps(q):
+        (Es_s, Ep_s), (Es_p, Ep_p) = q['s_in'], q['p_in']
+        return Es_s, Ep_s, Es_p, Ep_p
+    C = np.array([comps(q) for q in recs])
+    unpol = np.sqrt(np.sum(np.abs(C)**2, axis=1)/2)                                      # incoherent: unpolarized in, all out
+    pol45 = np.sqrt((np.abs(C[:, 0] + C[:, 2])**2 + np.abs(C[:, 1] + C[:, 3])**2)/2)      # coherent: 45 deg linear in, all out
+    fig, ax = plt.subplots(1, 2, figsize=(14, 5.4), sharex=True, constrained_layout=True)
+    for a, (T, lab, c) in zip(ax, [(unpol, 'unpolarized illumination, polarization-blind detector', '#6a3d9a'),
+                                   (pol45, '45 deg (s + p) illumination, polarization-blind detector', '#009E73')]):
+        y = (T/T[ref_i] - 1)*1e4
+        scatter(a, y, c)
+        a.set(title=lab, ylabel=f'total |E| rel. x = {x[ref_i]:.0f} nm [x1e-4]',
+              xlabel='x_interface / nm   (tip over oil  <-  0  ->  tip over water)')
+    fig.suptitle('Total backscattered field: s and p incidence and both detected polarizations combined (gap 5 nm)\n'
+                 'left: |E|tot = sqrt[(|Es,s|^2 + |Ep,s|^2 + |Es,p|^2 + |Ep,p|^2) / 2];  right: |E(s in) + E(p in)| / sqrt 2 summed over both detected components')
+    save(fig, 'fig6b_total_E.png')
     for l in lines:
         print('  ' + l)
     # near field over pure oil vs pure water (fields saved by linescan_h5_wide)
-    fo, fw = [os.path.join(RES, 'fields', f'linescan_h5_wide_x{v:+d}_g5.npz') for v in (-1000, 1000)]
+    fo, fw = [os.path.join(RES, 'fields', f'linescan_h5_wide_x{v:+d}_g5.npz') for v in (-700, 700)]   # -1000 is mis-meshed
     if os.path.exists(fo) and os.path.exists(fw):
         fig, ax = plt.subplots(1, 2, figsize=(13, 4.5))
         out = {}
-        for f, lab, c in ((fo, 'tip over oil (x_interface = -1000)', C_S), (fw, 'tip over water (x_interface = +1000)', C_P)):
+        for f, lab, c in ((fo, 'tip over oil (x_interface = -700)', C_S), (fw, 'tip over water (x_interface = +700)', C_P)):
             d = np.load(f); xl = d['slice_xz_X'][:, 0]*1e9; zl = d['slice_xz_Z'][0]*1e9
             A = np.linalg.norm(d['slice_xz_E'][1], axis=-1)
             k = np.argmin(abs(zl + 15)); i0 = np.argmin(abs(xl))

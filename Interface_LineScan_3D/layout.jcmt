@@ -51,6 +51,10 @@ keys['oil_length'] = keys['patch_edge'] - keys['x_interface']
 keys['oil_width'] = 2*keys['patch_edge']
 keys['oil_cx'] = 0.5*(keys['patch_edge'] + keys['x_interface'])
 keys['oil_cz'] = -keys['t_SiN'] - 0.5*keys['oil_depth']
+# oil_side: element size cap inside the oil Box.  With the global 1500 nm the mesher could put a
+# single ~1 um tetrahedron under the apex (x_interface = -1000: the near field in the oil was not
+# resolved).  500 nm lets the mesh grade down under the apex like the extruded water layer does
+# (~35 - 100 nm under the tip, checked with JCMgeo) for ~1.8x the elements.
 ?>
 Layout3D {
   UnitOfLength = 1e-09
@@ -108,6 +112,9 @@ Layout3D {
       Width = %(oil_width)e
       Height = %(oil_depth)e
       GlobalPosition = [%(oil_cx)e 0 %(oil_cz)e]
+      MeshOptions {
+        MaximumSideLength = %(oil_side)e
+      }
     }
     SolidOfRevolution {
       Name = "TipApex"
