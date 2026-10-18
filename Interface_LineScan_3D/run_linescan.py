@@ -18,6 +18,7 @@ be stopped and restarted (finished points are skipped):
     python run_linescan.py --stage noise          # interface far away, moved a few nm (remeshing noise)
     python run_linescan.py --stage linescan_h5    # raw signal across the interface at a fixed 5 nm gap
     python run_linescan.py --stage linescan_h101  # same positions at 101 nm; with linescan_h5 -> E(5) - E(101)
+    python run_linescan.py --stage linescan_h5_wide  # 5 nm scan extended to +-1 um (plateaus), saves fields
     python run_linescan.py --stage scan           # the line scan at 6.1 um
     python run_linescan.py --stage scan_5.5um     # the same line scan at 5.5 um
     python run_linescan.py --jcm [--coarse]       # only write the .jcm files for JCMcontrol
@@ -71,6 +72,11 @@ STAGES = {
     # same positions at the top of the tapping range: E(5 nm) - E(101 nm) removes the
     # height-independent far-field drift (plot_linescan.py diff)
     'linescan_h101': dict(mesh='fine',  wvl=6.1, x=X_SCAN,                 gaps=[101]),
+    # proof of concept: extend the 5 nm scan to +-1 um so the near-field step is complete on both
+    # sides and can be told apart from the slow far-field drift; fields saved to compare the near
+    # field over pure oil (x_interface = -1000) and pure water (+1000)
+    'linescan_h5_wide': dict(mesh='fine', wvl=6.1, x=[-1000, -700, -500, -400, 400, 500, 700, 1000],
+                             gaps=[5], save_fields=True),
     'zsweep':       dict(mesh='fine',   wvl=6.1, x=[0],                    gaps=HEIGHTS_DENSE),
     'coarse_check': dict(mesh='coarse', wvl=6.1, x=[0],                    gaps=HEIGHTS),
     'noise':        dict(mesh='fine',   wvl=6.1, x=[1000, 1003, 1006],     gaps=HEIGHTS),
