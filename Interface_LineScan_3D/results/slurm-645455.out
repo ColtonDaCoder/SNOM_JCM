@@ -1,0 +1,19 @@
+job 645455 on smic381, 28 cores, stages: linescan_h5_oilcap linescan_h101_oilcap
+JCMROOT=/home/coltonb/software/JCMsuite_6_0_10
+=== stage linescan_h5_oilcap on smic381 (2026-10-18 00:39:59): 11 solves to run, 0 already done, fine mesh, 6.1 um
+[1/11] x=-1000 nm gap=5 nm  |Ep|(p_in)=1.6959e+00 arg=-2.621  2764 dirs  unknowns=[3117435, 5226663]  mem=[94.0904312133789, 176.5170860290527] GB  3261 s  est.err FarField=[(1, 0.0120770136)]  PML(+X)=(0.045, 0)
+[2/11] x=-500 nm gap=5 nm  |Ep|(p_in)=1.6943e+00 arg=-2.622  2764 dirs  unknowns=[2298867, 4195668]  mem=[60.37490463256836, 123.3461227416992] GB  2337 s  est.err FarField=[(1, 0.0120248075)]  PML(+X)=(0.083, 0)
+[3/11] x=-250 nm gap=5 nm  |Ep|(p_in)=1.6937e+00 arg=-2.622  2764 dirs  unknowns=[2575167, 4460292]  mem=[69.65808486938477, 134.1594543457031] GB  2528 s  est.err FarField=[(1, 0.0118421948)]  PML(+X)=(0.16, 0)
+[4/11] x=-100 nm gap=5 nm  |Ep|(p_in)=1.6940e+00 arg=-2.623  2764 dirs  unknowns=[2551488, 4506108]  mem=[67.86560440063477, 138.1692962646484] GB  2435 s  est.err FarField=[(1, 0.0117998686)]  PML(+X)=(0.16, 0)
+[5/11] x=-50 nm gap=5 nm  |Ep|(p_in)=1.6941e+00 arg=-2.623  2764 dirs  unknowns=[2565846, 4594083]  mem=[67.13394546508789, 138.6422348022461] GB  2421 s  est.err FarField=[(1, 0.0118688867)]  PML(+X)=(0.16, 0)
+[6/11] x=+0 nm gap=5 nm  |Ep|(p_in)=1.6944e+00 arg=-2.623  2764 dirs  unknowns=[2629563, 4735119]  mem=[70.92984390258789, 147.4787483215332] GB  2505 s  est.err FarField=[(1, 0.0120093278)]  PML(+X)=(0.16, 0)
+[7/11] x=+50 nm gap=5 nm  |Ep|(p_in)=1.6946e+00 arg=-2.624  2764 dirs  unknowns=[2630745, 4650864]  mem=[71.2143325805664, 142.1261444091797] GB  2476 s  est.err FarField=[(1, 0.0119066967)]  PML(+X)=(0.16, 0)
+[8/11] x=+100 nm gap=5 nm  |Ep|(p_in)=1.6945e+00 arg=-2.624  2764 dirs  unknowns=[2553537, 4330821]  mem=[69.34514999389648, 131.1855430603027] GB  2488 s  est.err FarField=[(1, 0.0118409459)]  PML(+X)=(0.16, 0)
+[9/11] x=+250 nm gap=5 nm  |Ep|(p_in)=1.6953e+00 arg=-2.624  2764 dirs  unknowns=[2289069, 4219107]  mem=[61.62973785400391, 125.0388259887695] GB  2266 s  est.err FarField=[(1, 0.0117068657)]  PML(+X)=(0.095, 0)
+[10/11] x=+500 nm gap=5 nm  |Ep|(p_in)=1.6985e+00 arg=-2.625  2764 dirs  unknowns=[2243763, 4057269]  mem=[56.52991485595703, 115.0715522766113] GB  2018 s  est.err FarField=[(1, 0.0116176623)]  PML(+X)=(0.043, 1)
+[11/11] x=+1000 nm gap=5 nm  |Ep|(p_in)=1.6971e+00 arg=-2.625  2764 dirs  unknowns=[2331603, 4398873]  mem=[57.65430068969727, 130.2764091491699] GB  2275 s  est.err FarField=[(1, 0.0117753702)]  PML(+X)=(0.012, 1)
+=== stage linescan_h101_oilcap on smic381 (2026-10-18 08:10:14): 11 solves to run, 0 already done, fine mesh, 6.1 um
+[1/11] x=-1000 nm gap=101 nm  |Ep|(p_in)=1.7019e+00 arg=-2.619  2764 dirs  unknowns=[3591627, 6625308]  mem=[101.7741775512695, 223.5319023132324] GB  5224 s  est.err FarField=[(1, 0.0119213647)]  PML(+X)=(0.05, 0)
+[2/11] x=-500 nm gap=101 nm  |Ep|(p_in)=1.6997e+00 arg=-2.620  2764 dirs  unknowns=[2476293, 4762029]  mem=[61.77871322631836, 141.874885559082] GB  2949 s  est.err FarField=[(1, 0.0118262058)]  PML(+X)=(0.011, 1)
+[3/11] x=-250 nm gap=101 nm  |Ep|(p_in)=1.6992e+00 arg=-2.621  2764 dirs  unknowns=[2866536, 4997265]  mem=[76.77198791503906, 157.0113296508789] GB  3442 s  est.err FarField=[(1, 0.0116191572)]  PML(+X)=(0.16, 0)
+[4/11] x=-100 nm gap=101 nm  |Ep|(p_in)=1.6991e+00 arg=-2.622  2764 dirs  unknowns=[2966742, 5074470]  mem=[78.77441024780273, 155.8329086303711] GB  3868 s  est.err FarField=[(1, 0.0118010231)]  PML(+X)=(0.16, 0)

@@ -1,0 +1,4 @@
+job 645440 on smic381, 28 cores, stages: linescan_h5_oilcap
+JCMROOT=/home/coltonb/software/JCMsuite_6_0_10
+=== stage linescan_h5_oilcap on smic381 (2026-10-18 00:14:32): 11 solves to run, 0 already done, fine mesh, 6.1 um
+slurmstepd: error: *** JOB 645440 ON smic381 CANCELLED AT 2026-10-18T00:36:13 ***
