@@ -1,0 +1,9 @@
+job 646121 on smic001, 8 cores, stages: beamcheck test converge_fine converge_veryfine
+JCMROOT=/home/coltonb/software/JCMsuite_6_0_10
+beamcheck phi0_SP[1, 0]: kx/k0 = -0.829, spot at x = -150 nm, |Ez|^2 fraction 1.00, dominant z
+beamcheck phi0_SP[0, 1]: kx/k0 = -0.847, spot at x = +75 nm, |Ez|^2 fraction 0.00, dominant y
+beamcheck phi180_SP[1, 0]: kx/k0 = +0.829, spot at x = +150 nm, |Ez|^2 fraction 1.00, dominant z
+beamcheck phi180_SP[0, 1]: kx/k0 = +0.847, spot at x = -75 nm, |Ez|^2 fraction 0.00, dominant y
+beam check OK: beam_phi = 180, SP s = [1, 0], SP p = [0, 1]
+=== stage test on smic001 (2026-10-18 15:20:30): 1 solves to run, 0 already done, fine mesh, 6.1 um
+slurmstepd: error: *** JOB 646121 ON smic001 CANCELLED AT 2026-10-18T15:37:32 ***

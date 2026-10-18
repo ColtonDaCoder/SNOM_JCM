@@ -1,0 +1,65 @@
+{
+  "wvl": 6.1e-06,
+  "theta": 60,
+  "waist": 4.854225764302808e-06,
+  "cases": {
+    "phi0_SP[1, 0]": {
+      "beam_phi": 0.0,
+      "SP": [
+        1,
+        0
+      ],
+      "kx_over_k0": -0.829041502097254,
+      "expected_abs_kx_over_k0": 0.8660254037844386,
+      "peak_x_nm": -150.00000000000026,
+      "Ez_fraction_at_peak": 1.0,
+      "dominant_component": "z"
+    },
+    "phi0_SP[0, 1]": {
+      "beam_phi": 0.0,
+      "SP": [
+        0,
+        1
+      ],
+      "kx_over_k0": -0.8470848124133977,
+      "expected_abs_kx_over_k0": 0.8660254037844386,
+      "peak_x_nm": 74.99999999999844,
+      "Ez_fraction_at_peak": 6.919795518958484e-64,
+      "dominant_component": "y"
+    },
+    "phi180_SP[1, 0]": {
+      "beam_phi": 180.0,
+      "SP": [
+        1,
+        0
+      ],
+      "kx_over_k0": 0.8290415020972535,
+      "expected_abs_kx_over_k0": 0.8660254037844386,
+      "peak_x_nm": 149.99999999999855,
+      "Ez_fraction_at_peak": 1.0,
+      "dominant_component": "z"
+    },
+    "phi180_SP[0, 1]": {
+      "beam_phi": 180.0,
+      "SP": [
+        0,
+        1
+      ],
+      "kx_over_k0": 0.8470848124133978,
+      "expected_abs_kx_over_k0": 0.8660254037844386,
+      "peak_x_nm": -75.00000000000013,
+      "Ez_fraction_at_peak": 6.919795518958484e-64,
+      "dominant_component": "y"
+    }
+  },
+  "beam_phi": 180.0,
+  "sp_s": [
+    1,
+    0
+  ],
+  "sp_p": [
+    0,
+    1
+  ],
+  "problems": []
+}

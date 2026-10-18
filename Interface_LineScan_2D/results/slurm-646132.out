@@ -1,0 +1,10 @@
+job 646132 on smic001, 8 cores, stages: beamcheck test converge_fine converge_veryfine
+JCMROOT=/home/coltonb/software/JCMsuite_6_0_10
+beamcheck phi0_SP[1, 0]: kx/k0 = -0.829, spot at x = -150 nm, |Ez|^2 fraction 1.00, dominant z
+beamcheck phi0_SP[0, 1]: kx/k0 = -0.847, spot at x = +75 nm, |Ez|^2 fraction 0.00, dominant y
+beamcheck phi180_SP[1, 0]: kx/k0 = +0.829, spot at x = +150 nm, |Ez|^2 fraction 1.00, dominant z
+beamcheck phi180_SP[0, 1]: kx/k0 = +0.847, spot at x = -75 nm, |Ez|^2 fraction 0.00, dominant y
+beam check OK: beam_phi = 180, SP s = [1, 0], SP p = [0, 1]
+=== stage test on smic001 (2026-10-18 15:37:54): 1 solves to run, 0 already done, fine mesh, 6.1 um
+[test 1/1] x=+0 nm gap=5 nm  |Ep|(p_in)=7.38208e-02 arg=+2.2734  |gap int Ey|(p_in)=3.4555e+01 arg=-2.1999  314 dirs  unknowns=[1233231, 1499917, 1802115, 2125971]  214 s  est.err FarField=[(1, 0.00103850485), (2, 7.44957775e-05), (3, 2.82045647e-05)]
+=== stage converge_fine on smic001 (2026-10-18 15:41:29): 9 solves to run, 0 already done, fine mesh, 6.1 um
