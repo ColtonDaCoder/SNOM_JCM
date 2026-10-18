@@ -18,7 +18,7 @@ s = E along z (perpendicular to the plane of incidence), p = E in the x-y plane.
     python run_2d.py --stage exportbench    # time small field exports on the test field bag (no solve)
     python run_2d.py --stage converge_fine      # 3 positions x 3 gaps, 'fine' mesh
     python run_2d.py --stage converge_veryfine  # the same 9 points on 'veryfine' -> mesh convergence
-    python run_2d.py --stage scan_h5        # -1000 ... 1000 nm every 10 nm at a 5 nm gap (gap line saved every 100 nm)
+    python run_2d.py --stage scan_h5        # -1000 ... 1000 nm every 10 nm at a 5 nm gap
     python run_2d.py --stage scan_wide      # -5000 ... 5000 nm every 250 nm at 5 and 101 nm (edge fringe / plateaus)
     python run_2d.py --stage scan_demod     # -1000 ... 1000 nm every 25 nm x 14 heights -> S2, S3
     python run_2d.py --stage scan_demod --part 2/4   # only every 4th point starting at the 2nd (parallel jobs)
@@ -26,7 +26,7 @@ s = E along z (perpendicular to the plane of incidence), p = E in the x-y plane.
 
 Per solve (results/<stage>[.partIofN].pkl): backscattered far field in the NA window for s and p
 incidence, the near field on the tip axis (20 points across the gap -> gap integral, and 10 / 30 /
-100 nm into the liquid); save_fields points also get a line through the middle of the gap (JCM's point export is slow here, ~4 s per point, so exports are kept small),
+100 nm into the liquid) (JCM's point export is slow here, ~4 s per point, so exports are kept small),
 JCM's error estimates and costs.  Summary per solve in results/run_log.txt, JCM's console
 output in results/jcm_<stage>.log.  Stages are resumable (finished points are skipped).
 """
@@ -355,7 +355,7 @@ def load_line(wd, name):
     return np.ravel(c['X'])*1e9, np.ravel(c['Y'])*1e9, E
 
 
-def near_field(wd, gap, extra_lines=False):
+def near_field(wd, gap):
     """Local near-field observables from the exported points (nm; components x, y (vertical), z)."""
     _, ya, Ea = load_line(wd, 'line_axis')
     in_gap = (ya > 0) & (ya < gap)
@@ -366,20 +366,17 @@ def near_field(wd, gap, extra_lines=False):
     for depth in (10, 30, 100):                            # below the SiN, on the tip axis
         i = int(np.argmin(np.abs(ya - (-GEOMETRY['t_SiN'] - depth))))
         out[f'E_liquid_{depth}nm'] = Ea[:, i, :]
-    if extra_lines:
-        xg, _, Eg = load_line(wd, 'line_gap')
-        out.update(gapline_x=xg.astype(np.float32), gapline_E=Eg)
     return out
 
 
 def run_point(base_keys, x, gap, stage, wd, save_fields=False):
-    keys = dict(base_keys, x_interface=x, gap=gap, extra_lines=int(bool(save_fields)))
+    keys = dict(base_keys, x_interface=x, gap=gap)
     t0 = time.time()
     results = solve('project.jcmp', keys, wd, f'jcm_{stage}.log')
     record = {'x_interface': x, 'gap': gap, 'wall_time_s': time.time() - t0,
               'costs': costs_summary(results[0]), 'finished': time.strftime('%Y-%m-%d %H:%M:%S')}
     record.update(collect_backscatter(results[1], THETA, NA))
-    record.update(near_field(wd, gap, extra_lines=save_fields))
+    record.update(near_field(wd, gap))
     record.update(parse_jcm_log(solve.last_log))
     return record
 
@@ -474,7 +471,7 @@ def write_jcm(mesh='fine', wvl_um=6.1, x_interface=0.0, gap=5.0):
     beam = None if os.path.exists(BEAM_FILE) else {'beam_phi': 0, 'sp_s': [1, 0], 'sp_p': [0, 1]}
     if beam:
         print('no results/beamcheck.json yet: sources.jcm written with beam_phi = 0, SP = [1 0] / [0 1] (unchecked)')
-    keys = dict(GEOMETRY, **MESH[mesh], x_interface=x_interface, gap=gap, extra_lines=0)
+    keys = dict(GEOMETRY, **MESH[mesh], x_interface=x_interface, gap=gap)
     keys.update(material_keys(wvl_um*1e-6))
     keys.update(source_keys(wvl_um*1e-6, THETA, beam))
     for name in ('layout.jcmt', 'materials.jcmt', 'sources.jcmt', 'project.jcmpt'):

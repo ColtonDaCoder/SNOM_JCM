@@ -4,10 +4,9 @@
 # Lengths in the export grids are in metres; y = 0 is the SiN top surface.
 #
 # JCM's Cartesian export took ~4 s per point here (17 min for 263 points), far longer than the
-# solve, so the exports are kept small:
+# solve, so only one small export is done:
 #   line_axis   (always): x = 0; 20 points across the gap (midpoints -> gap integral) and
 #               3 points 10 / 30 / 100 nm below the SiN
-#   line_gap    (extra_lines = 1): y = gap / 2, x = -200 ... 200 nm, 10 nm steps (41 points)
 # ---------------------------------------------------------------------------
 import numpy as np
 g = keys['gap']
@@ -15,14 +14,6 @@ t = keys['t_SiN']
 y_liq = np.array([-t - 100.0, -t - 30.0, -t - 10.0])
 y_gap = (np.arange(20) + 0.5)/20*g
 keys['axis_y'] = np.concatenate([y_liq, y_gap])*1e-9
-extra = ''
-if keys.get('extra_lines', 0):
-    gx = ' '.join('%.6e' % v for v in np.arange(-200.0, 200.1, 10.0)*1e-9)
-    for name, xs, yv in (('line_gap', gx, 0.5*g*1e-9),):
-        extra += ('PostProcess {\n  ExportFields {\n    FieldBagPath = "project_results/fieldbag.jcm"\n'
-                  '    OutputFileName = "project_results/' + name + '.jcm"\n    OutputQuantity = ElectricFieldStrength\n'
-                  '    Cartesian {\n      GridPointsX = [' + xs + ']\n      GridPointsY = %.6e\n    }\n  }\n}\n' % yv)
-keys['extra_block'] = extra
 ?>
 Project {
   Electromagnetics {
@@ -69,4 +60,3 @@ PostProcess {
   }
 }
 
-%(extra_block)s
