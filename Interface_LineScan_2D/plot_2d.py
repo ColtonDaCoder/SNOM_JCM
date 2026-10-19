@@ -56,6 +56,287 @@ def plot_scan(stage, gap=5):
     print('wrote', out)
 
 
-if __name__ == '__main__':
+def plot_combined(stage, gap=5):
+    """
+    Es and Ep combined (in 2D s and p do not mix: the cross-polarized parts are exactly 0).
+    Total |E| = sqrt((|Es|^2 + |Ep|^2) / 2): unpolarized illumination, polarization-blind detector.
+    (Es + Ep) / 2: 45 deg (s + p) illumination, 45 deg analyzer -> amplitude and phase.
+    """
+    recs = [r for r in load(stage) if r['gap'] == gap]
+    x = np.array([r['x_interface'] for r in recs])
+    Es = np.array([r['s_in'][0] for r in recs])
+    Ep = np.array([r['p_in'][1] for r in recs])
+    tot = np.sqrt((np.abs(Es)**2 + np.abs(Ep)**2)/2)
+    e45 = (Es + Ep)/2
+    fig, ax = plt.subplots(1, 3, figsize=(15, 4.5), sharex=True)
+    for a, y, title, ylab, c in ((ax[0], tot, 'Total |E| (Es and Ep combined)', 'amplitude (arb.)', 'C0'),
+                                 (ax[1], np.abs(e45), '(Es + Ep) / 2 amplitude', 'amplitude (arb.)', 'C0'),
+                                 (ax[2], np.unwrap(np.angle(e45)), '(Es + Ep) / 2 phase', 'phase (rad)', 'C1')):
+        a.plot(x, y, 'o-', ms=4, color=c)
+        a.set_title(title)
+        a.set_ylabel(ylab)
+        a.set_xlabel('interface position x (nm)   oil  <  0  <  water')
+        a.axvline(0, color='0.6', lw=0.8)
+        a.grid(alpha=0.3)
+    fig.suptitle(f'2D line scan, gap {gap:g} nm')
+    fig.tight_layout()
+    os.makedirs(FIGS, exist_ok=True)
+    out = os.path.join(FIGS, f'{stage}_g{gap:g}_combined.png')
+    fig.savefig(out, dpi=130)
+    print('wrote', out)
+
+
+def plot_complex(stage, gap=5):
+    """
+    Amplitude and phase as one signal.  Top: complex contrast |E(x) - E_ref| / |E_ref| with E_ref the
+    value at the largest x (water side); it counts amplitude and phase changes together.
+    Bottom: the complex signal itself (Im vs Re), points coloured by x.
+    """
+    recs = [r for r in load(stage) if r['gap'] == gap]
+    x = np.array([r['x_interface'] for r in recs])
+    Es = np.array([r['s_in'][0] for r in recs])
+    Ep = np.array([r['p_in'][1] for r in recs])
+    quantities = [('Backscattered Ep, p polarized', Ep),
+                  ('Backscattered Es, s polarized', Es),
+                  ('(Es + Ep) / 2', (Es + Ep)/2),
+                  (f'Ey integrated from SiN to tip ({gap:g} nm), p polarized',
+                   np.array([r['gap_integral'][1, 1] for r in recs]))]
+    fig, ax = plt.subplots(2, 4, figsize=(19, 8.5))
+    for j, (title, v) in enumerate(quantities):
+        ref = v[np.argmax(x)]
+        a = ax[0, j]
+        a.plot(x, np.abs(v - ref)/np.abs(ref), 'o-', ms=4)
+        a.set_title(title, fontsize=10)
+        a.set_xlabel('interface position x (nm)   oil  <  0  <  water')
+        a.set_ylabel(f'|E - E(x = {x.max():.0f})| / |E(x = {x.max():.0f})|')
+        a.axvline(0, color='0.6', lw=0.8)
+        a.grid(alpha=0.3)
+        b = ax[1, j]
+        b.plot(v.real, v.imag, '-', color='0.7', lw=0.8, zorder=1)
+        sc = b.scatter(v.real, v.imag, c=x, cmap='coolwarm_r', s=22, zorder=2)
+        b.set_xlabel('Re E')
+        b.set_ylabel('Im E')
+        b.set_aspect('equal', adjustable='datalim')
+        b.grid(alpha=0.3)
+        fig.colorbar(sc, ax=b, label='x (nm)', shrink=0.8)
+    fig.suptitle(f'2D line scan, gap {gap:g} nm: amplitude and phase combined')
+    fig.tight_layout()
+    os.makedirs(FIGS, exist_ok=True)
+    out = os.path.join(FIGS, f'{stage}_g{gap:g}_complex.png')
+    fig.savefig(out, dpi=130)
+    print('wrote', out)
+
+
+if __name__ == '__main__' and (len(sys.argv) < 2 or sys.argv[1] not in ('ep_sub', 'ep_step', 'ep_lines', 'approach')):
     what = sys.argv[1] if len(sys.argv) > 1 else 'scan_h5'
     plot_scan(what)
+    plot_combined(what)
+    plot_complex(what)
+
+
+def plot_ep_subtracted(stage='scan_h5', gap=5, n_fit=5, model='quadratic'):
+    """
+    Ep complex contrast (top-left panel of *_complex.png) minus a fit to its last n_fit points.
+    model 'quadratic': c2 x^2 + c1 x + c0;  'inverse': a / x + b (undefined at x = 0, that point is dropped).
+    """
+    recs = [r for r in load(stage) if r['gap'] == gap]
+    x = np.array([r['x_interface'] for r in recs])
+    Ep = np.array([r['p_in'][1] for r in recs])
+    ref = Ep[np.argmax(x)]
+    c = np.abs(Ep - ref)/np.abs(ref)
+    if model == 'quadratic':
+        coef = np.polyfit(x[-n_fit:], c[-n_fit:], 2)
+        fit = np.polyval(coef, x)
+        label = f'quadratic fit to last {n_fit} points'
+    else:
+        keep = x != 0
+        x, c = x[keep], c[keep]
+        A = np.vstack([1/x[-n_fit:], np.ones(n_fit)]).T
+        coef = np.linalg.lstsq(A, c[-n_fit:], rcond=None)[0]
+        fit = coef[0]/x + coef[1]
+        label = f'a/x + b fit to last {n_fit} points'
+    fig, ax = plt.subplots(1, 2, figsize=(12, 4.5))
+    ax[0].plot(x, c, 'o-', ms=4, label='data')
+    ax[0].plot(x, fit, '--', color='k', lw=1, label=label)
+    ax[0].plot(x[-n_fit:], c[-n_fit:], 'o', ms=7, mfc='none', color='k')
+    ax[0].set_title('Backscattered Ep, p polarized')
+    ax[0].legend()
+    ax[1].plot(x, c - fit, 'o-', ms=4)
+    ax[1].set_title('Backscattered Ep, p polarized, minus fit')
+    for a in ax:
+        a.set_xlabel('interface position x (nm)   oil  <  0  <  water')
+        a.set_ylabel(f'|E - E(x = {x.max():.0f})| / |E(x = {x.max():.0f})|')
+        a.axvline(0, color='0.6', lw=0.8)
+        a.grid(alpha=0.3)
+    fig.suptitle(f'2D line scan, gap {gap:g} nm')
+    fig.tight_layout()
+    out = os.path.join(FIGS, f'{stage}_g{gap:g}_Ep_minus_{model}.png')
+    fig.savefig(out, dpi=130)
+    print('wrote', out)
+    print(model, 'fit coefficients:', coef)
+    for xi, r in zip(x, c - fit):
+        print(f'{xi:+6.0f} {r:+.5f}')
+
+
+if __name__ == '__main__' and len(sys.argv) > 1 and sys.argv[1] == 'ep_sub':
+    plot_ep_subtracted(model=sys.argv[2] if len(sys.argv) > 2 else 'quadratic')
+
+
+def plot_ep_step_fit(stage='scan_h5', gap=5):
+    """
+    Complex Ep fitted over all points with  B(x) + D * (1 - tanh((x - x0) / w)) / 2,
+    B(x) = b0 + b1 x + b2 x^2 a smooth complex background (b*, D complex; x0, w real).
+    Plotted: the data minus B(x) only (the step model is not subtracted), as complex contrast
+    relative to the water end in units of the fitted step |D|, and the complex plane.
+    """
+    from scipy.optimize import least_squares
+    recs = [r for r in load(stage) if r['gap'] == gap]
+    x = np.array([r['x_interface'] for r in recs], float)
+    E = np.array([r['p_in'][1] for r in recs])
+    u = x/1000
+
+    def design(x0, w):
+        return np.vstack([np.ones_like(u), u, u**2, 0.5*(1 - np.tanh((x - x0)/w))]).T
+
+    def res(pr):
+        M = design(*pr)
+        r = M @ np.linalg.lstsq(M, E, rcond=None)[0] - E
+        return np.r_[r.real, r.imag]
+    best = min((least_squares(res, [x0, w]) for x0 in (-300, -100, 0, 100) for w in (50, 150, 400)),
+               key=lambda s: s.cost)
+    x0, w = best.x
+    M = design(x0, w)
+    c = np.linalg.lstsq(M, E, rcond=None)[0]
+    B = M[:, :3] @ c[:3]
+    S = E - B                                   # data minus background
+    ref = S[np.argmax(x)]
+    con = np.abs(S - ref)/np.abs(c[3])           # in units of the fitted step |D|
+    rms = np.sqrt(np.mean(np.abs(M @ c - E)**2))/np.mean(np.abs(E))
+
+    fig, ax = plt.subplots(1, 2, figsize=(12, 4.6))
+    ax[0].plot(x, con, 'o-', ms=4)
+    ax[0].set_title('Backscattered Ep, p polarized, minus background')
+    ax[0].set_xlabel('interface position x (nm)   oil  <  0  <  water')
+    ax[0].set_ylabel(f'|S - S(x = {x.max():.0f})| / |step|')
+    ax[0].axvline(0, color='0.6', lw=0.8)
+    ax[0].grid(alpha=0.3)
+    ax[1].plot(S.real, S.imag, '-', color='0.7', lw=0.8, zorder=1)
+    sc = ax[1].scatter(S.real, S.imag, c=x, cmap='coolwarm_r', s=22, zorder=2)
+    ax[1].set_title('Backscattered Ep minus background, complex plane')
+    ax[1].set_xlabel('Re')
+    ax[1].set_ylabel('Im')
+    ax[1].set_aspect('equal', adjustable='datalim')
+    ax[1].grid(alpha=0.3)
+    fig.colorbar(sc, ax=ax[1], label='x (nm)', shrink=0.8)
+    fig.suptitle(f'2D line scan, gap {gap:g} nm')
+    fig.tight_layout()
+    out = os.path.join(FIGS, f'{stage}_g{gap:g}_Ep_minus_background.png')
+    fig.savefig(out, dpi=130)
+    print('wrote', out)
+    print(f'x0 = {x0:.1f} nm, w = {w:.1f} nm (10-90 % width {2*w*np.arctanh(0.8):.0f} nm), '
+          f'step |D|/|E| = {abs(c[3])/np.mean(np.abs(E)):.3f}, rms residual / |E| = {rms:.2e}')
+    for xi, ci in zip(x, con):
+        print(f'{xi:+6.0f} {ci:.4f}')
+
+
+if __name__ == '__main__' and len(sys.argv) > 1 and sys.argv[1] == 'ep_step':
+    plot_ep_step_fit()
+
+
+def plot_ep_two_lines(stage='scan_h5', gap=5, n=6):
+    """
+    Ep complex contrast (top-left panel of *_complex.png): straight lines fitted to the first n and
+    the last n points; baseline = left line up to where it meets the right line, right line after.
+    Plotted: data with both lines / baseline, and data minus baseline.
+    """
+    recs = [r for r in load(stage) if r['gap'] == gap]
+    x = np.array([r['x_interface'] for r in recs], float)
+    Ep = np.array([r['p_in'][1] for r in recs])
+    ref = Ep[np.argmax(x)]
+    c = np.abs(Ep - ref)/np.abs(ref)
+    L = np.polyfit(x[:n], c[:n], 1)
+    R = np.polyfit(x[-n:], c[-n:], 1)
+    x_int = (R[1] - L[1])/(L[0] - R[0])
+    base = np.where(x <= x_int, np.polyval(L, x), np.polyval(R, x))
+    xx = np.linspace(x.min(), x.max(), 400)
+    fig, ax = plt.subplots(1, 2, figsize=(12, 4.6))
+    ax[0].plot(x, c, 'o-', ms=4, label='data')
+    ax[0].plot(xx, np.polyval(L, xx), ':', color='C3', lw=1, label=f'line through first {n} points')
+    ax[0].plot(xx, np.polyval(R, xx), ':', color='C2', lw=1, label=f'line through last {n} points')
+    ax[0].plot(xx, np.where(xx <= x_int, np.polyval(L, xx), np.polyval(R, xx)), '--', color='k', lw=1.2, label='baseline')
+    ax[0].axvline(x_int, color='k', lw=0.6, ls=':')
+    ax[0].set_title('Backscattered Ep, p polarized')
+    ax[0].legend(fontsize=8)
+    ax[1].plot(x, c - base, 'o-', ms=4)
+    ax[1].axvline(x_int, color='k', lw=0.6, ls=':')
+    ax[1].set_title('Backscattered Ep, p polarized, minus baseline')
+    for a in ax:
+        a.set_xlabel('interface position x (nm)   oil  <  0  <  water')
+        a.set_ylabel(f'|E - E(x = {x.max():.0f})| / |E(x = {x.max():.0f})|')
+        a.axvline(0, color='0.6', lw=0.8)
+        a.grid(alpha=0.3)
+    fig.suptitle(f'2D line scan, gap {gap:g} nm')
+    fig.tight_layout()
+    out = os.path.join(FIGS, f'{stage}_g{gap:g}_Ep_minus_two_lines.png')
+    fig.savefig(out, dpi=130)
+    print('wrote', out)
+    print(f'left line {L}, right line {R}, intersection at x = {x_int:.1f} nm')
+    for xi, v in zip(x, c - base):
+        print(f'{xi:+6.0f} {v:+.5f}')
+
+
+if __name__ == '__main__' and len(sys.argv) > 1 and sys.argv[1] == 'ep_lines':
+    plot_ep_two_lines()
+
+
+LOG_RE = (r'x=([+-]?\d+) nm gap=([\d.]+) nm\s+\|Ep\|\(p_in\)=([\d.eE+-]+) arg=([+-][\d.]+)\s+'
+          r'\|gap int Ey\|\(p_in\)=([\d.eE+-]+) arg=([+-][\d.]+)')
+
+
+def approach_points(stages=('scan_demod', 'scan_h5'), logfile=None):
+    """{(x, gap): (Ep, gap_integral)} from the pkl files, plus run_log-format lines (e.g. pasted) if given."""
+    import re
+    pts = {}
+    if logfile:
+        for m in re.finditer(LOG_RE, open(logfile).read()):
+            x, g, a, p, ga, gp = (float(v) for v in m.groups())
+            pts[(x, g)] = (a*np.exp(1j*p), ga*np.exp(1j*gp))
+    for st in stages:
+        for r in load(st):
+            pts[(r['x_interface'], r['gap'])] = (r['p_in'][1], r['gap_integral'][1, 1])
+    return pts
+
+
+def plot_approach(logfile=None, xs=None):
+    """Approach curves: backscattered Ep (p in) and the gap field vs gap, one curve per position."""
+    pts = approach_points(logfile=logfile)
+    allx = sorted({x for x, g in pts})
+    xs = [x for x in (xs or allx) if sum(1 for k in pts if k[0] == x) > 2]
+    fig, ax = plt.subplots(2, 2, figsize=(12, 8.5), sharex=True)
+    cmap = plt.get_cmap('coolwarm_r')
+    for x in xs:
+        gs = np.array(sorted(g for xx, g in pts if xx == x))
+        Ep = np.array([pts[(x, g)][0] for g in gs])
+        Gi = np.array([pts[(x, g)][1] for g in gs])
+        col = cmap((x + 1000)/2000)
+        kw = dict(color=col, ms=4, label=f'x = {x:+.0f} nm')
+        ax[0, 0].plot(gs, np.abs(Ep), 'o-', **kw)
+        ax[1, 0].plot(gs, np.unwrap(np.angle(Ep)), 'o-', **kw)
+        ax[0, 1].plot(gs, np.abs(Gi)/gs, 'o-', **kw)
+        ax[1, 1].plot(gs, np.unwrap(np.angle(Gi)), 'o-', **kw)
+    ax[0, 0].set(title='Backscattered Ep, p polarized', ylabel='amplitude (arb.)')
+    ax[1, 0].set(ylabel='phase (rad)', xlabel='gap (nm)')
+    ax[0, 1].set(title='Ey in the gap (integral / gap), p polarized', ylabel='mean Ey (V/m, incident = 1)')
+    ax[1, 1].set(ylabel='phase (rad)', xlabel='gap (nm)')
+    for a in ax.flat:
+        a.grid(alpha=0.3)
+    ax[0, 0].legend(fontsize=8)
+    fig.suptitle('2D approach curves')
+    fig.tight_layout()
+    out = os.path.join(FIGS, 'approach_curves.png')
+    fig.savefig(out, dpi=130)
+    print('wrote', out, 'positions:', xs)
+
+
+if __name__ == '__main__' and len(sys.argv) > 1 and sys.argv[1] == 'approach':
+    plot_approach(logfile=sys.argv[2] if len(sys.argv) > 2 else None)
