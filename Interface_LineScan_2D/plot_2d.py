@@ -127,7 +127,7 @@ def plot_complex(stage, gap=5):
     print('wrote', out)
 
 
-if __name__ == '__main__' and (len(sys.argv) < 2 or sys.argv[1] not in ('ep_sub', 'ep_step', 'ep_lines', 'approach', 'demod', 's2s3')):
+if __name__ == '__main__' and (len(sys.argv) < 2 or sys.argv[1] not in ('ep_sub', 'ep_step', 'ep_lines', 'approach', 'demod', 's2s3', 'nearfield')):
     what = sys.argv[1] if len(sys.argv) > 1 else 'scan_h5'
     plot_scan(what)
     plot_combined(what)
@@ -432,3 +432,40 @@ def plot_s2_over_s3(logfile=None):
 
 if __name__ == '__main__' and len(sys.argv) > 1 and sys.argv[1] == 's2s3':
     plot_s2_over_s3(logfile=sys.argv[2] if len(sys.argv) > 2 else None)
+
+
+def plot_near_field_low_gap(gap=1, stages=('scan_demod', 'scan_h5', 'scan_demod_fill')):
+    """
+    Near field (p polarized, Ey = vertical component) on the tip axis at one gap vs x:
+    mean over the gap (SiN surface to apex) and 10 / 30 / 100 nm below the SiN.
+    """
+    recs = []
+    for st in stages:
+        recs += [r for r in load(st) if r['gap'] == gap]
+    recs = sorted({r['x_interface']: r for r in recs}.values(), key=lambda r: r['x_interface'])
+    x = np.array([r['x_interface'] for r in recs])
+    series = [('in the gap (mean)', np.array([r['gap_integral'][1, 1] for r in recs])/gap)]
+    for d in (10, 30, 100):
+        series.append((f'{d} nm below the SiN', np.array([r[f'E_liquid_{d}nm'][1, 1] for r in recs])))
+    fig, ax = plt.subplots(2, 4, figsize=(18, 7.5), sharex=True)
+    for j, (name, v) in enumerate(series):
+        ax[0, j].plot(x, np.abs(v), 'o-', ms=4)
+        ax[0, j].set_title(f'|Ey| {name}', fontsize=10)
+        ax[0, j].set_ylabel('|Ey| (incident = 1)')
+        ax[1, j].plot(x, np.unwrap(np.angle(v)), 'o-', ms=4, color='C1')
+        ax[1, j].set_ylabel('phase (rad)')
+        ax[1, j].set_xlabel('interface position x (nm)   oil  <  0  <  water')
+        for a in ax[:, j]:
+            a.axvline(0, color='0.6', lw=0.8)
+            a.grid(alpha=0.3)
+    fig.suptitle(f'2D near field on the tip axis, gap {gap:g} nm, p polarized')
+    fig.tight_layout()
+    out = os.path.join(FIGS, f'near_field_gap{gap:g}_vs_x.png')
+    fig.savefig(out, dpi=130)
+    print('wrote', out)
+    for r, *vals in zip(recs, *[s[1] for s in series]):
+        print(f"{r['x_interface']:+6.0f} " + '  '.join(f'{abs(v):8.4f} {np.angle(v):+.3f}' for v in vals))
+
+
+if __name__ == '__main__' and len(sys.argv) > 1 and sys.argv[1] == 'nearfield':
+    plot_near_field_low_gap(gap=float(sys.argv[2]) if len(sys.argv) > 2 else 1)
