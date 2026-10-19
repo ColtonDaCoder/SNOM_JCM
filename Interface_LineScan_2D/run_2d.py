@@ -21,7 +21,7 @@ s = E along z (perpendicular to the plane of incidence), p = E in the x-y plane.
     python run_2d.py --stage scan_h5        # -1000 ... 1000 nm every 10 nm at a 5 nm gap
     python run_2d.py --stage scan_wide      # -5000 ... 5000 nm every 250 nm at 5 and 101 nm (edge fringe / plateaus)
     python run_2d.py --stage scan_demod_fill    # 5 nm SiN at the extra X_GRADED positions (completes the 5 nm set)
-    python run_2d.py --stage scan_demod_sin20   # 20 nm SiN window, graded x (10 nm steps near 0), 15 heights incl. 5 nm
+    python run_2d.py --stage scan_demod_sin20   # 20 nm SiN window, graded x (finer steps within +-100 nm), 15 heights incl. 5 nm
     python run_2d.py --stage scan_demod     # -1000 ... 1000 nm every 100 nm x 14 heights (+ 5 nm from scan_h5) -> S2, S3
     python run_2d.py --stage scan_demod --part 2/2   # only every 2nd point starting at the 2nd (2 JCM licenses: at most 2 jobs at once)
     python run_2d.py --jcm                  # only write the .jcm files (JCMcontrol)
@@ -62,10 +62,9 @@ X_H5 = list(range(-1000, 1001, 10))
 X_DEMOD = list(range(-1000, 1001, 100))   # same 21 positions as the finished scan_h5 run, whose 5 nm points are the 15th height
 X_WIDE = list(range(-5000, 5001, 250))
 X_CONV = [-500, 0, 500]
-# graded positions: 100 nm steps beyond +-500, 50 nm to +-250, 20 nm to +-60, 10 nm within +-50
-# (contains all X_DEMOD points)
-_half = list(range(1000, 499, -100)) + [450, 400, 350, 300, 250] + list(range(240, 59, -20)) + list(range(50, 9, -10))
-X_GRADED = sorted([-v for v in _half] + [0] + _half)
+# graded positions: the 21 X_DEMOD points (100 nm steps) plus finer steps only within +-100 nm:
+# 20 nm between 50 and 100, 10 nm within +-50
+X_GRADED = sorted(set(X_DEMOD) | {s*v for v in (80, 60, 50, 40, 30, 20, 10) for s in (-1, 1)})
 
 STAGES = {
     'test':              dict(mesh='fine',     wvl=6.1, x=[0], gaps=[5], save_fields=True),
