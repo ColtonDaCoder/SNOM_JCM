@@ -20,6 +20,7 @@ s = E along z (perpendicular to the plane of incidence), p = E in the x-y plane.
     python run_2d.py --stage converge_veryfine  # the same 9 points on 'veryfine' -> mesh convergence
     python run_2d.py --stage scan_h5        # -1000 ... 1000 nm every 10 nm at a 5 nm gap
     python run_2d.py --stage scan_wide      # -5000 ... 5000 nm every 250 nm at 5 and 101 nm (edge fringe / plateaus)
+    python run_2d.py --stage scan_demod_sin20   # the same with a 20 nm SiN window (15 heights incl. 5 nm)
     python run_2d.py --stage scan_demod     # -1000 ... 1000 nm every 100 nm x 14 heights (+ 5 nm from scan_h5) -> S2, S3
     python run_2d.py --stage scan_demod --part 2/4   # only every 4th point starting at the 2nd (parallel jobs)
     python run_2d.py --jcm                  # only write the .jcm files (JCMcontrol)
@@ -69,6 +70,8 @@ STAGES = {
     'scan_wide':         dict(mesh='fine',     wvl=6.1, x=X_WIDE, gaps=[5, 101]),
     # HEIGHTS here; the 5 nm height of every position comes from scan_h5 (same mesh / settings)
     'scan_demod':        dict(mesh='fine',     wvl=6.1, x=X_DEMOD, gaps=HEIGHTS),
+    # same positions / heights (+ 5 nm) with a 20 nm SiN window (geom overrides GEOMETRY for this stage)
+    'scan_demod_sin20':  dict(mesh='fine',     wvl=6.1, x=X_DEMOD, gaps=sorted(HEIGHTS + [5]), geom={'t_SiN': 20}),
 }
 MIN_DIRECTIONS = 20     # far-field directions inside the NA window; fewer -> raise ft_refinements
 
@@ -288,8 +291,8 @@ def run_exportbench():
             json.dump(out, f, indent=1)
 
 
-def scan_keys(mesh, wvl):
-    keys = dict(GEOMETRY, **MESH[mesh])
+def scan_keys(mesh, wvl, geom=None):
+    keys = dict(GEOMETRY, **(geom or {}), **MESH[mesh])
     keys.update(material_keys(wvl))
     keys.update(source_keys(wvl, THETA))
     return keys
@@ -356,7 +359,7 @@ def load_line(wd, name):
     return np.ravel(c['X'])*1e9, np.ravel(c['Y'])*1e9, E
 
 
-def near_field(wd, gap):
+def near_field(wd, gap, t_sin):
     """Local near-field observables from the exported points (nm; components x, y (vertical), z)."""
     _, ya, Ea = load_line(wd, 'line_axis')
     in_gap = (ya > 0) & (ya < gap)
@@ -365,7 +368,7 @@ def near_field(wd, gap):
            # integral of E over the gap on the tip axis, from the SiN surface to the apex (nm * V/m)
            'gap_integral': Ea[:, in_gap, :].sum(axis=1)*dy}
     for depth in (10, 30, 100):                            # below the SiN, on the tip axis
-        i = int(np.argmin(np.abs(ya - (-GEOMETRY['t_SiN'] - depth))))
+        i = int(np.argmin(np.abs(ya - (-t_sin - depth))))
         out[f'E_liquid_{depth}nm'] = Ea[:, i, :]
     return out
 
@@ -377,7 +380,7 @@ def run_point(base_keys, x, gap, stage, wd, save_fields=False):
     record = {'x_interface': x, 'gap': gap, 'wall_time_s': time.time() - t0,
               'costs': costs_summary(results[0]), 'finished': time.strftime('%Y-%m-%d %H:%M:%S')}
     record.update(collect_backscatter(results[1], THETA, NA))
-    record.update(near_field(wd, gap))
+    record.update(near_field(wd, gap, base_keys['t_SiN']))
     record.update(parse_jcm_log(solve.last_log))
     return record
 
@@ -413,19 +416,20 @@ def run_stage(name, part=None):
     wvl = cfg['wvl']*1e-6
     old = data.get('settings')
     source = {k: (v.tolist() if isinstance(v, np.ndarray) else v) for k, v in source_keys(wvl, THETA).items()}
-    if data['records'] and old and (old['geometry'] != dict(GEOMETRY, **MESH[cfg['mesh']])
+    geometry = dict(GEOMETRY, **cfg.get('geom', {}), **MESH[cfg['mesh']])
+    if data['records'] and old and (old['geometry'] != geometry
                                     or old['wvl'] != wvl or old['materials'] != material_keys(wvl)
                                     or old.get('source') != source):
         raise SystemExit(f'{out_file} was made with different settings; move it away (e.g. results/old/) first')
     data['settings'] = {
         'stage': name, 'part': part, 'mesh': cfg['mesh'], 'wvl': wvl, 'theta': THETA, 'NA': NA,
         'tap_amplitude': TAP_AMPLITUDE, 'min_gap': MIN_GAP, 'heights': HEIGHTS,
-        'geometry': dict(GEOMETRY, **MESH[cfg['mesh']]),
+        'geometry': geometry,
         'material_files': MATERIAL_FILES, 'materials': material_keys(wvl), 'source': source,
         'host': socket.gethostname(), 'resources': configure_resources(),
         'slurm_job': os.environ.get('SLURM_JOB_ID'),
     }
-    base_keys = scan_keys(cfg['mesh'], wvl)
+    base_keys = scan_keys(cfg['mesh'], wvl, cfg.get('geom'))
 
     all_jobs = [(float(x), float(g)) for x in cfg['x'] for g in cfg['gaps']]
     if part is not None:
