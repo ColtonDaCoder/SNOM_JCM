@@ -127,7 +127,7 @@ def plot_complex(stage, gap=5):
     print('wrote', out)
 
 
-if __name__ == '__main__' and (len(sys.argv) < 2 or sys.argv[1] not in ('ep_sub', 'ep_step', 'ep_lines')):
+if __name__ == '__main__' and (len(sys.argv) < 2 or sys.argv[1] not in ('ep_sub', 'ep_step', 'ep_lines', 'approach')):
     what = sys.argv[1] if len(sys.argv) > 1 else 'scan_h5'
     plot_scan(what)
     plot_combined(what)
@@ -287,3 +287,56 @@ def plot_ep_two_lines(stage='scan_h5', gap=5, n=6):
 
 if __name__ == '__main__' and len(sys.argv) > 1 and sys.argv[1] == 'ep_lines':
     plot_ep_two_lines()
+
+
+LOG_RE = (r'x=([+-]?\d+) nm gap=([\d.]+) nm\s+\|Ep\|\(p_in\)=([\d.eE+-]+) arg=([+-][\d.]+)\s+'
+          r'\|gap int Ey\|\(p_in\)=([\d.eE+-]+) arg=([+-][\d.]+)')
+
+
+def approach_points(stages=('scan_demod', 'scan_h5'), logfile=None):
+    """{(x, gap): (Ep, gap_integral)} from the pkl files, plus run_log-format lines (e.g. pasted) if given."""
+    import re
+    pts = {}
+    if logfile:
+        for m in re.finditer(LOG_RE, open(logfile).read()):
+            x, g, a, p, ga, gp = (float(v) for v in m.groups())
+            pts[(x, g)] = (a*np.exp(1j*p), ga*np.exp(1j*gp))
+    for st in stages:
+        for r in load(st):
+            pts[(r['x_interface'], r['gap'])] = (r['p_in'][1], r['gap_integral'][1, 1])
+    return pts
+
+
+def plot_approach(logfile=None, xs=None):
+    """Approach curves: backscattered Ep (p in) and the gap field vs gap, one curve per position."""
+    pts = approach_points(logfile=logfile)
+    allx = sorted({x for x, g in pts})
+    xs = [x for x in (xs or allx) if sum(1 for k in pts if k[0] == x) > 2]
+    fig, ax = plt.subplots(2, 2, figsize=(12, 8.5), sharex=True)
+    cmap = plt.get_cmap('coolwarm_r')
+    for x in xs:
+        gs = np.array(sorted(g for xx, g in pts if xx == x))
+        Ep = np.array([pts[(x, g)][0] for g in gs])
+        Gi = np.array([pts[(x, g)][1] for g in gs])
+        col = cmap((x + 1000)/2000)
+        kw = dict(color=col, ms=4, label=f'x = {x:+.0f} nm')
+        ax[0, 0].plot(gs, np.abs(Ep), 'o-', **kw)
+        ax[1, 0].plot(gs, np.unwrap(np.angle(Ep)), 'o-', **kw)
+        ax[0, 1].plot(gs, np.abs(Gi)/gs, 'o-', **kw)
+        ax[1, 1].plot(gs, np.unwrap(np.angle(Gi)), 'o-', **kw)
+    ax[0, 0].set(title='Backscattered Ep, p polarized', ylabel='amplitude (arb.)')
+    ax[1, 0].set(ylabel='phase (rad)', xlabel='gap (nm)')
+    ax[0, 1].set(title='Ey in the gap (integral / gap), p polarized', ylabel='mean Ey (V/m, incident = 1)')
+    ax[1, 1].set(ylabel='phase (rad)', xlabel='gap (nm)')
+    for a in ax.flat:
+        a.grid(alpha=0.3)
+    ax[0, 0].legend(fontsize=8)
+    fig.suptitle('2D approach curves')
+    fig.tight_layout()
+    out = os.path.join(FIGS, 'approach_curves.png')
+    fig.savefig(out, dpi=130)
+    print('wrote', out, 'positions:', xs)
+
+
+if __name__ == '__main__' and len(sys.argv) > 1 and sys.argv[1] == 'approach':
+    plot_approach(logfile=sys.argv[2] if len(sys.argv) > 2 else None)
