@@ -10,7 +10,7 @@
 # Usage (from inside Interface_LineScan_2D; -A on the command line overrides the line above):
 #   sbatch -A <allocation> submit_2d.sbatch                         # beamcheck test converge_fine converge_veryfine
 #   sbatch -A <allocation> submit_2d.sbatch scan_h5 scan_wide       # any list of stages from run_2d.py
-#   sbatch -A <allocation> submit_2d.sbatch "scan_demod --part 1/4" # one part of a split stage (quote it)
+#   sbatch -A <allocation> submit_2d.sbatch "scan_demod_sin20 --part 1/2" # one part of a split stage (quote it; only 2 JCM licenses)
 # Every stage / part solves in its own work/<stage> folder, so several jobs can run at once
 # (also next to the 3D jobs).  Stages are resumable.  Afterwards commit and push results/.
 

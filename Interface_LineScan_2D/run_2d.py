@@ -22,7 +22,7 @@ s = E along z (perpendicular to the plane of incidence), p = E in the x-y plane.
     python run_2d.py --stage scan_wide      # -5000 ... 5000 nm every 250 nm at 5 and 101 nm (edge fringe / plateaus)
     python run_2d.py --stage scan_demod_sin20   # 20 nm SiN window, graded x (10 nm steps near 0), 15 heights incl. 5 nm
     python run_2d.py --stage scan_demod     # -1000 ... 1000 nm every 100 nm x 14 heights (+ 5 nm from scan_h5) -> S2, S3
-    python run_2d.py --stage scan_demod --part 2/4   # only every 4th point starting at the 2nd (parallel jobs)
+    python run_2d.py --stage scan_demod --part 2/2   # only every 2nd point starting at the 2nd (2 JCM licenses: at most 2 jobs at once)
     python run_2d.py --jcm                  # only write the .jcm files (JCMcontrol)
 
 Per solve (results/<stage>[.partIofN].pkl): backscattered far field in the NA window for s and p
