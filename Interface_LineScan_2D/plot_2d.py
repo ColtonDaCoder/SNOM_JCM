@@ -127,8 +127,44 @@ def plot_complex(stage, gap=5):
     print('wrote', out)
 
 
-if __name__ == '__main__':
+if __name__ == '__main__' and (len(sys.argv) < 2 or sys.argv[1] != 'ep_sub'):
     what = sys.argv[1] if len(sys.argv) > 1 else 'scan_h5'
     plot_scan(what)
     plot_combined(what)
     plot_complex(what)
+
+
+def plot_ep_subtracted(stage='scan_h5', gap=5, n_fit=5):
+    """Ep complex contrast (top-left panel of *_complex.png) minus a quadratic fitted to its last n_fit points."""
+    recs = [r for r in load(stage) if r['gap'] == gap]
+    x = np.array([r['x_interface'] for r in recs])
+    Ep = np.array([r['p_in'][1] for r in recs])
+    ref = Ep[np.argmax(x)]
+    c = np.abs(Ep - ref)/np.abs(ref)
+    coef = np.polyfit(x[-n_fit:], c[-n_fit:], 2)
+    fit = np.polyval(coef, x)
+    fig, ax = plt.subplots(1, 2, figsize=(12, 4.5))
+    ax[0].plot(x, c, 'o-', ms=4, label='data')
+    ax[0].plot(x, fit, '--', color='k', lw=1, label=f'quadratic fit to last {n_fit} points')
+    ax[0].plot(x[-n_fit:], c[-n_fit:], 'o', ms=7, mfc='none', color='k')
+    ax[0].set_title('Backscattered Ep, p polarized')
+    ax[0].legend()
+    ax[1].plot(x, c - fit, 'o-', ms=4)
+    ax[1].set_title('Backscattered Ep, p polarized, minus fit')
+    for a in ax:
+        a.set_xlabel('interface position x (nm)   oil  <  0  <  water')
+        a.set_ylabel(f'|E - E(x = {x.max():.0f})| / |E(x = {x.max():.0f})|')
+        a.axvline(0, color='0.6', lw=0.8)
+        a.grid(alpha=0.3)
+    fig.suptitle(f'2D line scan, gap {gap:g} nm')
+    fig.tight_layout()
+    out = os.path.join(FIGS, f'{stage}_g{gap:g}_Ep_minus_quadratic.png')
+    fig.savefig(out, dpi=130)
+    print('wrote', out)
+    print('fit coefficients (x^2, x, 1):', coef)
+    for xi, r in zip(x, c - fit):
+        print(f'{xi:+6.0f} {r:+.5f}')
+
+
+if __name__ == '__main__' and len(sys.argv) > 1 and sys.argv[1] == 'ep_sub':
+    plot_ep_subtracted()
