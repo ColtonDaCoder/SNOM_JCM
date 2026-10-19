@@ -127,7 +127,7 @@ def plot_complex(stage, gap=5):
     print('wrote', out)
 
 
-if __name__ == '__main__' and (len(sys.argv) < 2 or sys.argv[1] not in ('ep_sub', 'ep_step', 'ep_lines', 'approach')):
+if __name__ == '__main__' and (len(sys.argv) < 2 or sys.argv[1] not in ('ep_sub', 'ep_step', 'ep_lines', 'approach', 'demod')):
     what = sys.argv[1] if len(sys.argv) > 1 else 'scan_h5'
     plot_scan(what)
     plot_combined(what)
@@ -340,3 +340,57 @@ def plot_approach(logfile=None, xs=None):
 
 if __name__ == '__main__' and len(sys.argv) > 1 and sys.argv[1] == 'approach':
     plot_approach(logfile=sys.argv[2] if len(sys.argv) > 2 else None)
+
+
+TAP_AMPLITUDE = 100     # nm, as in run_2d.py
+MIN_GAP = 1
+
+
+def demodulate(gaps, E, n_t=2000, harmonics=(1, 2, 3, 4)):
+    """S_n: gap(t) = MIN_GAP + A/2 (1 + cos wt), cubic spline through E(gap) (same as the 3D analysis)."""
+    from scipy.interpolate import CubicSpline
+    t = np.linspace(0, 1, n_t, endpoint=False)
+    z = MIN_GAP + TAP_AMPLITUDE/2*(1 + np.cos(2*np.pi*t))
+    Ez = CubicSpline(gaps, E.real)(z) + 1j*CubicSpline(gaps, E.imag)(z)
+    return {n: np.mean(Ez*np.exp(-2j*np.pi*n*t)) for n in harmonics}
+
+
+def plot_demod(logfile=None, harmonics=(2, 3)):
+    """S_n vs x for the backscattered Ep (p in) and the mean gap field, positions with the full height set."""
+    pts = approach_points(logfile=logfile)
+    need = MIN_GAP + TAP_AMPLITUDE
+    rows = []
+    for x in sorted({x for x, g in pts}):
+        gs = np.array(sorted(g for xx, g in pts if xx == x))
+        if len(gs) < 10 or gs.min() > MIN_GAP or gs.max() < need:
+            continue
+        Ep = np.array([pts[(x, g)][0] for g in gs])
+        Gm = np.array([pts[(x, g)][1] for g in gs])/gs
+        rows.append((x, demodulate(gs, Ep), demodulate(gs, Gm)))
+    x = np.array([r[0] for r in rows])
+    fig, ax = plt.subplots(2, 2*len(harmonics), figsize=(5*2*len(harmonics), 7.5), sharex=True)
+    for k, (name, idx) in enumerate((('Backscattered Ep, p polarized', 1), ('Mean Ey in the gap, p polarized', 2))):
+        for j, n in enumerate(harmonics):
+            col = 2*k + j
+            S = np.array([r[idx][n] for r in rows])
+            ax[0, col].plot(x, np.abs(S), 'o-', ms=4)
+            ax[0, col].set_title(f'{name}: S{n}', fontsize=10)
+            ax[0, col].set_ylabel('amplitude')
+            ax[1, col].plot(x, np.unwrap(np.angle(S)), 'o-', ms=4, color='C1')
+            ax[1, col].set_ylabel('phase (rad)')
+            ax[1, col].set_xlabel('interface position x (nm)   oil  <  0  <  water')
+            for a in ax[:, col]:
+                a.axvline(0, color='0.6', lw=0.8)
+                a.grid(alpha=0.3)
+    fig.suptitle(f'2D demodulated signal (tapping {TAP_AMPLITUDE} nm from {MIN_GAP} nm)')
+    fig.tight_layout()
+    out = os.path.join(FIGS, 'demod_vs_x.png')
+    fig.savefig(out, dpi=130)
+    print('wrote', out)
+    for r in rows:
+        print(f"{r[0]:+6.0f}  " + '  '.join(f"S{n} |{abs(r[1][n]):.4e}| {np.angle(r[1][n]):+.4f}" for n in harmonics)
+              + '   gap: ' + '  '.join(f"S{n} |{abs(r[2][n]):.4f}| {np.angle(r[2][n]):+.4f}" for n in harmonics))
+
+
+if __name__ == '__main__' and len(sys.argv) > 1 and sys.argv[1] == 'demod':
+    plot_demod(logfile=sys.argv[2] if len(sys.argv) > 2 else None)
