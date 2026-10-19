@@ -86,7 +86,49 @@ def plot_combined(stage, gap=5):
     print('wrote', out)
 
 
+def plot_complex(stage, gap=5):
+    """
+    Amplitude and phase as one signal.  Top: complex contrast |E(x) - E_ref| / |E_ref| with E_ref the
+    value at the largest x (water side); it counts amplitude and phase changes together.
+    Bottom: the complex signal itself (Im vs Re), points coloured by x.
+    """
+    recs = [r for r in load(stage) if r['gap'] == gap]
+    x = np.array([r['x_interface'] for r in recs])
+    Es = np.array([r['s_in'][0] for r in recs])
+    Ep = np.array([r['p_in'][1] for r in recs])
+    quantities = [('Backscattered Ep, p polarized', Ep),
+                  ('Backscattered Es, s polarized', Es),
+                  ('(Es + Ep) / 2', (Es + Ep)/2),
+                  (f'Ey integrated from SiN to tip ({gap:g} nm), p polarized',
+                   np.array([r['gap_integral'][1, 1] for r in recs]))]
+    fig, ax = plt.subplots(2, 4, figsize=(19, 8.5))
+    for j, (title, v) in enumerate(quantities):
+        ref = v[np.argmax(x)]
+        a = ax[0, j]
+        a.plot(x, np.abs(v - ref)/np.abs(ref), 'o-', ms=4)
+        a.set_title(title, fontsize=10)
+        a.set_xlabel('interface position x (nm)   oil  <  0  <  water')
+        a.set_ylabel(f'|E - E(x = {x.max():.0f})| / |E(x = {x.max():.0f})|')
+        a.axvline(0, color='0.6', lw=0.8)
+        a.grid(alpha=0.3)
+        b = ax[1, j]
+        b.plot(v.real, v.imag, '-', color='0.7', lw=0.8, zorder=1)
+        sc = b.scatter(v.real, v.imag, c=x, cmap='coolwarm_r', s=22, zorder=2)
+        b.set_xlabel('Re E')
+        b.set_ylabel('Im E')
+        b.set_aspect('equal', adjustable='datalim')
+        b.grid(alpha=0.3)
+        fig.colorbar(sc, ax=b, label='x (nm)', shrink=0.8)
+    fig.suptitle(f'2D line scan, gap {gap:g} nm: amplitude and phase combined')
+    fig.tight_layout()
+    os.makedirs(FIGS, exist_ok=True)
+    out = os.path.join(FIGS, f'{stage}_g{gap:g}_complex.png')
+    fig.savefig(out, dpi=130)
+    print('wrote', out)
+
+
 if __name__ == '__main__':
     what = sys.argv[1] if len(sys.argv) > 1 else 'scan_h5'
     plot_scan(what)
     plot_combined(what)
+    plot_complex(what)
