@@ -293,7 +293,7 @@ LOG_RE = (r'x=([+-]?\d+) nm gap=([\d.]+) nm\s+\|Ep\|\(p_in\)=([\d.eE+-]+) arg=([
           r'\|gap int Ey\|\(p_in\)=([\d.eE+-]+) arg=([+-][\d.]+)')
 
 
-def approach_points(stages=('scan_demod', 'scan_h5'), logfile=None):
+def approach_points(stages=('scan_demod', 'scan_h5', 'scan_demod_fill'), logfile=None):
     """{(x, gap): (Ep, gap_integral)} from the pkl files, plus run_log-format lines (e.g. pasted) if given."""
     import re
     pts = {}
