@@ -56,6 +56,37 @@ def plot_scan(stage, gap=5):
     print('wrote', out)
 
 
+def plot_combined(stage, gap=5):
+    """
+    Es and Ep combined (in 2D s and p do not mix: the cross-polarized parts are exactly 0).
+    Total |E| = sqrt((|Es|^2 + |Ep|^2) / 2): unpolarized illumination, polarization-blind detector.
+    (Es + Ep) / 2: 45 deg (s + p) illumination, 45 deg analyzer -> amplitude and phase.
+    """
+    recs = [r for r in load(stage) if r['gap'] == gap]
+    x = np.array([r['x_interface'] for r in recs])
+    Es = np.array([r['s_in'][0] for r in recs])
+    Ep = np.array([r['p_in'][1] for r in recs])
+    tot = np.sqrt((np.abs(Es)**2 + np.abs(Ep)**2)/2)
+    e45 = (Es + Ep)/2
+    fig, ax = plt.subplots(1, 3, figsize=(15, 4.5), sharex=True)
+    for a, y, title, ylab, c in ((ax[0], tot, 'Total |E| (Es and Ep combined)', 'amplitude (arb.)', 'C0'),
+                                 (ax[1], np.abs(e45), '(Es + Ep) / 2 amplitude', 'amplitude (arb.)', 'C0'),
+                                 (ax[2], np.unwrap(np.angle(e45)), '(Es + Ep) / 2 phase', 'phase (rad)', 'C1')):
+        a.plot(x, y, 'o-', ms=4, color=c)
+        a.set_title(title)
+        a.set_ylabel(ylab)
+        a.set_xlabel('interface position x (nm)   oil  <  0  <  water')
+        a.axvline(0, color='0.6', lw=0.8)
+        a.grid(alpha=0.3)
+    fig.suptitle(f'2D line scan, gap {gap:g} nm')
+    fig.tight_layout()
+    os.makedirs(FIGS, exist_ok=True)
+    out = os.path.join(FIGS, f'{stage}_g{gap:g}_combined.png')
+    fig.savefig(out, dpi=130)
+    print('wrote', out)
+
+
 if __name__ == '__main__':
     what = sys.argv[1] if len(sys.argv) > 1 else 'scan_h5'
     plot_scan(what)
+    plot_combined(what)
