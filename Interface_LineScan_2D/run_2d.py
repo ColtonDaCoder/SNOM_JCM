@@ -20,7 +20,7 @@ s = E along z (perpendicular to the plane of incidence), p = E in the x-y plane.
     python run_2d.py --stage converge_veryfine  # the same 9 points on 'veryfine' -> mesh convergence
     python run_2d.py --stage scan_h5        # -1000 ... 1000 nm every 10 nm at a 5 nm gap
     python run_2d.py --stage scan_wide      # -5000 ... 5000 nm every 250 nm at 5 and 101 nm (edge fringe / plateaus)
-    python run_2d.py --stage scan_demod     # -1000 ... 1000 nm every 25 nm x 14 heights -> S2, S3
+    python run_2d.py --stage scan_demod     # -1000 ... 1000 nm every 100 nm x 14 heights (+ 5 nm from scan_h5) -> S2, S3
     python run_2d.py --stage scan_demod --part 2/4   # only every 4th point starting at the 2nd (parallel jobs)
     python run_2d.py --jcm                  # only write the .jcm files (JCMcontrol)
 
@@ -57,7 +57,7 @@ MIN_GAP = 1             # nm
 HEIGHTS = [1, 2, 3, 4, 6, 8, 10, 14, 20, 30, 45, 60, 80, 101]
 
 X_H5 = list(range(-1000, 1001, 10))
-X_DEMOD = list(range(-1000, 1001, 25))
+X_DEMOD = list(range(-1000, 1001, 100))   # same 21 positions as the finished scan_h5 run, whose 5 nm points are the 15th height
 X_WIDE = list(range(-5000, 5001, 250))
 X_CONV = [-500, 0, 500]
 
@@ -67,6 +67,7 @@ STAGES = {
     'converge_veryfine': dict(mesh='veryfine', wvl=6.1, x=X_CONV, gaps=[1, 5, 101]),
     'scan_h5':           dict(mesh='fine',     wvl=6.1, x=X_H5, gaps=[5], save_fields=list(range(-1000, 1001, 100))),
     'scan_wide':         dict(mesh='fine',     wvl=6.1, x=X_WIDE, gaps=[5, 101]),
+    # HEIGHTS here; the 5 nm height of every position comes from scan_h5 (same mesh / settings)
     'scan_demod':        dict(mesh='fine',     wvl=6.1, x=X_DEMOD, gaps=HEIGHTS),
 }
 MIN_DIRECTIONS = 20     # far-field directions inside the NA window; fewer -> raise ft_refinements
