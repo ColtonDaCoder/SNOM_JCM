@@ -127,7 +127,7 @@ def plot_complex(stage, gap=5):
     print('wrote', out)
 
 
-if __name__ == '__main__' and (len(sys.argv) < 2 or sys.argv[1] not in ('ep_sub', 'ep_step', 'ep_lines', 'approach', 'demod')):
+if __name__ == '__main__' and (len(sys.argv) < 2 or sys.argv[1] not in ('ep_sub', 'ep_step', 'ep_lines', 'approach', 'demod', 's2s3')):
     what = sys.argv[1] if len(sys.argv) > 1 else 'scan_h5'
     plot_scan(what)
     plot_combined(what)
@@ -394,3 +394,41 @@ def plot_demod(logfile=None, harmonics=(2, 3)):
 
 if __name__ == '__main__' and len(sys.argv) > 1 and sys.argv[1] == 'demod':
     plot_demod(logfile=sys.argv[2] if len(sys.argv) > 2 else None)
+
+
+def plot_s2_over_s3(logfile=None):
+    """Complex ratio S2 / S3 vs x for the backscattered Ep (p in) and the mean gap field."""
+    pts = approach_points(logfile=logfile)
+    rows = []
+    for x in sorted({x for x, g in pts}):
+        gs = np.array(sorted(g for xx, g in pts if xx == x))
+        if len(gs) < 10 or gs.min() > MIN_GAP or gs.max() < MIN_GAP + TAP_AMPLITUDE:
+            continue
+        Sf = demodulate(gs, np.array([pts[(x, g)][0] for g in gs]))
+        Sg = demodulate(gs, np.array([pts[(x, g)][1] for g in gs])/gs)
+        rows.append((x, Sf[2]/Sf[3], Sg[2]/Sg[3]))
+    x = np.array([r[0] for r in rows])
+    fig, ax = plt.subplots(2, 2, figsize=(11, 7.5), sharex=True)
+    for col, (name, idx) in enumerate((('Backscattered Ep, p polarized: S2 / S3', 1),
+                                       ('Mean Ey in the gap, p polarized: S2 / S3', 2))):
+        R = np.array([r[idx] for r in rows])
+        ax[0, col].plot(x, np.abs(R), 'o-', ms=4)
+        ax[0, col].set_title(name, fontsize=10)
+        ax[0, col].set_ylabel('amplitude')
+        ax[1, col].plot(x, np.unwrap(np.angle(R)), 'o-', ms=4, color='C1')
+        ax[1, col].set_ylabel('phase (rad)')
+        ax[1, col].set_xlabel('interface position x (nm)   oil  <  0  <  water')
+        for a in ax[:, col]:
+            a.axvline(0, color='0.6', lw=0.8)
+            a.grid(alpha=0.3)
+    fig.suptitle(f'2D S2 / S3 (tapping {TAP_AMPLITUDE} nm from {MIN_GAP} nm)')
+    fig.tight_layout()
+    out = os.path.join(FIGS, 'S2_over_S3_vs_x.png')
+    fig.savefig(out, dpi=130)
+    print('wrote', out)
+    for r in rows:
+        print(f'{r[0]:+6.0f}  Ep: |{abs(r[1]):.4f}| {np.angle(r[1]):+.4f}   gap: |{abs(r[2]):.4f}| {np.angle(r[2]):+.4f}')
+
+
+if __name__ == '__main__' and len(sys.argv) > 1 and sys.argv[1] == 's2s3':
+    plot_s2_over_s3(logfile=sys.argv[2] if len(sys.argv) > 2 else None)
