@@ -127,7 +127,7 @@ def plot_complex(stage, gap=5):
     print('wrote', out)
 
 
-if __name__ == '__main__' and (len(sys.argv) < 2 or sys.argv[1] != 'ep_sub'):
+if __name__ == '__main__' and (len(sys.argv) < 2 or sys.argv[1] not in ('ep_sub', 'ep_step')):
     what = sys.argv[1] if len(sys.argv) > 1 else 'scan_h5'
     plot_scan(what)
     plot_combined(what)
@@ -180,3 +180,64 @@ def plot_ep_subtracted(stage='scan_h5', gap=5, n_fit=5, model='quadratic'):
 
 if __name__ == '__main__' and len(sys.argv) > 1 and sys.argv[1] == 'ep_sub':
     plot_ep_subtracted(model=sys.argv[2] if len(sys.argv) > 2 else 'quadratic')
+
+
+def plot_ep_step_fit(stage='scan_h5', gap=5):
+    """
+    Complex Ep fitted over all points with  B(x) + D * (1 - tanh((x - x0) / w)) / 2,
+    B(x) = b0 + b1 x + b2 x^2 a smooth complex background (b*, D complex; x0, w real).
+    Plotted: the data minus B(x) only (the step model is not subtracted), as complex contrast
+    relative to the water end in units of the fitted step |D|, and the complex plane.
+    """
+    from scipy.optimize import least_squares
+    recs = [r for r in load(stage) if r['gap'] == gap]
+    x = np.array([r['x_interface'] for r in recs], float)
+    E = np.array([r['p_in'][1] for r in recs])
+    u = x/1000
+
+    def design(x0, w):
+        return np.vstack([np.ones_like(u), u, u**2, 0.5*(1 - np.tanh((x - x0)/w))]).T
+
+    def res(pr):
+        M = design(*pr)
+        r = M @ np.linalg.lstsq(M, E, rcond=None)[0] - E
+        return np.r_[r.real, r.imag]
+    best = min((least_squares(res, [x0, w]) for x0 in (-300, -100, 0, 100) for w in (50, 150, 400)),
+               key=lambda s: s.cost)
+    x0, w = best.x
+    M = design(x0, w)
+    c = np.linalg.lstsq(M, E, rcond=None)[0]
+    B = M[:, :3] @ c[:3]
+    S = E - B                                   # data minus background
+    ref = S[np.argmax(x)]
+    con = np.abs(S - ref)/np.abs(c[3])           # in units of the fitted step |D|
+    rms = np.sqrt(np.mean(np.abs(M @ c - E)**2))/np.mean(np.abs(E))
+
+    fig, ax = plt.subplots(1, 2, figsize=(12, 4.6))
+    ax[0].plot(x, con, 'o-', ms=4)
+    ax[0].set_title('Backscattered Ep, p polarized, minus background')
+    ax[0].set_xlabel('interface position x (nm)   oil  <  0  <  water')
+    ax[0].set_ylabel(f'|S - S(x = {x.max():.0f})| / |step|')
+    ax[0].axvline(0, color='0.6', lw=0.8)
+    ax[0].grid(alpha=0.3)
+    ax[1].plot(S.real, S.imag, '-', color='0.7', lw=0.8, zorder=1)
+    sc = ax[1].scatter(S.real, S.imag, c=x, cmap='coolwarm_r', s=22, zorder=2)
+    ax[1].set_title('Backscattered Ep minus background, complex plane')
+    ax[1].set_xlabel('Re')
+    ax[1].set_ylabel('Im')
+    ax[1].set_aspect('equal', adjustable='datalim')
+    ax[1].grid(alpha=0.3)
+    fig.colorbar(sc, ax=ax[1], label='x (nm)', shrink=0.8)
+    fig.suptitle(f'2D line scan, gap {gap:g} nm')
+    fig.tight_layout()
+    out = os.path.join(FIGS, f'{stage}_g{gap:g}_Ep_minus_background.png')
+    fig.savefig(out, dpi=130)
+    print('wrote', out)
+    print(f'x0 = {x0:.1f} nm, w = {w:.1f} nm (10-90 % width {2*w*np.arctanh(0.8):.0f} nm), '
+          f'step |D|/|E| = {abs(c[3])/np.mean(np.abs(E)):.3f}, rms residual / |E| = {rms:.2e}')
+    for xi, ci in zip(x, con):
+        print(f'{xi:+6.0f} {ci:.4f}')
+
+
+if __name__ == '__main__' and len(sys.argv) > 1 and sys.argv[1] == 'ep_step':
+    plot_ep_step_fit()
