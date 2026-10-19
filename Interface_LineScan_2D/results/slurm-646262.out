@@ -1,0 +1,4 @@
+job 646262 on smic001, 8 cores, stages: scan_h5
+JCMROOT=/home/coltonb/software/JCMsuite_6_0_10
+=== stage scan_h5 on smic001 (2026-10-18 18:38:45): 18 solves to run, 18 already done, fine mesh, 6.1 um
+slurmstepd: error: *** JOB 646262 ON smic001 CANCELLED AT 2026-10-18T18:39:25 ***

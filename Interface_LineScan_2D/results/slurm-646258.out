@@ -1,0 +1,5 @@
+job 646258 on smic001, 8 cores, stages: scan_h5
+JCMROOT=/home/coltonb/software/JCMsuite_6_0_10
+=== stage scan_h5 on smic001 (2026-10-18 18:33:56): 19 solves to run, 17 already done, fine mesh, 6.1 um
+[scan_h5 1/19] x=-800 nm gap=5 nm  |Ep|(p_in)=8.62937e-02 arg=+2.1377  |gap int Ey|(p_in)=3.6694e+01 arg=-2.3230  314 dirs  unknowns=[1239579, 1516949, 1823937, 2149665]  231 s  est.err FarField=[(1, 0.000995822351), (2, 7.51164398e-05), (3, 2.93825484e-05)]
+slurmstepd: error: *** JOB 646258 ON smic001 CANCELLED AT 2026-10-18T18:38:22 ***
