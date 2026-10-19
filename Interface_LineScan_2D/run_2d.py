@@ -62,9 +62,8 @@ X_H5 = list(range(-1000, 1001, 10))
 X_DEMOD = list(range(-1000, 1001, 100))   # same 21 positions as the finished scan_h5 run, whose 5 nm points are the 15th height
 X_WIDE = list(range(-5000, 5001, 250))
 X_CONV = [-500, 0, 500]
-# graded positions: the 21 X_DEMOD points (100 nm steps) plus finer steps only within +-100 nm:
-# 20 nm between 50 and 100, 10 nm within +-50
-X_GRADED = sorted(set(X_DEMOD) | {s*v for v in (80, 60, 50, 40, 30, 20, 10) for s in (-1, 1)})
+# graded positions: the 21 X_DEMOD points (100 nm steps) plus 20 nm steps within +-100 nm
+X_GRADED = sorted(set(X_DEMOD) | set(range(-80, 81, 20)))
 
 STAGES = {
     'test':              dict(mesh='fine',     wvl=6.1, x=[0], gaps=[5], save_fields=True),
