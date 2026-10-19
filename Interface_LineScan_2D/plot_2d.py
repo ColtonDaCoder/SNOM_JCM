@@ -127,7 +127,7 @@ def plot_complex(stage, gap=5):
     print('wrote', out)
 
 
-if __name__ == '__main__' and (len(sys.argv) < 2 or sys.argv[1] not in ('ep_sub', 'ep_step')):
+if __name__ == '__main__' and (len(sys.argv) < 2 or sys.argv[1] not in ('ep_sub', 'ep_step', 'ep_lines')):
     what = sys.argv[1] if len(sys.argv) > 1 else 'scan_h5'
     plot_scan(what)
     plot_combined(what)
@@ -241,3 +241,49 @@ def plot_ep_step_fit(stage='scan_h5', gap=5):
 
 if __name__ == '__main__' and len(sys.argv) > 1 and sys.argv[1] == 'ep_step':
     plot_ep_step_fit()
+
+
+def plot_ep_two_lines(stage='scan_h5', gap=5, n=6):
+    """
+    Ep complex contrast (top-left panel of *_complex.png): straight lines fitted to the first n and
+    the last n points; baseline = left line up to where it meets the right line, right line after.
+    Plotted: data with both lines / baseline, and data minus baseline.
+    """
+    recs = [r for r in load(stage) if r['gap'] == gap]
+    x = np.array([r['x_interface'] for r in recs], float)
+    Ep = np.array([r['p_in'][1] for r in recs])
+    ref = Ep[np.argmax(x)]
+    c = np.abs(Ep - ref)/np.abs(ref)
+    L = np.polyfit(x[:n], c[:n], 1)
+    R = np.polyfit(x[-n:], c[-n:], 1)
+    x_int = (R[1] - L[1])/(L[0] - R[0])
+    base = np.where(x <= x_int, np.polyval(L, x), np.polyval(R, x))
+    xx = np.linspace(x.min(), x.max(), 400)
+    fig, ax = plt.subplots(1, 2, figsize=(12, 4.6))
+    ax[0].plot(x, c, 'o-', ms=4, label='data')
+    ax[0].plot(xx, np.polyval(L, xx), ':', color='C3', lw=1, label=f'line through first {n} points')
+    ax[0].plot(xx, np.polyval(R, xx), ':', color='C2', lw=1, label=f'line through last {n} points')
+    ax[0].plot(xx, np.where(xx <= x_int, np.polyval(L, xx), np.polyval(R, xx)), '--', color='k', lw=1.2, label='baseline')
+    ax[0].axvline(x_int, color='k', lw=0.6, ls=':')
+    ax[0].set_title('Backscattered Ep, p polarized')
+    ax[0].legend(fontsize=8)
+    ax[1].plot(x, c - base, 'o-', ms=4)
+    ax[1].axvline(x_int, color='k', lw=0.6, ls=':')
+    ax[1].set_title('Backscattered Ep, p polarized, minus baseline')
+    for a in ax:
+        a.set_xlabel('interface position x (nm)   oil  <  0  <  water')
+        a.set_ylabel(f'|E - E(x = {x.max():.0f})| / |E(x = {x.max():.0f})|')
+        a.axvline(0, color='0.6', lw=0.8)
+        a.grid(alpha=0.3)
+    fig.suptitle(f'2D line scan, gap {gap:g} nm')
+    fig.tight_layout()
+    out = os.path.join(FIGS, f'{stage}_g{gap:g}_Ep_minus_two_lines.png')
+    fig.savefig(out, dpi=130)
+    print('wrote', out)
+    print(f'left line {L}, right line {R}, intersection at x = {x_int:.1f} nm')
+    for xi, v in zip(x, c - base):
+        print(f'{xi:+6.0f} {v:+.5f}')
+
+
+if __name__ == '__main__' and len(sys.argv) > 1 and sys.argv[1] == 'ep_lines':
+    plot_ep_two_lines()
