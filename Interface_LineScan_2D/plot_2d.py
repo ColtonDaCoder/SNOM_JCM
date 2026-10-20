@@ -133,7 +133,7 @@ def plot_complex(stage, gap=5):
     print('wrote', out)
 
 
-if __name__ == '__main__' and (len(sys.argv) < 2 or sys.argv[1] not in ('ep_sub', 'ep_step', 'ep_lines', 'approach', 'demod', 's2s3', 'nearfield', 'compare', 's2s3_prov', 's2s3_both')):
+if __name__ == '__main__' and (len(sys.argv) < 2 or sys.argv[1] not in ('ep_sub', 'ep_step', 'ep_lines', 'approach', 'demod', 's2s3', 'nearfield', 'compare', 's2s3_prov', 's2s3_both', 's2s3_wl')):
     what = sys.argv[1] if len(sys.argv) > 1 else 'scan_h5'
     plot_scan(what)
     plot_combined(what)
@@ -299,8 +299,8 @@ LOG_RE = (r'x=([+-]?\d+) nm gap=([\d.]+) nm\s+\|Ep\|\(p_in\)=([\d.eE+-]+) arg=([
           r'\|gap int Ey\|\(p_in\)=([\d.eE+-]+) arg=([+-][\d.]+)')
 
 
-SETS = {'sin5': (('scan_demod', 'scan_h5', 'scan_demod_fill'), '', '5 nm SiN'),
-        'sin20': (('scan_demod_sin20',), '_sin20', '20 nm SiN'),
+SETS = {'sin5': (('scan_demod', 'scan_h5', 'scan_demod_fill'), '', '5 nm SiN, 6.1 um'),
+        'sin20': (('scan_demod_sin20',), '_sin20', '20 nm SiN, 6.1 um'),
         'wl5p5': (('scan_demod_5p5um',), '_5p5um', '5 nm SiN, 5.5 um')}
 SET = _SET_ARG or 'sin5'
 
@@ -357,6 +357,7 @@ if __name__ == '__main__' and len(sys.argv) > 1 and sys.argv[1] == 'approach':
 
 TAP_AMPLITUDE = 100     # nm, as in run_2d.py
 MIN_GAP = 1
+N_HEIGHTS = 15         # a position is demodulated only when all heights (14 + 5 nm) are there
 
 
 def demodulate(gaps, E, n_t=2000, harmonics=(1, 2, 3, 4)):
@@ -375,7 +376,7 @@ def plot_demod(logfile=None, harmonics=(2, 3)):
     rows = []
     for x in sorted({x for x, g in pts}):
         gs = np.array(sorted(g for xx, g in pts if xx == x))
-        if len(gs) < 10 or gs.min() > MIN_GAP or gs.max() < need:
+        if len(gs) < N_HEIGHTS or gs.min() > MIN_GAP or gs.max() < need:
             continue
         Ep = np.array([pts[(x, g)][0] for g in gs])
         Gm = np.array([pts[(x, g)][1] for g in gs])/gs
@@ -415,7 +416,7 @@ def plot_s2_over_s3(logfile=None):
     rows = []
     for x in sorted({x for x, g in pts}):
         gs = np.array(sorted(g for xx, g in pts if xx == x))
-        if len(gs) < 10 or gs.min() > MIN_GAP or gs.max() < MIN_GAP + TAP_AMPLITUDE:
+        if len(gs) < N_HEIGHTS or gs.min() > MIN_GAP or gs.max() < MIN_GAP + TAP_AMPLITUDE:
             continue
         Sf = demodulate(gs, np.array([pts[(x, g)][0] for g in gs]))
         Sg = demodulate(gs, np.array([pts[(x, g)][1] for g in gs])/gs)
@@ -490,7 +491,7 @@ def demod_rows(set_name):
     rows = []
     for x in sorted({x for x, g in pts}):
         gs = np.array(sorted(g for xx, g in pts if xx == x))
-        if len(gs) < 10 or gs.min() > MIN_GAP or gs.max() < MIN_GAP + TAP_AMPLITUDE:
+        if len(gs) < N_HEIGHTS or gs.min() > MIN_GAP or gs.max() < MIN_GAP + TAP_AMPLITUDE:
             continue
         rows.append((x, demodulate(gs, np.array([pts[(x, g)][0] for g in gs])),
                      demodulate(gs, np.array([pts[(x, g)][1] for g in gs])/gs)))
@@ -583,11 +584,14 @@ if __name__ == '__main__' and len(sys.argv) > 1 and sys.argv[1] == 's2s3_prov':
     plot_s2s3_provisional()
 
 
-def plot_s2s3_sin5_sin20():
-    """S2 / S3 of the backscattered Ep for 5 and 20 nm SiN: raw (left) and normalized to x = -1000 (right)."""
+def plot_s2s3_sin5_sin20(sets=(('sin5', 'C0'), ('sin20', 'C3')), title='5 nm vs 20 nm SiN',
+                         fname='S2_over_S3_sin5_vs_sin20.png'):
+    """S2 / S3 of the backscattered Ep for two data sets: raw (left) and normalized to x = -1000 (right)."""
     fig, ax = plt.subplots(2, 2, figsize=(13, 8), sharex=True)
-    for set_name, c in (('sin5', 'C0'), ('sin20', 'C3')):
+    for set_name, c in sets:
         rows = demod_rows(set_name)
+        if not rows:
+            continue
         x = np.array([r[0] for r in rows])
         R = np.array([r[1][2]/r[1][3] for r in rows])
         amp, ph = np.abs(R), np.unwrap(np.angle(R))
@@ -606,12 +610,17 @@ def plot_s2s3_sin5_sin20():
     for a in ax[1]:
         a.set_xlabel('interface position x (nm)   oil  <  0  <  water')
     ax[0, 0].legend()
-    fig.suptitle('2D backscattered Ep, p polarized: S2 / S3, 5 nm vs 20 nm SiN')
+    fig.suptitle(f'2D backscattered Ep, p polarized: S2 / S3, {title}')
     fig.tight_layout()
-    out = os.path.join(FIGS, 'S2_over_S3_sin5_vs_sin20.png')
+    out = os.path.join(FIGS, fname)
     fig.savefig(out, dpi=130)
     print('wrote', out)
 
 
 if __name__ == '__main__' and len(sys.argv) > 1 and sys.argv[1] == 's2s3_both':
     plot_s2s3_sin5_sin20()
+
+
+if __name__ == '__main__' and len(sys.argv) > 1 and sys.argv[1] == 's2s3_wl':
+    plot_s2s3_sin5_sin20(sets=(('sin5', 'C0'), ('wl5p5', 'C2')), title='6.1 um vs 5.5 um (5 nm SiN)',
+                         fname='S2_over_S3_6p1_vs_5p5um.png')
