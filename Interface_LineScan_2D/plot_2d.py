@@ -133,7 +133,7 @@ def plot_complex(stage, gap=5):
     print('wrote', out)
 
 
-if __name__ == '__main__' and (len(sys.argv) < 2 or sys.argv[1] not in ('ep_sub', 'ep_step', 'ep_lines', 'approach', 'demod', 's2s3', 'nearfield', 'compare', 's2s3_prov')):
+if __name__ == '__main__' and (len(sys.argv) < 2 or sys.argv[1] not in ('ep_sub', 'ep_step', 'ep_lines', 'approach', 'demod', 's2s3', 'nearfield', 'compare', 's2s3_prov', 's2s3_both')):
     what = sys.argv[1] if len(sys.argv) > 1 else 'scan_h5'
     plot_scan(what)
     plot_combined(what)
@@ -580,3 +580,37 @@ def plot_s2s3_provisional(heights=(1, 3, 5, 8, 14, 30, 60, 101)):
 
 if __name__ == '__main__' and len(sys.argv) > 1 and sys.argv[1] == 's2s3_prov':
     plot_s2s3_provisional()
+
+
+def plot_s2s3_sin5_sin20():
+    """S2 / S3 of the backscattered Ep for 5 and 20 nm SiN: raw (left) and normalized to x = -1000 (right)."""
+    fig, ax = plt.subplots(2, 2, figsize=(13, 8), sharex=True)
+    for set_name, c in (('sin5', 'C0'), ('sin20', 'C3')):
+        rows = demod_rows(set_name)
+        x = np.array([r[0] for r in rows])
+        R = np.array([r[1][2]/r[1][3] for r in rows])
+        amp, ph = np.abs(R), np.unwrap(np.angle(R))
+        kw = dict(ms=4, color=c, label=SETS[set_name][2])
+        ax[0, 0].plot(x, amp, 'o-', **kw)
+        ax[1, 0].plot(x, ph, 'o-', **kw)
+        ax[0, 1].plot(x, amp/amp[0], 'o-', **kw)
+        ax[1, 1].plot(x, ph - ph[0], 'o-', **kw)
+    ax[0, 0].set(title='S2 / S3 amplitude', ylabel='amplitude')
+    ax[1, 0].set(title='S2 / S3 phase', ylabel='phase (rad)')
+    ax[0, 1].set(title='S2 / S3 amplitude, normalized', ylabel='amplitude / value at x = -1000')
+    ax[1, 1].set(title='S2 / S3 phase, normalized', ylabel='phase - phase at x = -1000 (rad)')
+    for a in ax.flat:
+        a.axvline(0, color='0.6', lw=0.8)
+        a.grid(alpha=0.3)
+    for a in ax[1]:
+        a.set_xlabel('interface position x (nm)   oil  <  0  <  water')
+    ax[0, 0].legend()
+    fig.suptitle('2D backscattered Ep, p polarized: S2 / S3, 5 nm vs 20 nm SiN')
+    fig.tight_layout()
+    out = os.path.join(FIGS, 'S2_over_S3_sin5_vs_sin20.png')
+    fig.savefig(out, dpi=130)
+    print('wrote', out)
+
+
+if __name__ == '__main__' and len(sys.argv) > 1 and sys.argv[1] == 's2s3_both':
+    plot_s2s3_sin5_sin20()
