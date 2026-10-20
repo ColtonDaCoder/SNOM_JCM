@@ -300,7 +300,8 @@ LOG_RE = (r'x=([+-]?\d+) nm gap=([\d.]+) nm\s+\|Ep\|\(p_in\)=([\d.eE+-]+) arg=([
 
 
 SETS = {'sin5': (('scan_demod', 'scan_h5', 'scan_demod_fill'), '', '5 nm SiN'),
-        'sin20': (('scan_demod_sin20',), '_sin20', '20 nm SiN')}
+        'sin20': (('scan_demod_sin20',), '_sin20', '20 nm SiN'),
+        'wl5p5': (('scan_demod_5p5um',), '_5p5um', '5 nm SiN, 5.5 um')}
 SET = _SET_ARG or 'sin5'
 
 

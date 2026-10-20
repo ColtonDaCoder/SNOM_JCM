@@ -22,6 +22,7 @@ s = E along z (perpendicular to the plane of incidence), p = E in the x-y plane.
     python run_2d.py --stage scan_wide      # -5000 ... 5000 nm every 250 nm at 5 and 101 nm (edge fringe / plateaus)
     python run_2d.py --stage scan_demod_fill    # 5 nm SiN at the extra X_GRADED positions (completes the 5 nm set)
     python run_2d.py --stage scan_demod_sin20   # 20 nm SiN window, graded x (finer steps within +-100 nm), 15 heights incl. 5 nm
+    python run_2d.py --stage scan_demod_5p5um   # 5.5 um, 5 nm SiN, same x / heights (wavelength control)
     python run_2d.py --stage scan_demod     # -1000 ... 1000 nm every 100 nm x 14 heights (+ 5 nm from scan_h5) -> S2, S3
     python run_2d.py --stage scan_demod --part 2/2   # only every 2nd point starting at the 2nd (2 JCM licenses: at most 2 jobs at once)
     python run_2d.py --jcm                  # only write the .jcm files (JCMcontrol)
@@ -78,6 +79,9 @@ STAGES = {
     'scan_demod_fill':   dict(mesh='fine',     wvl=6.1, x=[x for x in X_GRADED if x not in X_DEMOD], gaps=sorted(HEIGHTS + [5])),
     # 20 nm SiN window (geom overrides GEOMETRY for this stage), graded positions X_GRADED, heights + 5 nm
     'scan_demod_sin20':  dict(mesh='fine',     wvl=6.1, x=X_GRADED, gaps=sorted(HEIGHTS + [5]), geom={'t_SiN': 20}),
+    # 5.5 um (off the water bending band: Im eps(water) 0.03 instead of 0.35 at 6.1 um), 5 nm SiN,
+    # same positions / heights as the 6.1 um 5 nm set -> wavelength control of the oil | water contrast
+    'scan_demod_5p5um':  dict(mesh='fine',     wvl=5.5, x=X_GRADED, gaps=sorted(HEIGHTS + [5])),
 }
 MIN_DIRECTIONS = 20     # far-field directions inside the NA window; fewer -> raise ft_refinements
 
