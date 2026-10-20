@@ -15,6 +15,12 @@ matplotlib.use('Agg')
 import matplotlib.pyplot as plt
 
 HERE = os.path.dirname(os.path.abspath(__file__))
+if '--set' in sys.argv:                      # e.g.  python plot_2d.py demod --set sin20
+    _i = sys.argv.index('--set')
+    _SET_ARG = sys.argv[_i + 1]
+    del sys.argv[_i:_i + 2]
+else:
+    _SET_ARG = None
 RESULTS = os.path.join(HERE, 'results')
 FIGS = os.path.join(HERE, 'figures')
 
@@ -127,7 +133,7 @@ def plot_complex(stage, gap=5):
     print('wrote', out)
 
 
-if __name__ == '__main__' and (len(sys.argv) < 2 or sys.argv[1] not in ('ep_sub', 'ep_step', 'ep_lines', 'approach', 'demod', 's2s3', 'nearfield')):
+if __name__ == '__main__' and (len(sys.argv) < 2 or sys.argv[1] not in ('ep_sub', 'ep_step', 'ep_lines', 'approach', 'demod', 's2s3', 'nearfield', 'compare', 's2s3_prov')):
     what = sys.argv[1] if len(sys.argv) > 1 else 'scan_h5'
     plot_scan(what)
     plot_combined(what)
@@ -293,9 +299,15 @@ LOG_RE = (r'x=([+-]?\d+) nm gap=([\d.]+) nm\s+\|Ep\|\(p_in\)=([\d.eE+-]+) arg=([
           r'\|gap int Ey\|\(p_in\)=([\d.eE+-]+) arg=([+-][\d.]+)')
 
 
-def approach_points(stages=('scan_demod', 'scan_h5', 'scan_demod_fill'), logfile=None):
+SETS = {'sin5': (('scan_demod', 'scan_h5', 'scan_demod_fill'), '', '5 nm SiN'),
+        'sin20': (('scan_demod_sin20',), '_sin20', '20 nm SiN')}
+SET = _SET_ARG or 'sin5'
+
+
+def approach_points(stages=None, logfile=None):
     """{(x, gap): (Ep, gap_integral)} from the pkl files, plus run_log-format lines (e.g. pasted) if given."""
     import re
+    stages = stages or SETS[SET][0]
     pts = {}
     if logfile:
         for m in re.finditer(LOG_RE, open(logfile).read()):
@@ -331,9 +343,9 @@ def plot_approach(logfile=None, xs=None):
     for a in ax.flat:
         a.grid(alpha=0.3)
     ax[0, 0].legend(fontsize=8)
-    fig.suptitle('2D approach curves')
+    fig.suptitle(f'2D approach curves, {SETS[SET][2]}')
     fig.tight_layout()
-    out = os.path.join(FIGS, 'approach_curves.png')
+    out = os.path.join(FIGS, 'approach_curves' + SETS[SET][1] + '.png')
     fig.savefig(out, dpi=130)
     print('wrote', out, 'positions:', xs)
 
@@ -382,9 +394,9 @@ def plot_demod(logfile=None, harmonics=(2, 3)):
             for a in ax[:, col]:
                 a.axvline(0, color='0.6', lw=0.8)
                 a.grid(alpha=0.3)
-    fig.suptitle(f'2D demodulated signal (tapping {TAP_AMPLITUDE} nm from {MIN_GAP} nm)')
+    fig.suptitle(f'2D demodulated signal, {SETS[SET][2]} (tapping {TAP_AMPLITUDE} nm from {MIN_GAP} nm)')
     fig.tight_layout()
-    out = os.path.join(FIGS, 'demod_vs_x.png')
+    out = os.path.join(FIGS, 'demod_vs_x' + SETS[SET][1] + '.png')
     fig.savefig(out, dpi=130)
     print('wrote', out)
     for r in rows:
@@ -421,9 +433,9 @@ def plot_s2_over_s3(logfile=None):
         for a in ax[:, col]:
             a.axvline(0, color='0.6', lw=0.8)
             a.grid(alpha=0.3)
-    fig.suptitle(f'2D S2 / S3 (tapping {TAP_AMPLITUDE} nm from {MIN_GAP} nm)')
+    fig.suptitle(f'2D S2 / S3, {SETS[SET][2]} (tapping {TAP_AMPLITUDE} nm from {MIN_GAP} nm)')
     fig.tight_layout()
-    out = os.path.join(FIGS, 'S2_over_S3_vs_x.png')
+    out = os.path.join(FIGS, 'S2_over_S3_vs_x' + SETS[SET][1] + '.png')
     fig.savefig(out, dpi=130)
     print('wrote', out)
     for r in rows:
@@ -469,3 +481,102 @@ def plot_near_field_low_gap(gap=1, stages=('scan_demod', 'scan_h5', 'scan_demod_
 
 if __name__ == '__main__' and len(sys.argv) > 1 and sys.argv[1] == 'nearfield':
     plot_near_field_low_gap(gap=float(sys.argv[2]) if len(sys.argv) > 2 else 1)
+
+
+def demod_rows(set_name):
+    """[(x, {n: S_n of Ep}, {n: S_n of mean gap Ey})] for positions with the full tapping range."""
+    pts = approach_points(stages=SETS[set_name][0])
+    rows = []
+    for x in sorted({x for x, g in pts}):
+        gs = np.array(sorted(g for xx, g in pts if xx == x))
+        if len(gs) < 10 or gs.min() > MIN_GAP or gs.max() < MIN_GAP + TAP_AMPLITUDE:
+            continue
+        rows.append((x, demodulate(gs, np.array([pts[(x, g)][0] for g in gs])),
+                     demodulate(gs, np.array([pts[(x, g)][1] for g in gs])/gs)))
+    return rows
+
+
+def plot_compare_sin():
+    """5 nm vs 20 nm SiN: S2, S3 and S2/S3 of the backscattered Ep vs x, each normalized to its oil end."""
+    fig, ax = plt.subplots(2, 3, figsize=(16, 7.5), sharex=True)
+    for set_name, c in (('sin5', 'C0'), ('sin20', 'C3')):
+        rows = demod_rows(set_name)
+        if not rows:
+            continue
+        x = np.array([r[0] for r in rows])
+        for j, (lab, v) in enumerate((('S2', np.array([r[1][2] for r in rows])),
+                                      ('S3', np.array([r[1][3] for r in rows])),
+                                      ('S2 / S3', np.array([r[1][2]/r[1][3] for r in rows])))):
+            ax[0, j].plot(x, np.abs(v)/np.abs(v[0]), 'o-', ms=4, color=c, label=SETS[set_name][2])
+            ax[1, j].plot(x, np.unwrap(np.angle(v)) - np.angle(v[0]), 'o-', ms=4, color=c)
+            ax[0, j].set_title(f'Backscattered Ep, p polarized: {lab}', fontsize=10)
+    for j in range(3):
+        ax[0, j].set_ylabel(f'amplitude / value at x = -1000')
+        ax[1, j].set_ylabel('phase - phase at x = -1000 (rad)')
+        ax[1, j].set_xlabel('interface position x (nm)   oil  <  0  <  water')
+        for a in ax[:, j]:
+            a.axvline(0, color='0.6', lw=0.8)
+            a.grid(alpha=0.3)
+    ax[0, 0].legend()
+    fig.suptitle(f'2D, 5 nm vs 20 nm SiN window (tapping {TAP_AMPLITUDE} nm from {MIN_GAP} nm)')
+    fig.tight_layout()
+    out = os.path.join(FIGS, 'compare_sin5_sin20.png')
+    fig.savefig(out, dpi=130)
+    print('wrote', out)
+
+
+if __name__ == '__main__' and len(sys.argv) > 1 and sys.argv[1] == 'compare':
+    plot_compare_sin()
+
+
+def plot_s2s3_provisional(heights=(1, 3, 5, 8, 14, 30, 60, 101)):
+    """
+    S2 / S3 of the backscattered Ep from a reduced height set (as in a half-finished split run).
+    20 nm SiN with the heights available; 5 nm SiN both with all 15 heights and with the same reduced set,
+    which shows the error of demodulating from the reduced set.
+    """
+    def ratio(set_name, hs=None):
+        pts = approach_points(stages=SETS[set_name][0])
+        out = []
+        for x in sorted({x for x, g in pts}):
+            gs = np.array(sorted(g for xx, g in pts if xx == x and (hs is None or g in hs)))
+            if hs is not None and len(gs) != len(hs):
+                continue
+            if hs is None and (len(gs) < 10 or gs.min() > MIN_GAP or gs.max() < MIN_GAP + TAP_AMPLITUDE):
+                continue
+            S = demodulate(gs, np.array([pts[(x, g)][0] for g in gs]))
+            out.append((x, S[2]/S[3]))
+        return np.array([o[0] for o in out]), np.array([o[1] for o in out])
+    curves = [('5 nm SiN, 15 heights', 'C0', 'o-', ratio('sin5')),
+              (f'5 nm SiN, {len(heights)} heights', 'C0', 's--', ratio('sin5', heights)),
+              (f'20 nm SiN, {len(heights)} heights (provisional)', 'C3', 'o-', ratio('sin20', heights))]
+    fig, ax = plt.subplots(2, 2, figsize=(13, 8), sharex=True)
+    for j, norm in enumerate((False, True)):
+        for lab, c, st, (x, R) in curves:
+            if len(x) == 0:
+                continue
+            a = np.abs(R)/np.abs(R[0]) if norm else np.abs(R)
+            p = np.unwrap(np.angle(R)) - (np.angle(R[0]) if norm else 0)
+            ax[0, j].plot(x, a, st, ms=4, color=c, mfc='none' if 's' in st else c, label=lab)
+            ax[1, j].plot(x, p, st, ms=4, color=c, mfc='none' if 's' in st else c)
+        ax[0, j].set_title('Backscattered Ep, p polarized: S2 / S3' + (' (normalized to x = -1000)' if norm else ''), fontsize=10)
+        ax[0, j].set_ylabel('amplitude' + (' / value at x = -1000' if norm else ''))
+        ax[1, j].set_ylabel('phase' + (' - phase at x = -1000' if norm else '') + ' (rad)')
+        ax[1, j].set_xlabel('interface position x (nm)   oil  <  0  <  water')
+        for a in ax[:, j]:
+            a.axvline(0, color='0.6', lw=0.8)
+            a.grid(alpha=0.3)
+    ax[0, 0].legend(fontsize=8)
+    fig.suptitle(f'2D S2 / S3: 20 nm SiN (part 1 of 2, heights {", ".join(str(h) for h in heights)} nm) vs 5 nm SiN')
+    fig.tight_layout()
+    out = os.path.join(FIGS, 'S2_over_S3_sin20_provisional.png')
+    fig.savefig(out, dpi=130)
+    print('wrote', out)
+    for lab, c, st, (x, R) in curves:
+        print(lab)
+        for xi, r in zip(x, R):
+            print(f'  {xi:+6.0f}  |{abs(r):.4f}|  {np.angle(r):+.4f}')
+
+
+if __name__ == '__main__' and len(sys.argv) > 1 and sys.argv[1] == 's2s3_prov':
+    plot_s2s3_provisional()
