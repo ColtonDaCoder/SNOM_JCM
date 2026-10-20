@@ -1,0 +1,3 @@
+job 649931 on smic017, 8 cores, stages: scan_demod_sin20 --part 2/2
+JCMROOT=/home/coltonb/software/JCMsuite_6_0_10
+=== stage scan_demod_sin20.part2of2 on smic017 (2026-10-20 00:18:19): 217 solves to run, 0 already done, fine mesh, 6.1 um
