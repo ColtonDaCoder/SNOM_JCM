@@ -133,7 +133,7 @@ def plot_complex(stage, gap=5):
     print('wrote', out)
 
 
-if __name__ == '__main__' and (len(sys.argv) < 2 or sys.argv[1] not in ('ep_sub', 'ep_step', 'ep_lines', 'approach', 'demod', 's2s3', 'nearfield', 'compare')):
+if __name__ == '__main__' and (len(sys.argv) < 2 or sys.argv[1] not in ('ep_sub', 'ep_step', 'ep_lines', 'approach', 'demod', 's2s3', 'nearfield', 'compare', 's2s3_prov')):
     what = sys.argv[1] if len(sys.argv) > 1 else 'scan_h5'
     plot_scan(what)
     plot_combined(what)
@@ -527,3 +527,56 @@ def plot_compare_sin():
 
 if __name__ == '__main__' and len(sys.argv) > 1 and sys.argv[1] == 'compare':
     plot_compare_sin()
+
+
+def plot_s2s3_provisional(heights=(1, 3, 5, 8, 14, 30, 60, 101)):
+    """
+    S2 / S3 of the backscattered Ep from a reduced height set (as in a half-finished split run).
+    20 nm SiN with the heights available; 5 nm SiN both with all 15 heights and with the same reduced set,
+    which shows the error of demodulating from the reduced set.
+    """
+    def ratio(set_name, hs=None):
+        pts = approach_points(stages=SETS[set_name][0])
+        out = []
+        for x in sorted({x for x, g in pts}):
+            gs = np.array(sorted(g for xx, g in pts if xx == x and (hs is None or g in hs)))
+            if hs is not None and len(gs) != len(hs):
+                continue
+            if hs is None and (len(gs) < 10 or gs.min() > MIN_GAP or gs.max() < MIN_GAP + TAP_AMPLITUDE):
+                continue
+            S = demodulate(gs, np.array([pts[(x, g)][0] for g in gs]))
+            out.append((x, S[2]/S[3]))
+        return np.array([o[0] for o in out]), np.array([o[1] for o in out])
+    curves = [('5 nm SiN, 15 heights', 'C0', 'o-', ratio('sin5')),
+              (f'5 nm SiN, {len(heights)} heights', 'C0', 's--', ratio('sin5', heights)),
+              (f'20 nm SiN, {len(heights)} heights (provisional)', 'C3', 'o-', ratio('sin20', heights))]
+    fig, ax = plt.subplots(2, 2, figsize=(13, 8), sharex=True)
+    for j, norm in enumerate((False, True)):
+        for lab, c, st, (x, R) in curves:
+            if len(x) == 0:
+                continue
+            a = np.abs(R)/np.abs(R[0]) if norm else np.abs(R)
+            p = np.unwrap(np.angle(R)) - (np.angle(R[0]) if norm else 0)
+            ax[0, j].plot(x, a, st, ms=4, color=c, mfc='none' if 's' in st else c, label=lab)
+            ax[1, j].plot(x, p, st, ms=4, color=c, mfc='none' if 's' in st else c)
+        ax[0, j].set_title('Backscattered Ep, p polarized: S2 / S3' + (' (normalized to x = -1000)' if norm else ''), fontsize=10)
+        ax[0, j].set_ylabel('amplitude' + (' / value at x = -1000' if norm else ''))
+        ax[1, j].set_ylabel('phase' + (' - phase at x = -1000' if norm else '') + ' (rad)')
+        ax[1, j].set_xlabel('interface position x (nm)   oil  <  0  <  water')
+        for a in ax[:, j]:
+            a.axvline(0, color='0.6', lw=0.8)
+            a.grid(alpha=0.3)
+    ax[0, 0].legend(fontsize=8)
+    fig.suptitle(f'2D S2 / S3: 20 nm SiN (part 1 of 2, heights {", ".join(str(h) for h in heights)} nm) vs 5 nm SiN')
+    fig.tight_layout()
+    out = os.path.join(FIGS, 'S2_over_S3_sin20_provisional.png')
+    fig.savefig(out, dpi=130)
+    print('wrote', out)
+    for lab, c, st, (x, R) in curves:
+        print(lab)
+        for xi, r in zip(x, R):
+            print(f'  {xi:+6.0f}  |{abs(r):.4f}|  {np.angle(r):+.4f}')
+
+
+if __name__ == '__main__' and len(sys.argv) > 1 and sys.argv[1] == 's2s3_prov':
+    plot_s2s3_provisional()
