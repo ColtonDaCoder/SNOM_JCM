@@ -133,7 +133,7 @@ def plot_complex(stage, gap=5):
     print('wrote', out)
 
 
-if __name__ == '__main__' and (len(sys.argv) < 2 or sys.argv[1] not in ('ep_sub', 'ep_step', 'ep_lines', 'approach', 'demod', 's2s3', 'nearfield', 'compare', 's2s3_prov', 's2s3_both', 's2s3_wl')):
+if __name__ == '__main__' and (len(sys.argv) < 2 or sys.argv[1] not in ('ep_sub', 'ep_step', 'ep_lines', 'approach', 'demod', 's2s3', 'nearfield', 'compare', 's2s3_prov', 's2s3_both', 's2s3_wl', 's2s3_wl3')):
     what = sys.argv[1] if len(sys.argv) > 1 else 'scan_h5'
     plot_scan(what)
     plot_combined(what)
@@ -301,7 +301,8 @@ LOG_RE = (r'x=([+-]?\d+) nm gap=([\d.]+) nm\s+\|Ep\|\(p_in\)=([\d.eE+-]+) arg=([
 
 SETS = {'sin5': (('scan_demod', 'scan_h5', 'scan_demod_fill'), '', '5 nm SiN, 6.1 um'),
         'sin20': (('scan_demod_sin20',), '_sin20', '20 nm SiN, 6.1 um'),
-        'wl5p5': (('scan_demod_5p5um',), '_5p5um', '5 nm SiN, 5.5 um')}
+        'wl5p5': (('scan_demod_5p5um',), '_5p5um', '5 nm SiN, 5.5 um'),
+        'wl2p95': (('scan_demod_2p95um',), '_2p95um', '5 nm SiN, 2.95 um')}
 SET = _SET_ARG or 'sin5'
 
 
@@ -624,3 +625,8 @@ if __name__ == '__main__' and len(sys.argv) > 1 and sys.argv[1] == 's2s3_both':
 if __name__ == '__main__' and len(sys.argv) > 1 and sys.argv[1] == 's2s3_wl':
     plot_s2s3_sin5_sin20(sets=(('sin5', 'C0'), ('wl5p5', 'C2')), title='6.1 um vs 5.5 um (5 nm SiN)',
                          fname='S2_over_S3_6p1_vs_5p5um.png')
+
+
+if __name__ == '__main__' and len(sys.argv) > 1 and sys.argv[1] == 's2s3_wl3':
+    plot_s2s3_sin5_sin20(sets=(('sin5', 'C0'), ('wl5p5', 'C2'), ('wl2p95', 'C4')),
+                         title='6.1 / 5.5 / 2.95 um (5 nm SiN)', fname='S2_over_S3_wavelengths.png')
