@@ -22,7 +22,7 @@ s = E along z (perpendicular to the plane of incidence), p = E in the x-y plane.
     python run_2d.py --stage scan_wide      # -5000 ... 5000 nm every 250 nm at 5 and 101 nm (edge fringe / plateaus)
     python run_2d.py --stage scan_demod_fill    # 5 nm SiN at the extra X_GRADED positions (completes the 5 nm set)
     python run_2d.py --stage scan_demod_sin20   # 20 nm SiN window, graded x (finer steps within +-100 nm), 15 heights incl. 5 nm
-    python run_2d.py --stage nearfield_map      # 1 solve (x = 0, 5 nm) + near-field map and refined mesh for figures
+    python run_2d.py --stage nearfield_map      # x = 0 at gaps 1/5/30/101 nm + near-field maps and refined meshes for figures
     python run_2d.py --stage scan_demod_2p95um  # 2.95 um (water O-H stretch), 5 nm SiN, same x / heights
     python run_2d.py --stage scan_demod_5p5um   # 5.5 um, 5 nm SiN, same x / heights (wavelength control)
     python run_2d.py --stage scan_demod     # -1000 ... 1000 nm every 100 nm x 14 heights (+ 5 nm from scan_h5) -> S2, S3
@@ -87,9 +87,10 @@ STAGES = {
     # 2.95 um: peak of the water O-H stretch absorption (Hale & Querry k = 0.298, Im eps 0.77; octane
     # transparent, its C-H stretch is at 3.4 um), 5 nm SiN, same positions / heights
     'scan_demod_2p95um': dict(mesh='fine',     wvl=2.95, x=X_GRADED, gaps=sorted(HEIGHTS + [5])),
-    # one solve of the standard setup (6.1 um, 5 nm SiN, 5 nm gap, tip over the interface) with a near-field
-    # map around the apex (500 x 220 nm, 5 nm grid) and the refined mesh files -> results/fields/ (for figures)
-    'nearfield_map':     dict(mesh='fine',     wvl=6.1, x=[0], gaps=[5], field_map=True),
+    # standard setup (6.1 um, 5 nm SiN, tip over the interface) at 4 heights, each with a near-field map
+    # around the apex (500 nm wide, from 60 nm below the SiN to 150 nm above the apex, 5 nm grid) and the
+    # refined mesh files -> results/fields/ (for figures)
+    'nearfield_map':     dict(mesh='fine',     wvl=6.1, x=[0], gaps=[1, 5, 30, 101], field_map=True),
 }
 MIN_DIRECTIONS = 20     # far-field directions inside the NA window; fewer -> raise ft_refinements
 
