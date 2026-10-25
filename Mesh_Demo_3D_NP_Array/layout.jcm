@@ -33,7 +33,7 @@ Layout3D {
       }
       Layer {
         Name = "Air"
-        Thickness = 13445.0
+        Thickness = 13546.0
         DomainIdMapping = [101 1]
       }
       LayerInterface {
@@ -47,7 +47,7 @@ Layout3D {
       DomainId = 5
       Priority = 3
       Radius = 50.0
-      GlobalPosition = [-250.0 -250.0 -57.0]
+      GlobalPosition = [-250.0 -250.0 51.0]
       MeshOptions {
         BoundaryMeshConstraint {
           MaximumSideLength = 15.0
@@ -60,7 +60,7 @@ Layout3D {
       DomainId = 5
       Priority = 3
       Radius = 50.0
-      GlobalPosition = [-250.0 0.0 -57.0]
+      GlobalPosition = [-250.0 0.0 51.0]
       MeshOptions {
         BoundaryMeshConstraint {
           MaximumSideLength = 15.0
@@ -73,7 +73,7 @@ Layout3D {
       DomainId = 5
       Priority = 3
       Radius = 50.0
-      GlobalPosition = [-250.0 250.0 -57.0]
+      GlobalPosition = [-250.0 250.0 51.0]
       MeshOptions {
         BoundaryMeshConstraint {
           MaximumSideLength = 15.0
@@ -86,7 +86,7 @@ Layout3D {
       DomainId = 5
       Priority = 3
       Radius = 50.0
-      GlobalPosition = [0.0 -250.0 -57.0]
+      GlobalPosition = [0.0 -250.0 51.0]
       MeshOptions {
         BoundaryMeshConstraint {
           MaximumSideLength = 15.0
@@ -99,7 +99,7 @@ Layout3D {
       DomainId = 5
       Priority = 3
       Radius = 50.0
-      GlobalPosition = [0.0 0.0 -57.0]
+      GlobalPosition = [0.0 0.0 51.0]
       MeshOptions {
         BoundaryMeshConstraint {
           MaximumSideLength = 15.0
@@ -112,7 +112,7 @@ Layout3D {
       DomainId = 5
       Priority = 3
       Radius = 50.0
-      GlobalPosition = [0.0 250.0 -57.0]
+      GlobalPosition = [0.0 250.0 51.0]
       MeshOptions {
         BoundaryMeshConstraint {
           MaximumSideLength = 15.0
@@ -125,7 +125,7 @@ Layout3D {
       DomainId = 5
       Priority = 3
       Radius = 50.0
-      GlobalPosition = [250.0 -250.0 -57.0]
+      GlobalPosition = [250.0 -250.0 51.0]
       MeshOptions {
         BoundaryMeshConstraint {
           MaximumSideLength = 15.0
@@ -138,7 +138,7 @@ Layout3D {
       DomainId = 5
       Priority = 3
       Radius = 50.0
-      GlobalPosition = [250.0 0.0 -57.0]
+      GlobalPosition = [250.0 0.0 51.0]
       MeshOptions {
         BoundaryMeshConstraint {
           MaximumSideLength = 15.0
@@ -151,7 +151,7 @@ Layout3D {
       DomainId = 5
       Priority = 3
       Radius = 50.0
-      GlobalPosition = [250.0 250.0 -57.0]
+      GlobalPosition = [250.0 250.0 51.0]
       MeshOptions {
         BoundaryMeshConstraint {
           MaximumSideLength = 15.0
@@ -163,7 +163,7 @@ Layout3D {
       Name = "TipApex"
       DomainId = 3
       Priority = 2
-      GlobalPosition = [0 0 5.0]
+      GlobalPosition = [0 0 106.0]
       Generator {
         Polygon {
           Points = [0.0000 0.0000, 9.7668 0.6386, 19.3672 2.5437, 28.6378 5.6828, 37.4206 10.0023, 45.5662 15.4288, 52.9357 21.8699, 59.4037 29.2158, 64.8601 37.3414, 565.7307 900.0000, 0.0000 900.0000]
@@ -177,7 +177,7 @@ Layout3D {
       BottomRadius = 565.7307267913521
       TopRadius = 7556.309154432643
       Height = 12040.0
-      GlobalPosition = [0 0 905.0]
+      GlobalPosition = [0 0 1006.0]
     }
   }
 }

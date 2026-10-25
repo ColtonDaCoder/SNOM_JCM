@@ -2,9 +2,9 @@
 Mesh demo (for slides): full 3D s-SNOM geometry with an array of nanoparticles under the tip.
 
 Same tip as Interface_LineScan_3D (75 nm spherical apex tangent to a 30.14 deg cone, 12.94 um long:
-a SolidOfRevolution cap for the lowest 900 nm plus a Cone).  Gap 5 nm above a 5 nm SiN window, water
-below.  A 3 x 3 array of 100 nm diameter nanoparticles (250 nm pitch) sits in the water against the
-window, centred under the apex, 2 nm below the SiN.  One global MaximumSideLength; the spheres get a
+a SolidOfRevolution cap for the lowest 900 nm plus a Cone).  5 nm SiN window with water below.  A 3 x 3
+array of 100 nm diameter nanoparticles (250 nm pitch) sits on top of the SiN (1 nm air gap), centred
+under the apex; the tip apex is 5 nm above the top of the central particle.  One global MaximumSideLength; the spheres get a
 surface element size so they are not faceted at the global size.  Refinement is left to HAdaptive.
 
     python make_mesh.py        # writes layout/materials/sources/project .jcm(p) and meshes -> grid.jcm
@@ -20,8 +20,9 @@ HERE = os.path.dirname(os.path.abspath(__file__))
 sys.path.insert(0, os.path.join(HERE, '..', 'Mesh_Demo_Cylindrical_NP'))
 from make_mesh import write_common            # same materials / Gaussian beam / HAdaptive project  # noqa: E402
 
-GAP, T_SIN, R_TIP, HALF_ANGLE, TIP_LEN, CAP_H = 5.0, 5.0, 75.0, 30.14, 12940.0, 900.0
-NP_R, NP_SPACING, NP_PITCH, NP_N = 50.0, 2.0, 250.0, 3
+T_SIN, R_TIP, HALF_ANGLE, TIP_LEN, CAP_H = 5.0, 75.0, 30.14, 12940.0, 900.0
+NP_R, NP_SPACING, NP_PITCH, NP_N = 50.0, 1.0, 250.0, 3   # NP_SPACING: air gap between SiN top and particles
+GAP = NP_SPACING + 2*NP_R + 5.0                          # tip apex 5 nm above the top of the central particle
 CD_WIDTH, LIQ_DEPTH, AIR_ABOVE = 16000.0, 2000.0, 500.0
 MAX_SIDE, NP_SIDE = 1500.0, 15.0
 
@@ -34,7 +35,7 @@ def write_files():
     r_joint = R_TIP*np.cos(a) + (CAP_H - (R_TIP - R_TIP*np.sin(a)))*np.tan(a)
     prof += [(r_joint, CAP_H), (0.0, CAP_H)]
     profile = ', '.join('%.4f %.4f' % xy for xy in prof)
-    zc = -T_SIN - NP_SPACING - NP_R
+    zc = NP_SPACING + NP_R               # particles on top of the SiN (air side)
     spheres = []
     k = 0
     for i in range(NP_N):

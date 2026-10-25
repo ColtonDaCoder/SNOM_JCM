@@ -3,8 +3,8 @@ Mesh demo (for slides): cylindrical (axisymmetric) s-SNOM geometry with a nanopa
 
 Layout2D in cylindrical coordinates: x = r >= 0 (the symmetry axis is the left edge), y = z.
 Same tip as Interface_LineScan_2D/3D (75 nm apex radius, 30.14 deg half angle, 12.94 um long), which
-in these coordinates is a true cone.  Gap 5 nm above a 5 nm SiN window, water below; a 100 nm
-diameter nanoparticle sits in the water, centred on the axis 2 nm below the SiN.
+in these coordinates is a true cone.  5 nm SiN window with water below; a 100 nm diameter nanoparticle
+sits on top of the SiN (1 nm air gap), centred on the axis, and the tip apex is 5 nm above it.
 Mesh: one global MaximumSideLength; refinement is left to HAdaptive in project.jcmp.
 
     python make_mesh.py        # writes layout/materials/sources/project .jcm(p) and meshes -> grid.jcm
@@ -18,8 +18,9 @@ import jcmwave
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 
-GAP, T_SIN, R_TIP, HALF_ANGLE, TIP_LEN = 5.0, 5.0, 75.0, 30.14, 12940.0
-NP_R, NP_SPACING = 50.0, 2.0          # nanoparticle radius, water gap between SiN and particle
+T_SIN, R_TIP, HALF_ANGLE, TIP_LEN = 5.0, 75.0, 30.14, 12940.0
+NP_R, NP_SPACING = 50.0, 1.0          # nanoparticle radius, air gap between SiN top and particle
+GAP = NP_SPACING + 2*NP_R + 5.0       # tip apex 5 nm above the top of the particle
 LIQ_DEPTH, AIR_ABOVE, R_MAX = 3000.0, 500.0, 9000.0
 MAX_SIDE = 400.0
 
@@ -40,7 +41,7 @@ def tip_profile():
 
 
 def np_profile():
-    yc = -T_SIN - NP_SPACING - NP_R
+    yc = NP_SPACING + NP_R               # particle on top of the SiN (air side)
     return [(NP_R*np.cos(t), yc + NP_R*np.sin(t)) for t in np.linspace(-np.pi/2, np.pi/2, 61)]   # counter-clockwise
 
 
