@@ -742,10 +742,12 @@ def plot_approach_and_tapping(xs=((-1000.0, 'oil', '#d95f02'), (-40.0, 'oil', '#
     pts = approach_points(stages=SETS[set_name][0])
     t = np.linspace(0, 1, 1000)
     z = MIN_GAP + TAP_AMPLITUDE/2*(1 + np.cos(2*np.pi*t))
-    fig, ax = plt.subplots(1, 2, figsize=(13, 5))
+    fig, ax = plt.subplots(1, 3, figsize=(19, 5.2))
+    Sn = []
     for x, name, c in xs:
         gs = np.array(sorted(g for xx, g in pts if xx == x))
         E = np.array([pts[(x, g)][0] for g in gs])
+        Sn.append(demodulate(gs, E))
         spl = lambda h: np.abs(CubicSpline(gs, E.real)(h) + 1j*CubicSpline(gs, E.imag)(h))
         hh = np.linspace(gs.min(), gs.max(), 300)
         ax[0].plot(hh, spl(hh), '-', color=c, lw=1.8)
@@ -757,10 +759,24 @@ def plot_approach_and_tapping(xs=((-1000.0, 'oil', '#d95f02'), (-40.0, 'oil', '#
     ax[1].set_xticks([0, 0.25, 0.5, 0.75, 1])
     ax[1].set_xticklabels([f'{z0:.0f}' for z0 in MIN_GAP + TAP_AMPLITUDE/2*(1 + np.cos(2*np.pi*np.array([0, 0.25, 0.5, 0.75, 1])))])
     ax[1].set_xlim(0, 1)
+    # third panel: |S2| and |S3| per position, relative to the oil end (absolute values on the bars)
+    w = 0.8/len(xs)
+    for k, n in enumerate((2, 3)):
+        ref = abs(Sn[0][n])
+        for j, ((x, name, c), S) in enumerate(zip(xs, Sn)):
+            pos = k + (j - (len(xs) - 1)/2)*w
+            ax[2].bar(pos, abs(S[n])/ref, width=w*0.9, color=c, label=f'x = {x:+.0f} nm' if k == 0 else None)
+            ax[2].text(pos, abs(S[n])/ref + 0.01, f'{abs(S[n]):.2e}', ha='center', va='bottom', fontsize=7, rotation=90)
+    ax[2].set_xticks([0, 1])
+    ax[2].set_xticklabels(['S2', 'S3'])
+    ax[2].set_ylim(0.6, 1.25)
+    ax[2].set(ylabel='|Sn| / |Sn| at x = -1000 nm (oil)', title='Demodulated signal: S2 and S3')
     for a in ax:
         a.grid(alpha=0.3)
-        a.legend()
-    fig.suptitle(f'2D, {SETS[set_name][2]}')
+    ax[0].legend()
+    ax[1].legend()
+    ax[2].legend(fontsize=8, loc='upper right', ncol=2)
+    fig.suptitle(f'2D, {SETS[set_name][2]} (tapping {TAP_AMPLITUDE} nm from {MIN_GAP} nm)')
     fig.tight_layout()
     out = os.path.join(FIGS, 'approach_and_tapping.png')
     fig.savefig(out, dpi=130)
