@@ -133,7 +133,7 @@ def plot_complex(stage, gap=5):
     print('wrote', out)
 
 
-if __name__ == '__main__' and (len(sys.argv) < 2 or sys.argv[1] not in ('ep_sub', 'ep_step', 'ep_lines', 'approach', 'demod', 's2s3', 'nearfield', 'compare', 's2s3_prov', 's2s3_both', 's2s3_wl', 's2s3_wl3', 'explain', 'tapview', 'tapview_inphase', 's2s3_wl_amp', 'nk')):
+if __name__ == '__main__' and (len(sys.argv) < 2 or sys.argv[1] not in ('ep_sub', 'ep_step', 'ep_lines', 'approach', 'demod', 's2s3', 'nearfield', 'compare', 's2s3_prov', 's2s3_both', 's2s3_wl', 's2s3_wl3', 'explain', 'tapview', 'tapview_inphase', 's2s3_wl_amp', 'nk', 'heights')):
     what = sys.argv[1] if len(sys.argv) > 1 else 'scan_h5'
     plot_scan(what)
     plot_combined(what)
@@ -940,3 +940,25 @@ def plot_nk(wmin=2.5, wmax=7.0):
 
 if __name__ == '__main__' and len(sys.argv) > 1 and sys.argv[1] == 'nk':
     plot_nk()
+
+
+def plot_heights():
+    """The tip heights that were solved (14 demod heights + 5 nm): dots on a single vertical axis."""
+    hs = sorted(set([1, 2, 3, 4, 6, 8, 10, 14, 20, 30, 45, 60, 80, 101] + [5]))
+    with plt.rc_context({'font.size': 22, 'axes.labelsize': 24, 'ytick.labelsize': 20}):
+        fig, ax = plt.subplots(figsize=(2.6, 8))
+        ax.plot(np.zeros(len(hs)), hs, 'o', ms=11, color='C0')
+        ax.set_ylabel('Tip height (nm)')
+        ax.set_ylim(-3, 105)
+        ax.set_xlim(-1, 1)
+        ax.set_xticks([])
+        for side in ('top', 'right', 'bottom'):
+            ax.spines[side].set_visible(False)
+        fig.tight_layout()
+        out = os.path.join(FIGS, 'heights_run.png')
+        fig.savefig(out, dpi=150, transparent=True)
+    print('wrote', out, hs)
+
+
+if __name__ == '__main__' and len(sys.argv) > 1 and sys.argv[1] == 'heights':
+    plot_heights()
