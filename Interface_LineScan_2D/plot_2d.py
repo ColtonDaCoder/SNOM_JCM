@@ -946,11 +946,11 @@ def plot_heights():
     """The tip heights that were solved (14 demod heights + 5 nm): dots on a single vertical axis."""
     hs = sorted(set([1, 2, 3, 4, 6, 8, 10, 14, 20, 30, 45, 60, 80, 101] + [5]))
     with plt.rc_context({'font.size': 22, 'axes.labelsize': 24, 'ytick.labelsize': 20}):
-        fig, ax = plt.subplots(figsize=(2.6, 8))
-        ax.hlines(hs, -0.6, 0.6, color='C0', lw=2.5)
+        fig, ax = plt.subplots(figsize=(3.5, 8))
+        ax.hlines(hs, 0, 3.6, color='C0', lw=2.5)       # from the y axis, 3x the previous length
         ax.set_ylabel('Tip height (nm)')
         ax.set_ylim(-3, 105)
-        ax.set_xlim(-1, 1)
+        ax.set_xlim(0, 3.6)
         ax.set_xticks([])
         for side in ('top', 'right', 'bottom'):
             ax.spines[side].set_visible(False)
