@@ -133,7 +133,7 @@ def plot_complex(stage, gap=5):
     print('wrote', out)
 
 
-if __name__ == '__main__' and (len(sys.argv) < 2 or sys.argv[1] not in ('ep_sub', 'ep_step', 'ep_lines', 'approach', 'demod', 's2s3', 'nearfield', 'compare', 's2s3_prov', 's2s3_both', 's2s3_wl', 's2s3_wl3', 'explain', 'tapview', 'tapview_inphase')):
+if __name__ == '__main__' and (len(sys.argv) < 2 or sys.argv[1] not in ('ep_sub', 'ep_step', 'ep_lines', 'approach', 'demod', 's2s3', 'nearfield', 'compare', 's2s3_prov', 's2s3_both', 's2s3_wl', 's2s3_wl3', 'explain', 'tapview', 'tapview_inphase', 's2s3_wl_amp')):
     what = sys.argv[1] if len(sys.argv) > 1 else 'scan_h5'
     plot_scan(what)
     plot_combined(what)
@@ -870,3 +870,35 @@ def plot_approach_and_tapping_inphase(xs=((-1000.0, 'oil', '#d95f02'), (-40.0, '
 
 if __name__ == '__main__' and len(sys.argv) > 1 and sys.argv[1] == 'tapview_inphase':
     plot_approach_and_tapping_inphase(set_name=SET, norm='--norm' in sys.argv)
+
+
+def plot_s2s3_amplitude(sets=(('sin5', 'C0', '6.1 µm'), ('wl5p5', 'C2', '5.5 µm'), ('wl2p95', 'C4', '2.95 µm')),
+                        fname='S2_over_S3_wavelengths.png', title='Backscattered Ep, 5 nm SiN'):
+    """|S2/S3| vs x (left) and normalized to the oil end x = -1000 nm (right), one curve per data set."""
+    with plt.rc_context({'font.size': 16, 'axes.titlesize': 18, 'axes.labelsize': 17,
+                         'xtick.labelsize': 15, 'ytick.labelsize': 15, 'legend.fontsize': 15}):
+        fig, ax = plt.subplots(1, 2, figsize=(15, 6))
+        for set_name, c, lab in sets:
+            rows = demod_rows(set_name)
+            if not rows:
+                continue
+            x = np.array([r[0] for r in rows])
+            amp = np.array([abs(r[1][2]/r[1][3]) for r in rows])
+            ax[0].plot(x, amp, 'o-', ms=5, lw=2, color=c, label=lab)
+            ax[1].plot(x, amp/amp[0], 'o-', ms=5, lw=2, color=c, label=lab)
+        ax[0].set(ylabel='|S$_2$ / S$_3$|', title='S$_2$/S$_3$ amplitude')
+        ax[1].set(ylabel='Normalized |S$_2$ / S$_3$|', title='Normalized to oil (x = −1000 nm)')
+        for a in ax:
+            a.set_xlabel('Interface position x (nm)   oil  <  0  <  water')
+            a.axvline(0, color='0.6', lw=0.8)
+            a.grid(alpha=0.3)
+            a.legend()
+        fig.suptitle(title)
+        fig.tight_layout()
+        out = os.path.join(FIGS, fname)
+        fig.savefig(out, dpi=130)
+    print('wrote', out)
+
+
+if __name__ == '__main__' and len(sys.argv) > 1 and sys.argv[1] == 's2s3_wl_amp':
+    plot_s2s3_amplitude()
