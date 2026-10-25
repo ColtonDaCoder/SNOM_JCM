@@ -736,8 +736,9 @@ if __name__ == '__main__' and len(sys.argv) > 1 and sys.argv[1] == 'explain':
 
 
 def plot_approach_and_tapping(xs=((-1000.0, 'oil', '#d95f02'), (-40.0, 'oil', '#fdae6b'),
-                                  (40.0, 'water', '#9ecae1'), (1000.0, 'water', '#08519c')), set_name='sin5'):
+                                  (40.0, 'water', '#9ecae1'), (1000.0, 'water', '#08519c')), set_name='sin5', norm=False):
     """
+    norm=True: every curve divided by its own |Ep| at the top of the tap (101 nm) -> *_norm.png.
     2 x 2: approach curves |Ep| vs height; the same signal over one tapping cycle (ticks = tip height);
     that signal with its average and 1w part removed (what is left carries S2, S3, ...); |S2|, |S3| per position.
     """
@@ -754,11 +755,12 @@ def plot_approach_and_tapping(xs=((-1000.0, 'oil', '#d95f02'), (-40.0, 'oil', '#
         gs = np.array(sorted(g for xx, g in pts if xx == x))
         E = np.array([pts[(x, g)][0] for g in gs])
         Sn.append(demodulate(gs, E))
-        spl = lambda h: np.abs(CubicSpline(gs, E.real)(h) + 1j*CubicSpline(gs, E.imag)(h))
+        k_n = 1/np.abs(E[-1]) if norm else 1.0
+        spl = lambda h: k_n*np.abs(CubicSpline(gs, E.real)(h) + 1j*CubicSpline(gs, E.imag)(h))
         hh = np.linspace(gs.min(), gs.max(), 300)
         lab = f'tip over {name} (x = {x:+.0f} nm)'
         ax[0].plot(hh, spl(hh), '-', color=c, lw=1.8)
-        ax[0].plot(gs, np.abs(E), 'o', color=c, ms=5, label=lab)
+        ax[0].plot(gs, k_n*np.abs(E), 'o', color=c, ms=5, label=lab)
         ax[1].plot(t, spl(z), '-', color=c, lw=2, label=lab)
         sc = spl(zc)
         a0, a1 = np.mean(sc), 2*np.mean(sc*np.cos(2*np.pi*tc))
@@ -769,10 +771,11 @@ def plot_approach_and_tapping(xs=((-1000.0, 'oil', '#d95f02'), (-40.0, 'oil', '#
         a.set_xticklabels([f'{z0:.0f}' for z0 in MIN_GAP + TAP_AMPLITUDE/2*(1 + np.cos(2*np.pi*np.array(ticks)))])
         a.set_xlim(0, 1)
         a.set_xlabel('tip height during one tapping cycle (nm)')
-    ax[0].set(xlabel='tip height (nm)', ylabel='backscattered |Ep| (arb.)', title='Approach curve')
-    ax[1].set(ylabel='backscattered |Ep| (arb.)', title='Signal during one tapping cycle')
+    yl = '|Ep| / |Ep| at 101 nm' if norm else 'backscattered |Ep| (arb.)'
+    ax[0].set(xlabel='tip height (nm)', ylabel=yl, title='Approach curve')
+    ax[1].set(ylabel=yl, title='Signal during one tapping cycle')
     ax[2].axhline(0, color='0.6', lw=0.8)
-    ax[2].set(ylabel='|Ep| minus average and 1w part (x 1e-3, arb.)',
+    ax[2].set(ylabel=('normalized |Ep|' if norm else '|Ep|') + ' minus average and 1w part (x 1e-3)',
               title='Signal during one tapping cycle, 1w wiggle removed')
     # |S2| and |S3| per position, relative to the oil end (absolute values on the bars)
     w = 0.8/len(xs)
@@ -793,17 +796,18 @@ def plot_approach_and_tapping(xs=((-1000.0, 'oil', '#d95f02'), (-40.0, 'oil', '#
     ax[3].legend(fontsize=8, loc='upper right', ncol=2)
     fig.suptitle(f'2D, {SETS[set_name][2]} (tapping {TAP_AMPLITUDE} nm from {MIN_GAP} nm)')
     fig.tight_layout()
-    out = os.path.join(FIGS, 'approach_and_tapping.png')
+    out = os.path.join(FIGS, 'approach_and_tapping' + ('_norm' if norm else '') + '.png')
     fig.savefig(out, dpi=130)
     print('wrote', out)
 
 
 if __name__ == '__main__' and len(sys.argv) > 1 and sys.argv[1] == 'tapview':
-    plot_approach_and_tapping(set_name=SET)
+    plot_approach_and_tapping(set_name=SET, norm='--norm' in sys.argv)
 
 
 def plot_approach_and_tapping_inphase(xs=((-1000.0, 'oil', '#d95f02'), (-40.0, 'oil', '#fdae6b'),
-                                          (40.0, 'water', '#9ecae1'), (1000.0, 'water', '#08519c')), set_name='sin5'):
+                                          (40.0, 'water', '#9ecae1'), (1000.0, 'water', '#08519c')), set_name='sin5',
+                                      norm=False):
     """
     Same 2 x 2 layout as plot_approach_and_tapping, but the three signal panels show Re[E exp(-i arg S2)]:
     the part of the complex backscattered field E that is in phase with S2 at that position.  With this choice
@@ -823,7 +827,7 @@ def plot_approach_and_tapping_inphase(xs=((-1000.0, 'oil', '#d95f02'), (-40.0, '
         E = np.array([pts[(x, g)][0] for g in gs])
         S = demodulate(gs, E)
         Sn.append(S)
-        rot = np.exp(-1j*np.angle(S[2]))
+        rot = np.exp(-1j*np.angle(S[2]))/(np.abs(E[-1]) if norm else 1.0)   # norm: divide by |Ep| at 101 nm
         f = lambda h: ((CubicSpline(gs, E.real)(h) + 1j*CubicSpline(gs, E.imag)(h))*rot).real
         hh = np.linspace(gs.min(), gs.max(), 300)
         lab = f'tip over {name} (x = {x:+.0f} nm)'
@@ -833,15 +837,16 @@ def plot_approach_and_tapping_inphase(xs=((-1000.0, 'oil', '#d95f02'), (-40.0, '
         fc = f(zc)
         a0, a1 = np.mean(fc), 2*np.mean(fc*np.cos(2*np.pi*tc))
         ax[2].plot(t, (f(z) - a0 - a1*np.cos(2*np.pi*t))*1e3, '-', color=c, lw=2,
-                   label=f'{lab}: 2|S2| = {2e3*abs(S[2]):.2f}e-3')
+                   label=f'{lab}: 2|S2|{"/|Ep(101)|" if norm else ""} = {2e3*abs(S[2]*rot):.2f}e-3')
     ticks = [0, 0.25, 0.5, 0.75, 1]
     for a in (ax[1], ax[2]):
         a.set_xticks(ticks)
         a.set_xticklabels([f'{z0:.0f}' for z0 in MIN_GAP + TAP_AMPLITUDE/2*(1 + np.cos(2*np.pi*np.array(ticks)))])
         a.set_xlim(0, 1)
         a.set_xlabel('tip height during one tapping cycle (nm)')
-    ax[0].set(xlabel='tip height (nm)', ylabel='backscattered Ep, in phase with S2 (arb.)', title='Approach curve')
-    ax[1].set(ylabel='backscattered Ep, in phase with S2 (arb.)', title='Signal during one tapping cycle')
+    yl = 'Ep in phase with S2, / |Ep| at 101 nm' if norm else 'backscattered Ep, in phase with S2 (arb.)'
+    ax[0].set(xlabel='tip height (nm)', ylabel=yl, title='Approach curve')
+    ax[1].set(ylabel=yl, title='Signal during one tapping cycle')
     ax[2].axhline(0, color='0.6', lw=0.8)
     ax[2].set(ylabel='minus average and 1w part (x 1e-3, arb.)',
               title='Signal during one tapping cycle, 1w wiggle removed')
@@ -864,10 +869,10 @@ def plot_approach_and_tapping_inphase(xs=((-1000.0, 'oil', '#d95f02'), (-40.0, '
     fig.suptitle(f'2D, {SETS[set_name][2]} (tapping {TAP_AMPLITUDE} nm from {MIN_GAP} nm); '
                  f'signals: part of the complex Ep in phase with each position\'s S2')
     fig.tight_layout()
-    out = os.path.join(FIGS, 'approach_and_tapping_inphase.png')
+    out = os.path.join(FIGS, 'approach_and_tapping_inphase' + ('_norm' if norm else '') + '.png')
     fig.savefig(out, dpi=130)
     print('wrote', out)
 
 
 if __name__ == '__main__' and len(sys.argv) > 1 and sys.argv[1] == 'tapview_inphase':
-    plot_approach_and_tapping_inphase(set_name=SET)
+    plot_approach_and_tapping_inphase(set_name=SET, norm='--norm' in sys.argv)
