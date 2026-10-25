@@ -133,7 +133,7 @@ def plot_complex(stage, gap=5):
     print('wrote', out)
 
 
-if __name__ == '__main__' and (len(sys.argv) < 2 or sys.argv[1] not in ('ep_sub', 'ep_step', 'ep_lines', 'approach', 'demod', 's2s3', 'nearfield', 'compare', 's2s3_prov', 's2s3_both', 's2s3_wl', 's2s3_wl3', 'explain', 'tapview', 'tapview_inphase', 's2s3_wl_amp', 'nk', 'heights')):
+if __name__ == '__main__' and (len(sys.argv) < 2 or sys.argv[1] not in ('ep_sub', 'ep_step', 'ep_lines', 'approach', 'demod', 's2s3', 'nearfield', 'compare', 's2s3_prov', 's2s3_both', 's2s3_wl', 's2s3_wl3', 'explain', 'tapview', 'tapview_inphase', 's2s3_wl_amp', 'nk', 'heights', 'farfield')):
     what = sys.argv[1] if len(sys.argv) > 1 else 'scan_h5'
     plot_scan(what)
     plot_combined(what)
@@ -962,3 +962,47 @@ def plot_heights():
 
 if __name__ == '__main__' and len(sys.argv) > 1 and sys.argv[1] == 'heights':
     plot_heights()
+
+
+def plot_farfield(xs=((-1000.0, 'oil', '#7f2704'), (1000.0, 'water', '#08306b')), gap=5.0):
+    """
+    What the detector collects.  Left: far-field amplitude of the scattered light per emission direction
+    inside the NA 0.4 collection cone around the backscatter direction (60 deg from the surface normal).
+    Right: the detected signal = coherent sum over the cone, vs tip height (the approach curve that is
+    demodulated).
+    """
+    th0, na = 60.0, 0.4
+    half = np.degrees(np.arcsin(na))
+    recs = {r['x_interface']: r for r in load('scan_h5') if r['gap'] == gap}
+    pts = approach_points(stages=SETS['sin5'][0])
+    with plt.rc_context({'font.size': 17, 'axes.titlesize': 19, 'axes.labelsize': 18,
+                         'xtick.labelsize': 15, 'ytick.labelsize': 15, 'legend.fontsize': 15}):
+        fig, ax = plt.subplots(1, 2, figsize=(16, 6.5))
+        ax[0].axvspan(th0 - half, th0 + half, color='0.88', zorder=0, label=f'collection cone (NA {na})')
+        ax[0].axvline(th0, color='C3', ls='--', lw=2, label='backscatter direction (60°)')
+        for x, name, c in xs:
+            r = recs[x]
+            K, E = np.real(r['K_cone']), r['E_cone_p_in']
+            th = np.degrees(np.arctan2(-K[:, 0], K[:, 1]))
+            o = np.argsort(th)
+            ax[0].plot(th[o], np.linalg.norm(E, axis=1)[o]*1e3, '-', lw=3, color=c, label=f'tip over {name}')
+        ax[0].set(xlabel='Emission angle from surface normal (°)', ylabel='Far-field |E| per direction (×10⁻³)',
+                  title=f'Far field in the collection cone (tip height {gap:g} nm)')
+        ax[0].set_xlim(th0 - half - 4, th0 + half + 4)
+        for x, name, c in xs:
+            gs = np.array(sorted(g for xx, g in pts if xx == x))
+            Ep = np.array([pts[(x, g)][0] for g in gs])
+            ax[1].plot(gs, np.abs(Ep), 'o-', ms=6, lw=2.5, color=c, label=f'tip over {name}')
+        ax[1].set(xlabel='Tip height (nm)', ylabel='Detected |Ep|', title='Detected signal (coherent sum over the cone)')
+        for a in ax:
+            a.grid(alpha=0.3)
+            a.legend()
+        fig.suptitle('2D, 5 nm SiN, 6.1 µm, p-polarized: what the detector collects')
+        fig.tight_layout()
+        out = os.path.join(FIGS, 'farfield_signal.png')
+        fig.savefig(out, dpi=130)
+    print('wrote', out)
+
+
+if __name__ == '__main__' and len(sys.argv) > 1 and sys.argv[1] == 'farfield':
+    plot_farfield()

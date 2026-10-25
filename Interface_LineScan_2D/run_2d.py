@@ -22,6 +22,7 @@ s = E along z (perpendicular to the plane of incidence), p = E in the x-y plane.
     python run_2d.py --stage scan_wide      # -5000 ... 5000 nm every 250 nm at 5 and 101 nm (edge fringe / plateaus)
     python run_2d.py --stage scan_demod_fill    # 5 nm SiN at the extra X_GRADED positions (completes the 5 nm set)
     python run_2d.py --stage scan_demod_sin20   # 20 nm SiN window, graded x (finer steps within +-100 nm), 15 heights incl. 5 nm
+    python run_2d.py --stage nearfield_map      # 1 solve (x = 0, 5 nm) + near-field map and refined mesh for figures
     python run_2d.py --stage scan_demod_2p95um  # 2.95 um (water O-H stretch), 5 nm SiN, same x / heights
     python run_2d.py --stage scan_demod_5p5um   # 5.5 um, 5 nm SiN, same x / heights (wavelength control)
     python run_2d.py --stage scan_demod     # -1000 ... 1000 nm every 100 nm x 14 heights (+ 5 nm from scan_h5) -> S2, S3
@@ -86,6 +87,9 @@ STAGES = {
     # 2.95 um: peak of the water O-H stretch absorption (Hale & Querry k = 0.298, Im eps 0.77; octane
     # transparent, its C-H stretch is at 3.4 um), 5 nm SiN, same positions / heights
     'scan_demod_2p95um': dict(mesh='fine',     wvl=2.95, x=X_GRADED, gaps=sorted(HEIGHTS + [5])),
+    # one solve of the standard setup (6.1 um, 5 nm SiN, 5 nm gap, tip over the interface) with a near-field
+    # map around the apex (500 x 220 nm, 5 nm grid) and the refined mesh files -> results/fields/ (for figures)
+    'nearfield_map':     dict(mesh='fine',     wvl=6.1, x=[0], gaps=[5], field_map=True),
 }
 MIN_DIRECTIONS = 20     # far-field directions inside the NA window; fewer -> raise ft_refinements
 
@@ -387,8 +391,28 @@ def near_field(wd, gap, t_sin):
     return out
 
 
-def run_point(base_keys, x, gap, stage, wd, save_fields=False):
-    keys = dict(base_keys, x_interface=x, gap=gap)
+def save_map(wd, stage, x, gap):
+    """Near-field map (map.jcm) -> results/fields/<stage>_x.._g...npz, plus copies of the refined mesh files."""
+    import shutil
+    d = os.path.join(RESULTS, 'fields')
+    os.makedirs(d, exist_ok=True)
+    tag = f'{stage}_x{x:+.0f}_g{gap:.0f}'
+    c = jcmwave.loadcartesianfields(os.path.join(wd, 'project_results', 'map.jcm'))
+    np.savez_compressed(os.path.join(d, tag + '.npz'), X=np.asarray(c['X'])*1e9, Y=np.asarray(c['Y'])*1e9,
+                        E=np.stack([np.asarray(f, np.complex64) for f in c['field']]))
+    # the adaptively refined mesh: copy every grid file JCM left in the working folder
+    for root in (wd, os.path.join(wd, 'project_results')):
+        for f in os.listdir(root):
+            if 'grid' in f.lower() and f.endswith('.jcm'):
+                shutil.copy(os.path.join(root, f), os.path.join(d, f'{tag}_{os.path.basename(root)}_{f}'))
+    with open(os.path.join(d, tag + '_files.txt'), 'w') as f:      # what JCM wrote, to find the refined mesh
+        for root, _, files in os.walk(wd):
+            for n in files:
+                f.write(f'{os.path.relpath(os.path.join(root, n), wd)}  {os.path.getsize(os.path.join(root, n))}\n')
+
+
+def run_point(base_keys, x, gap, stage, wd, save_fields=False, field_map=False):
+    keys = dict(base_keys, x_interface=x, gap=gap, map=int(bool(field_map)))
     t0 = time.time()
     results = solve('project.jcmp', keys, wd, f'jcm_{stage}.log')
     record = {'x_interface': x, 'gap': gap, 'wall_time_s': time.time() - t0,
@@ -396,6 +420,8 @@ def run_point(base_keys, x, gap, stage, wd, save_fields=False):
     record.update(collect_backscatter(results[1], THETA, NA))
     record.update(near_field(wd, gap, base_keys['t_SiN']))
     record.update(parse_jcm_log(solve.last_log))
+    if field_map:
+        save_map(wd, stage, x, gap)
     return record
 
 
@@ -458,7 +484,7 @@ def run_stage(name, part=None):
     for n, (x, gap) in enumerate(jobs):
         save = (x in sf) if isinstance(sf, list) else sf
         try:
-            rec = run_point(base_keys, x, gap, name, wd, save)
+            rec = run_point(base_keys, x, gap, name, wd, save, cfg.get('field_map', False))
         except Exception:
             tb = traceback.format_exc()
             data['failures'].append({'x_interface': x, 'gap': gap, 'traceback': tb})

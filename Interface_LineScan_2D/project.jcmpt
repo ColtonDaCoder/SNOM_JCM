@@ -14,6 +14,15 @@ t = keys['t_SiN']
 y_liq = np.array([-t - 100.0, -t - 30.0, -t - 10.0])
 y_gap = (np.arange(20) + 0.5)/20*g
 keys['axis_y'] = np.concatenate([y_liq, y_gap])*1e-9
+# optional near-field map around the apex (stage nearfield_map only; ~4500 points, slow export)
+map_block = ''
+if keys.get('map', 0):
+    mx = ' '.join('%.6e' % v for v in np.arange(-250.0, 250.1, 5.0)*1e-9)
+    my = ' '.join('%.6e' % v for v in np.arange(-60.0, 160.1, 5.0)*1e-9)
+    map_block = ('PostProcess {\n  ExportFields {\n    FieldBagPath = "project_results/fieldbag.jcm"\n'
+                 '    OutputFileName = "project_results/map.jcm"\n    OutputQuantity = ElectricFieldStrength\n'
+                 '    Cartesian {\n      GridPointsX = [' + mx + ']\n      GridPointsY = [' + my + ']\n    }\n  }\n}\n')
+keys['map_block'] = map_block
 ?>
 Project {
   Electromagnetics {
@@ -59,4 +68,6 @@ PostProcess {
     }
   }
 }
+
+%(map_block)s
 
