@@ -133,7 +133,7 @@ def plot_complex(stage, gap=5):
     print('wrote', out)
 
 
-if __name__ == '__main__' and (len(sys.argv) < 2 or sys.argv[1] not in ('ep_sub', 'ep_step', 'ep_lines', 'approach', 'demod', 's2s3', 'nearfield', 'compare', 's2s3_prov', 's2s3_both', 's2s3_wl', 's2s3_wl3', 'explain')):
+if __name__ == '__main__' and (len(sys.argv) < 2 or sys.argv[1] not in ('ep_sub', 'ep_step', 'ep_lines', 'approach', 'demod', 's2s3', 'nearfield', 'compare', 's2s3_prov', 's2s3_both', 's2s3_wl', 's2s3_wl3', 'explain', 'tapview')):
     what = sys.argv[1] if len(sys.argv) > 1 else 'scan_h5'
     plot_scan(what)
     plot_combined(what)
@@ -733,3 +733,38 @@ def plot_demod_explained(x, set_name='sin5'):
 if __name__ == '__main__' and len(sys.argv) > 1 and sys.argv[1] == 'explain':
     for _x in ([float(sys.argv[2])] if len(sys.argv) > 2 else (-1000.0, 0.0, 1000.0)):
         plot_demod_explained(_x, SET)
+
+
+def plot_approach_and_tapping(xs=((-1000.0, 'oil', 'C1'), (1000.0, 'water', 'C0')), set_name='sin5'):
+    """Left: approach curves |Ep| vs height.  Right: the same signal over one tapping cycle (ticks = tip height)."""
+    from scipy.interpolate import CubicSpline
+    pts = approach_points(stages=SETS[set_name][0])
+    t = np.linspace(0, 1, 1000)
+    z = MIN_GAP + TAP_AMPLITUDE/2*(1 + np.cos(2*np.pi*t))
+    fig, ax = plt.subplots(1, 2, figsize=(13, 5))
+    for x, name, c in xs:
+        gs = np.array(sorted(g for xx, g in pts if xx == x))
+        E = np.array([pts[(x, g)][0] for g in gs])
+        spl = lambda h: np.abs(CubicSpline(gs, E.real)(h) + 1j*CubicSpline(gs, E.imag)(h))
+        hh = np.linspace(gs.min(), gs.max(), 300)
+        ax[0].plot(hh, spl(hh), '-', color=c, lw=1.8)
+        ax[0].plot(gs, np.abs(E), 'o', color=c, ms=5, label=f'tip over {name} (x = {x:+.0f} nm)')
+        ax[1].plot(t, spl(z), '-', color=c, lw=2, label=f'tip over {name} (x = {x:+.0f} nm)')
+    ax[0].set(xlabel='tip height (nm)', ylabel='backscattered |Ep| (arb.)', title='Approach curve')
+    ax[1].set(xlabel='tip height during one tapping cycle (nm)', ylabel='backscattered |Ep| (arb.)',
+              title='Signal during one tapping cycle')
+    ax[1].set_xticks([0, 0.25, 0.5, 0.75, 1])
+    ax[1].set_xticklabels([f'{z0:.0f}' for z0 in MIN_GAP + TAP_AMPLITUDE/2*(1 + np.cos(2*np.pi*np.array([0, 0.25, 0.5, 0.75, 1])))])
+    ax[1].set_xlim(0, 1)
+    for a in ax:
+        a.grid(alpha=0.3)
+        a.legend()
+    fig.suptitle(f'2D, {SETS[set_name][2]}')
+    fig.tight_layout()
+    out = os.path.join(FIGS, 'approach_and_tapping.png')
+    fig.savefig(out, dpi=130)
+    print('wrote', out)
+
+
+if __name__ == '__main__' and len(sys.argv) > 1 and sys.argv[1] == 'tapview':
+    plot_approach_and_tapping(set_name=SET)
