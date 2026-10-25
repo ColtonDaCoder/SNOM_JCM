@@ -1,0 +1,18 @@
+SourceBag {
+  Source {
+    ElectricFieldStrength {
+      GaussianBeam {
+        Lambda0 = 6.1e-06
+        ThetaPhi = [60 180]
+        Incidence = FromAbove
+        3DTo2D = yes
+        SP = [0 1]
+        Waist = 4.854e-06
+        Focus = [0 0 0]
+        OpticalSystem {
+          NumericalAperture = 0.4
+        }
+      }
+    }
+  }
+}

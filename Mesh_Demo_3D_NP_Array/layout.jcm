@@ -1,0 +1,183 @@
+Layout3D {
+  UnitOfLength = 1e-09
+  MeshOptions {
+    MaximumSideLength = 1500.0
+  }
+  Extrusion {
+    Objects {
+      Parallelogram {
+        Name = "CD"
+        DomainId = 101
+        Priority = ComputationalDomain
+        Width = 16000.0
+        Height = 16000.0
+        Boundary {
+          Class = Transparent
+        }
+      }
+    }
+    MultiLayer {
+      LayerInterface {
+        BoundaryClass = Transparent
+        GlobalZ = -2005.0
+      }
+      Layer {
+        Name = "Water"
+        Thickness = 2000.0
+        DomainIdMapping = [101 2]
+      }
+      Layer {
+        Name = "SiN"
+        Thickness = 5.0
+        DomainIdMapping = [101 7]
+      }
+      Layer {
+        Name = "Air"
+        Thickness = 13445.0
+        DomainIdMapping = [101 1]
+      }
+      LayerInterface {
+        BoundaryClass = Transparent
+      }
+    }
+  }
+  Objects {
+    Sphere {
+      Name = "NP1"
+      DomainId = 5
+      Priority = 3
+      Radius = 50.0
+      GlobalPosition = [-250.0 -250.0 -57.0]
+      MeshOptions {
+        BoundaryMeshConstraint {
+          MaximumSideLength = 15.0
+        }
+        MaximumSideLength = 15.0
+      }
+    }
+    Sphere {
+      Name = "NP2"
+      DomainId = 5
+      Priority = 3
+      Radius = 50.0
+      GlobalPosition = [-250.0 0.0 -57.0]
+      MeshOptions {
+        BoundaryMeshConstraint {
+          MaximumSideLength = 15.0
+        }
+        MaximumSideLength = 15.0
+      }
+    }
+    Sphere {
+      Name = "NP3"
+      DomainId = 5
+      Priority = 3
+      Radius = 50.0
+      GlobalPosition = [-250.0 250.0 -57.0]
+      MeshOptions {
+        BoundaryMeshConstraint {
+          MaximumSideLength = 15.0
+        }
+        MaximumSideLength = 15.0
+      }
+    }
+    Sphere {
+      Name = "NP4"
+      DomainId = 5
+      Priority = 3
+      Radius = 50.0
+      GlobalPosition = [0.0 -250.0 -57.0]
+      MeshOptions {
+        BoundaryMeshConstraint {
+          MaximumSideLength = 15.0
+        }
+        MaximumSideLength = 15.0
+      }
+    }
+    Sphere {
+      Name = "NP5"
+      DomainId = 5
+      Priority = 3
+      Radius = 50.0
+      GlobalPosition = [0.0 0.0 -57.0]
+      MeshOptions {
+        BoundaryMeshConstraint {
+          MaximumSideLength = 15.0
+        }
+        MaximumSideLength = 15.0
+      }
+    }
+    Sphere {
+      Name = "NP6"
+      DomainId = 5
+      Priority = 3
+      Radius = 50.0
+      GlobalPosition = [0.0 250.0 -57.0]
+      MeshOptions {
+        BoundaryMeshConstraint {
+          MaximumSideLength = 15.0
+        }
+        MaximumSideLength = 15.0
+      }
+    }
+    Sphere {
+      Name = "NP7"
+      DomainId = 5
+      Priority = 3
+      Radius = 50.0
+      GlobalPosition = [250.0 -250.0 -57.0]
+      MeshOptions {
+        BoundaryMeshConstraint {
+          MaximumSideLength = 15.0
+        }
+        MaximumSideLength = 15.0
+      }
+    }
+    Sphere {
+      Name = "NP8"
+      DomainId = 5
+      Priority = 3
+      Radius = 50.0
+      GlobalPosition = [250.0 0.0 -57.0]
+      MeshOptions {
+        BoundaryMeshConstraint {
+          MaximumSideLength = 15.0
+        }
+        MaximumSideLength = 15.0
+      }
+    }
+    Sphere {
+      Name = "NP9"
+      DomainId = 5
+      Priority = 3
+      Radius = 50.0
+      GlobalPosition = [250.0 250.0 -57.0]
+      MeshOptions {
+        BoundaryMeshConstraint {
+          MaximumSideLength = 15.0
+        }
+        MaximumSideLength = 15.0
+      }
+    }
+    SolidOfRevolution {
+      Name = "TipApex"
+      DomainId = 3
+      Priority = 2
+      GlobalPosition = [0 0 5.0]
+      Generator {
+        Polygon {
+          Points = [0.0000 0.0000, 9.7668 0.6386, 19.3672 2.5437, 28.6378 5.6828, 37.4206 10.0023, 45.5662 15.4288, 52.9357 21.8699, 59.4037 29.2158, 64.8601 37.3414, 565.7307 900.0000, 0.0000 900.0000]
+        }
+      }
+    }
+    Cone {
+      Name = "TipShaft"
+      DomainId = 3
+      Priority = 2
+      BottomRadius = 565.7307267913521
+      TopRadius = 7556.309154432643
+      Height = 12040.0
+      GlobalPosition = [0 0 905.0]
+    }
+  }
+}

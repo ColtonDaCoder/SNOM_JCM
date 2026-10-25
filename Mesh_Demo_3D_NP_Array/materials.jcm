@@ -1,0 +1,30 @@
+Material {
+  Name = "Air"
+  DomainId = 1
+  RelPermittivity = (1.0, 0.0)
+  RelPermeability = 1.0
+}
+Material {
+  Name = "Water"
+  DomainId = 2
+  RelPermittivity = (1.723, 0.346)
+  RelPermeability = 1.0
+}
+Material {
+  Name = "Pt"
+  DomainId = 3
+  RelPermittivity = (-567.461, 266.645)
+  RelPermeability = 1.0
+}
+Material {
+  Name = "Nanoparticle"
+  DomainId = 5
+  RelPermittivity = (2.4, 0.0)
+  RelPermeability = 1.0
+}
+Material {
+  Name = "SiN"
+  DomainId = 7
+  RelPermittivity = (4.887, 0.173)
+  RelPermeability = 1.0
+}
