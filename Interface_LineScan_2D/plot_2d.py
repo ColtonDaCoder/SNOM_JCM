@@ -750,8 +750,8 @@ def plot_approach_and_tapping(xs=((-1000.0, 'oil', '#7f2704'), (-40.0, 'oil', '#
     z = MIN_GAP + TAP_AMPLITUDE/2*(1 + np.cos(2*np.pi*t))
     tc = np.linspace(0, 1, 4000, endpoint=False)       # one full cycle for the Fourier coefficients
     zc = MIN_GAP + TAP_AMPLITUDE/2*(1 + np.cos(2*np.pi*tc))
-    rc = plt.rc_context({'font.size': 32, 'axes.titlesize': 38, 'axes.labelsize': 34,
-                         'xtick.labelsize': 30, 'ytick.labelsize': 30, 'legend.fontsize': 32, 'figure.titlesize': 38})
+    rc = plt.rc_context({'font.size': 28, 'axes.titlesize': 33, 'axes.labelsize': 30,
+                         'xtick.labelsize': 26, 'ytick.labelsize': 26, 'legend.fontsize': 28, 'figure.titlesize': 33})
     rc.__enter__()
     fig, axs = plt.subplots(2, 2, figsize=(18, 14.5))
     ax = [axs[0, 0], axs[0, 1], axs[1, 0], axs[1, 1]]
@@ -776,17 +776,17 @@ def plot_approach_and_tapping(xs=((-1000.0, 'oil', '#7f2704'), (-40.0, 'oil', '#
         a.set_xticklabels([f'{z0:.0f}' for z0 in MIN_GAP + TAP_AMPLITUDE/2*(1 + np.cos(2*np.pi*np.array(ticks)))])
         a.set_xlim(0, 1)
         a.set_xlabel('Tip height during tap (nm)')
-    yl = '|Ep| / |Ep(101 nm)|' if norm else '|Ep| (arb.)'
+    yl = '|Ep| / |Ep(101 nm)|' if norm else '|Ep|'
     ax[0].set(xlabel='Tip height (nm)', ylabel=yl, title='Approach curve')
     ax[1].set(ylabel=yl, title='Tapping cycle')
     ax[2].axhline(0, color='0.6', lw=0.8)
-    ax[2].set(ylabel='Signal − DC − 1ω\n(×10⁻³)', title='Higher-harmonic content (n ≥ 2)')
+    ax[2].set(ylabel='Signal (×10⁻³)', title='Higher-harmonic content')
     for a in ax[:3]:
         a.grid(alpha=0.3)
     # fourth panel: the legend (same colours in all panels)
     h, l = ax[0].get_legend_handles_labels()
     ax[3].axis('off')
-    ax[3].legend(h, l, loc='center', fontsize=30, frameon=False, markerscale=1.4, handletextpad=0.2)
+    ax[3].legend(h, l, loc='center', fontsize=26, frameon=False, markerscale=1.4, handletextpad=0.2)
     fig.suptitle(f'2D, {SETS[set_name][2]} (tapping {TAP_AMPLITUDE} nm from {MIN_GAP} nm)')
     fig.tight_layout(h_pad=2.5)
     out = os.path.join(FIGS, 'approach_and_tapping' + ('_norm' if norm else '') + '.png')
