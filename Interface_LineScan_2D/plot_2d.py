@@ -133,7 +133,7 @@ def plot_complex(stage, gap=5):
     print('wrote', out)
 
 
-if __name__ == '__main__' and (len(sys.argv) < 2 or sys.argv[1] not in ('ep_sub', 'ep_step', 'ep_lines', 'approach', 'demod', 's2s3', 'nearfield', 'compare', 's2s3_prov', 's2s3_both', 's2s3_wl', 's2s3_wl3', 'explain', 'tapview', 'tapview_inphase', 's2s3_wl_amp')):
+if __name__ == '__main__' and (len(sys.argv) < 2 or sys.argv[1] not in ('ep_sub', 'ep_step', 'ep_lines', 'approach', 'demod', 's2s3', 'nearfield', 'compare', 's2s3_prov', 's2s3_both', 's2s3_wl', 's2s3_wl3', 'explain', 'tapview', 'tapview_inphase', 's2s3_wl_amp', 'nk')):
     what = sys.argv[1] if len(sys.argv) > 1 else 'scan_h5'
     plot_scan(what)
     plot_combined(what)
@@ -902,3 +902,40 @@ def plot_s2s3_amplitude(sets=(('sin5', 'C0', '6.1 µm'), ('wl5p5', 'C2', '5.5 µ
 
 if __name__ == '__main__' and len(sys.argv) > 1 and sys.argv[1] == 's2s3_wl_amp':
     plot_s2s3_amplitude()
+
+
+def plot_nk(wmin=2.5, wmax=7.0):
+    """n and k of water (Hale & Querry) and n-octane (Myers, OTS stand-in) with the simulated wavelengths marked."""
+    def read(f):
+        d = np.array([l.split(',') for l in open(os.path.join(HERE, 'optical_data', f)) if l[0].isdigit()], float)
+        m = (d[:, 0] >= wmin) & (d[:, 0] <= wmax)
+        return d[m, 0], d[m, 1], d[m, 2]
+    mats = (('water_HaleQuerry.csv', 'water (Hale & Querry)', 'C0'),
+            ('octane_Myers.csv', 'n-octane, OTS stand-in (Myers)', 'C1'))
+    marks = ((2.95, 'O–H stretch'), (5.5, 'off-band'), (6.1, 'H–O–H bend'))
+    with plt.rc_context({'font.size': 16, 'axes.titlesize': 18, 'axes.labelsize': 18,
+                         'xtick.labelsize': 15, 'ytick.labelsize': 15, 'legend.fontsize': 15}):
+        fig, ax = plt.subplots(2, 1, figsize=(11, 9), sharex=True)
+        for f, lab, c in mats:
+            w, n, k = read(f)
+            ax[0].plot(w, n, '-', lw=2.2, color=c, label=lab)
+            ax[1].plot(w, k, '-', lw=2.2, color=c, label=lab)
+        for a in ax:
+            for w0, txt in marks:
+                a.axvline(w0, color='0.4', ls='--', lw=1)
+            a.grid(alpha=0.3)
+        for w0, txt in marks:
+            ax[0].text(w0, 1.0, f' {txt}\n {w0:g} µm', transform=ax[0].get_xaxis_transform(), va='bottom',
+                       ha='center', fontsize=13)
+        ax[0].set(ylabel='n')
+        ax[1].set(ylabel='k', xlabel='Wavelength (µm)')
+        ax[0].legend(loc='lower right')
+        ax[1].set_xlim(wmin, wmax)
+        fig.tight_layout()
+        out = os.path.join(FIGS, 'nk_water_octane.png')
+        fig.savefig(out, dpi=130)
+    print('wrote', out)
+
+
+if __name__ == '__main__' and len(sys.argv) > 1 and sys.argv[1] == 'nk':
+    plot_nk()
