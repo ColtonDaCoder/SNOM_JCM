@@ -735,7 +735,8 @@ if __name__ == '__main__' and len(sys.argv) > 1 and sys.argv[1] == 'explain':
         plot_demod_explained(_x, SET)
 
 
-def plot_approach_and_tapping(xs=((-1000.0, 'oil', 'C1'), (1000.0, 'water', 'C0')), set_name='sin5'):
+def plot_approach_and_tapping(xs=((-1000.0, 'oil', '#d95f02'), (-40.0, 'oil', '#fdae6b'),
+                                  (40.0, 'water', '#9ecae1'), (1000.0, 'water', '#08519c')), set_name='sin5'):
     """Left: approach curves |Ep| vs height.  Right: the same signal over one tapping cycle (ticks = tip height)."""
     from scipy.interpolate import CubicSpline
     pts = approach_points(stages=SETS[set_name][0])
