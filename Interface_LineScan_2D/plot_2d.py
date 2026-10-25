@@ -911,22 +911,23 @@ def plot_nk(wmin=2.5, wmax=7.0):
         m = (d[:, 0] >= wmin) & (d[:, 0] <= wmax)
         return d[m, 0], d[m, 1], d[m, 2]
     mats = (('water_HaleQuerry.csv', 'water (Hale & Querry)', 'C0'),
-            ('octane_Myers.csv', 'n-octane, OTS stand-in (Myers)', 'C1'))
+            ('octane_Myers.csv', 'n-octane (Myers)', 'C1'))
     marks = ((2.95, 'O–H stretch'), (5.5, 'off-band'), (6.1, 'H–O–H bend'))
-    with plt.rc_context({'font.size': 16, 'axes.titlesize': 18, 'axes.labelsize': 18,
-                         'xtick.labelsize': 15, 'ytick.labelsize': 15, 'legend.fontsize': 15}):
-        fig, ax = plt.subplots(2, 1, figsize=(11, 9), sharex=True)
+    with plt.rc_context({'font.size': 24, 'axes.titlesize': 26, 'axes.labelsize': 28,
+                         'xtick.labelsize': 22, 'ytick.labelsize': 22, 'legend.fontsize': 21}):
+        fig, ax = plt.subplots(2, 1, figsize=(12, 10.5), sharex=True)
         for f, lab, c in mats:
             w, n, k = read(f)
-            ax[0].plot(w, n, '-', lw=2.2, color=c, label=lab)
-            ax[1].plot(w, k, '-', lw=2.2, color=c, label=lab)
+            ax[0].plot(w, n, '-', lw=3, color=c, label=lab)
+            ax[1].plot(w, k, '-', lw=3, color=c, label=lab)
         for a in ax:
             for w0, txt in marks:
                 a.axvline(w0, color='0.4', ls='--', lw=1)
             a.grid(alpha=0.3)
+        align = {2.95: 'center', 5.5: 'right', 6.1: 'left'}      # 5.5 and 6.1 are close: push labels apart
         for w0, txt in marks:
-            ax[0].text(w0, 1.0, f' {txt}\n {w0:g} µm', transform=ax[0].get_xaxis_transform(), va='bottom',
-                       ha='center', fontsize=13)
+            ax[0].text(w0, 1.0, f'{txt}\n{w0:g} µm', transform=ax[0].get_xaxis_transform(), va='bottom',
+                       ha=align[w0], multialignment='center', fontsize=19)
         ax[0].set(ylabel='n')
         ax[1].set(ylabel='k', xlabel='Wavelength (µm)')
         ax[0].legend(loc='lower right')
