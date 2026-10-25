@@ -737,12 +737,18 @@ if __name__ == '__main__' and len(sys.argv) > 1 and sys.argv[1] == 'explain':
 
 def plot_approach_and_tapping(xs=((-1000.0, 'oil', '#d95f02'), (-40.0, 'oil', '#fdae6b'),
                                   (40.0, 'water', '#9ecae1'), (1000.0, 'water', '#08519c')), set_name='sin5'):
-    """Left: approach curves |Ep| vs height.  Right: the same signal over one tapping cycle (ticks = tip height)."""
+    """
+    2 x 2: approach curves |Ep| vs height; the same signal over one tapping cycle (ticks = tip height);
+    that signal with its average and 1w part removed (what is left carries S2, S3, ...); |S2|, |S3| per position.
+    """
     from scipy.interpolate import CubicSpline
     pts = approach_points(stages=SETS[set_name][0])
     t = np.linspace(0, 1, 1000)
     z = MIN_GAP + TAP_AMPLITUDE/2*(1 + np.cos(2*np.pi*t))
-    fig, ax = plt.subplots(1, 3, figsize=(19, 5.2))
+    tc = np.linspace(0, 1, 4000, endpoint=False)       # one full cycle for the Fourier coefficients
+    zc = MIN_GAP + TAP_AMPLITUDE/2*(1 + np.cos(2*np.pi*tc))
+    fig, axs = plt.subplots(2, 2, figsize=(14, 10))
+    ax = [axs[0, 0], axs[0, 1], axs[1, 0], axs[1, 1]]
     Sn = []
     for x, name, c in xs:
         gs = np.array(sorted(g for xx, g in pts if xx == x))
@@ -750,32 +756,41 @@ def plot_approach_and_tapping(xs=((-1000.0, 'oil', '#d95f02'), (-40.0, 'oil', '#
         Sn.append(demodulate(gs, E))
         spl = lambda h: np.abs(CubicSpline(gs, E.real)(h) + 1j*CubicSpline(gs, E.imag)(h))
         hh = np.linspace(gs.min(), gs.max(), 300)
+        lab = f'tip over {name} (x = {x:+.0f} nm)'
         ax[0].plot(hh, spl(hh), '-', color=c, lw=1.8)
-        ax[0].plot(gs, np.abs(E), 'o', color=c, ms=5, label=f'tip over {name} (x = {x:+.0f} nm)')
-        ax[1].plot(t, spl(z), '-', color=c, lw=2, label=f'tip over {name} (x = {x:+.0f} nm)')
+        ax[0].plot(gs, np.abs(E), 'o', color=c, ms=5, label=lab)
+        ax[1].plot(t, spl(z), '-', color=c, lw=2, label=lab)
+        sc = spl(zc)
+        a0, a1 = np.mean(sc), 2*np.mean(sc*np.cos(2*np.pi*tc))
+        ax[2].plot(t, (spl(z) - a0 - a1*np.cos(2*np.pi*t))*1e3, '-', color=c, lw=2, label=lab)
+    ticks = [0, 0.25, 0.5, 0.75, 1]
+    for a in (ax[1], ax[2]):
+        a.set_xticks(ticks)
+        a.set_xticklabels([f'{z0:.0f}' for z0 in MIN_GAP + TAP_AMPLITUDE/2*(1 + np.cos(2*np.pi*np.array(ticks)))])
+        a.set_xlim(0, 1)
+        a.set_xlabel('tip height during one tapping cycle (nm)')
     ax[0].set(xlabel='tip height (nm)', ylabel='backscattered |Ep| (arb.)', title='Approach curve')
-    ax[1].set(xlabel='tip height during one tapping cycle (nm)', ylabel='backscattered |Ep| (arb.)',
-              title='Signal during one tapping cycle')
-    ax[1].set_xticks([0, 0.25, 0.5, 0.75, 1])
-    ax[1].set_xticklabels([f'{z0:.0f}' for z0 in MIN_GAP + TAP_AMPLITUDE/2*(1 + np.cos(2*np.pi*np.array([0, 0.25, 0.5, 0.75, 1])))])
-    ax[1].set_xlim(0, 1)
-    # third panel: |S2| and |S3| per position, relative to the oil end (absolute values on the bars)
+    ax[1].set(ylabel='backscattered |Ep| (arb.)', title='Signal during one tapping cycle')
+    ax[2].axhline(0, color='0.6', lw=0.8)
+    ax[2].set(ylabel='|Ep| minus average and 1w part (x 1e-3, arb.)',
+              title='Signal during one tapping cycle, 1w wiggle removed')
+    # |S2| and |S3| per position, relative to the oil end (absolute values on the bars)
     w = 0.8/len(xs)
     for k, n in enumerate((2, 3)):
         ref = abs(Sn[0][n])
         for j, ((x, name, c), S) in enumerate(zip(xs, Sn)):
             pos = k + (j - (len(xs) - 1)/2)*w
-            ax[2].bar(pos, abs(S[n])/ref, width=w*0.9, color=c, label=f'x = {x:+.0f} nm' if k == 0 else None)
-            ax[2].text(pos, abs(S[n])/ref + 0.01, f'{abs(S[n]):.2e}', ha='center', va='bottom', fontsize=7, rotation=90)
-    ax[2].set_xticks([0, 1])
-    ax[2].set_xticklabels(['S2', 'S3'])
-    ax[2].set_ylim(0.6, 1.25)
-    ax[2].set(ylabel='|Sn| / |Sn| at x = -1000 nm (oil)', title='Demodulated signal: S2 and S3')
+            ax[3].bar(pos, abs(S[n])/ref, width=w*0.9, color=c, label=f'x = {x:+.0f} nm' if k == 0 else None)
+            ax[3].text(pos, abs(S[n])/ref + 0.01, f'{abs(S[n]):.2e}', ha='center', va='bottom', fontsize=7, rotation=90)
+    ax[3].set_xticks([0, 1])
+    ax[3].set_xticklabels(['S2', 'S3'])
+    ax[3].set_ylim(0.6, 1.25)
+    ax[3].set(ylabel='|Sn| / |Sn| at x = -1000 nm (oil)', title='Demodulated signal: S2 and S3')
     for a in ax:
         a.grid(alpha=0.3)
-    ax[0].legend()
-    ax[1].legend()
-    ax[2].legend(fontsize=8, loc='upper right', ncol=2)
+    for a in ax[:3]:
+        a.legend(fontsize=9)
+    ax[3].legend(fontsize=8, loc='upper right', ncol=2)
     fig.suptitle(f'2D, {SETS[set_name][2]} (tapping {TAP_AMPLITUDE} nm from {MIN_GAP} nm)')
     fig.tight_layout()
     out = os.path.join(FIGS, 'approach_and_tapping.png')
