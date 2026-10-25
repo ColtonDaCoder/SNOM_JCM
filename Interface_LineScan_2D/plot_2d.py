@@ -133,7 +133,7 @@ def plot_complex(stage, gap=5):
     print('wrote', out)
 
 
-if __name__ == '__main__' and (len(sys.argv) < 2 or sys.argv[1] not in ('ep_sub', 'ep_step', 'ep_lines', 'approach', 'demod', 's2s3', 'nearfield', 'compare', 's2s3_prov', 's2s3_both', 's2s3_wl', 's2s3_wl3', 'explain', 'tapview')):
+if __name__ == '__main__' and (len(sys.argv) < 2 or sys.argv[1] not in ('ep_sub', 'ep_step', 'ep_lines', 'approach', 'demod', 's2s3', 'nearfield', 'compare', 's2s3_prov', 's2s3_both', 's2s3_wl', 's2s3_wl3', 'explain', 'tapview', 'tapview_inphase')):
     what = sys.argv[1] if len(sys.argv) > 1 else 'scan_h5'
     plot_scan(what)
     plot_combined(what)
@@ -800,3 +800,74 @@ def plot_approach_and_tapping(xs=((-1000.0, 'oil', '#d95f02'), (-40.0, 'oil', '#
 
 if __name__ == '__main__' and len(sys.argv) > 1 and sys.argv[1] == 'tapview':
     plot_approach_and_tapping(set_name=SET)
+
+
+def plot_approach_and_tapping_inphase(xs=((-1000.0, 'oil', '#d95f02'), (-40.0, 'oil', '#fdae6b'),
+                                          (40.0, 'water', '#9ecae1'), (1000.0, 'water', '#08519c')), set_name='sin5'):
+    """
+    Same 2 x 2 layout as plot_approach_and_tapping, but the three signal panels show Re[E exp(-i arg S2)]:
+    the part of the complex backscattered field E that is in phase with S2 at that position.  With this choice
+    the 2w part of the wiggle in the third panel has amplitude exactly 2 |S2|, consistent with the S2 bars.
+    """
+    from scipy.interpolate import CubicSpline
+    pts = approach_points(stages=SETS[set_name][0])
+    t = np.linspace(0, 1, 1000)
+    z = MIN_GAP + TAP_AMPLITUDE/2*(1 + np.cos(2*np.pi*t))
+    tc = np.linspace(0, 1, 4000, endpoint=False)
+    zc = MIN_GAP + TAP_AMPLITUDE/2*(1 + np.cos(2*np.pi*tc))
+    fig, axs = plt.subplots(2, 2, figsize=(14, 10))
+    ax = [axs[0, 0], axs[0, 1], axs[1, 0], axs[1, 1]]
+    Sn = []
+    for x, name, c in xs:
+        gs = np.array(sorted(g for xx, g in pts if xx == x))
+        E = np.array([pts[(x, g)][0] for g in gs])
+        S = demodulate(gs, E)
+        Sn.append(S)
+        rot = np.exp(-1j*np.angle(S[2]))
+        f = lambda h: ((CubicSpline(gs, E.real)(h) + 1j*CubicSpline(gs, E.imag)(h))*rot).real
+        hh = np.linspace(gs.min(), gs.max(), 300)
+        lab = f'tip over {name} (x = {x:+.0f} nm)'
+        ax[0].plot(hh, f(hh), '-', color=c, lw=1.8)
+        ax[0].plot(gs, (E*rot).real, 'o', color=c, ms=5, label=lab)
+        ax[1].plot(t, f(z), '-', color=c, lw=2, label=lab)
+        fc = f(zc)
+        a0, a1 = np.mean(fc), 2*np.mean(fc*np.cos(2*np.pi*tc))
+        ax[2].plot(t, (f(z) - a0 - a1*np.cos(2*np.pi*t))*1e3, '-', color=c, lw=2,
+                   label=f'{lab}: 2|S2| = {2e3*abs(S[2]):.2f}e-3')
+    ticks = [0, 0.25, 0.5, 0.75, 1]
+    for a in (ax[1], ax[2]):
+        a.set_xticks(ticks)
+        a.set_xticklabels([f'{z0:.0f}' for z0 in MIN_GAP + TAP_AMPLITUDE/2*(1 + np.cos(2*np.pi*np.array(ticks)))])
+        a.set_xlim(0, 1)
+        a.set_xlabel('tip height during one tapping cycle (nm)')
+    ax[0].set(xlabel='tip height (nm)', ylabel='backscattered Ep, in phase with S2 (arb.)', title='Approach curve')
+    ax[1].set(ylabel='backscattered Ep, in phase with S2 (arb.)', title='Signal during one tapping cycle')
+    ax[2].axhline(0, color='0.6', lw=0.8)
+    ax[2].set(ylabel='minus average and 1w part (x 1e-3, arb.)',
+              title='Signal during one tapping cycle, 1w wiggle removed')
+    w = 0.8/len(xs)
+    for k, n in enumerate((2, 3)):
+        ref = abs(Sn[0][n])
+        for j, ((x, name, c), S) in enumerate(zip(xs, Sn)):
+            pos = k + (j - (len(xs) - 1)/2)*w
+            ax[3].bar(pos, abs(S[n])/ref, width=w*0.9, color=c, label=f'x = {x:+.0f} nm' if k == 0 else None)
+            ax[3].text(pos, abs(S[n])/ref + 0.01, f'{abs(S[n]):.2e}', ha='center', va='bottom', fontsize=7, rotation=90)
+    ax[3].set_xticks([0, 1])
+    ax[3].set_xticklabels(['S2', 'S3'])
+    ax[3].set_ylim(0.6, 1.25)
+    ax[3].set(ylabel='|Sn| / |Sn| at x = -1000 nm (oil)', title='Demodulated signal: S2 and S3')
+    for a in ax:
+        a.grid(alpha=0.3)
+    for a in ax[:3]:
+        a.legend(fontsize=8.5)
+    ax[3].legend(fontsize=8, loc='upper right', ncol=2)
+    fig.suptitle(f'2D, {SETS[set_name][2]} (tapping {TAP_AMPLITUDE} nm from {MIN_GAP} nm); '
+                 f'signals: part of the complex Ep in phase with each position\'s S2')
+    fig.tight_layout()
+    out = os.path.join(FIGS, 'approach_and_tapping_inphase.png')
+    fig.savefig(out, dpi=130)
+    print('wrote', out)
+
+
+if __name__ == '__main__' and len(sys.argv) > 1 and sys.argv[1] == 'tapview_inphase':
+    plot_approach_and_tapping_inphase(set_name=SET)
