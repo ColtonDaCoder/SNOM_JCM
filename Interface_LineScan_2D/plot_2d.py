@@ -735,8 +735,9 @@ if __name__ == '__main__' and len(sys.argv) > 1 and sys.argv[1] == 'explain':
         plot_demod_explained(_x, SET)
 
 
-def plot_approach_and_tapping(xs=((-1000.0, 'oil', '#a63603'), (-40.0, 'oil', '#e6550d'), (-20.0, 'oil', '#fdae6b'),
-                                  (20.0, 'water', '#9ecae1'), (40.0, 'water', '#4292c6'), (1000.0, 'water', '#08519c')),
+def plot_approach_and_tapping(xs=((-1000.0, 'oil', '#7f2704'), (-500.0, 'oil', '#d94801'), (-40.0, 'oil', '#fd8d3c'),
+                                  (-20.0, 'oil', '#fdbe85'), (20.0, 'water', '#9ecae1'), (40.0, 'water', '#6baed6'),
+                                  (500.0, 'water', '#2171b5'), (1000.0, 'water', '#08306b')),
                               set_name='sin5', norm=False):
     """
     norm=True: every curve divided by its own |Ep| at the top of the tap (101 nm) -> *_norm.png.
@@ -792,10 +793,11 @@ def plot_approach_and_tapping(xs=((-1000.0, 'oil', '#a63603'), (-40.0, 'oil', '#
     ax[3].set(ylabel='|Sn| / |Sn| at x = -1000 nm (oil)', title='Demodulated signal: S2 and S3')
     for a in ax:
         a.grid(alpha=0.3)
-    ax[0].legend(fontsize=9)                    # same colours in all panels: one legend
     ax[3].legend(fontsize=8, loc='upper right', ncol=2)
     fig.suptitle(f'2D, {SETS[set_name][2]} (tapping {TAP_AMPLITUDE} nm from {MIN_GAP} nm)')
-    fig.tight_layout()
+    h, l = ax[0].get_legend_handles_labels()           # same colours in all panels: one legend under the title
+    fig.legend(h, l, loc='upper center', ncol=4, fontsize=9, bbox_to_anchor=(0.5, 0.965), frameon=False)
+    fig.tight_layout(rect=(0, 0, 1, 0.92))
     out = os.path.join(FIGS, 'approach_and_tapping' + ('_norm' if norm else '') + '.png')
     fig.savefig(out, dpi=130)
     print('wrote', out)
