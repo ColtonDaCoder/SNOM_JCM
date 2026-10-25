@@ -735,9 +735,9 @@ if __name__ == '__main__' and len(sys.argv) > 1 and sys.argv[1] == 'explain':
         plot_demod_explained(_x, SET)
 
 
-def plot_approach_and_tapping(xs=((-1000.0, 'oil', '#7f2704'), (-500.0, 'oil', '#d94801'), (-40.0, 'oil', '#fd8d3c'),
+def plot_approach_and_tapping(xs=((-1000.0, 'oil', '#7f2704'), (-200.0, 'oil', '#d94801'), (-40.0, 'oil', '#fd8d3c'),
                                   (-20.0, 'oil', '#fdbe85'), (20.0, 'water', '#9ecae1'), (40.0, 'water', '#6baed6'),
-                                  (500.0, 'water', '#2171b5'), (1000.0, 'water', '#08306b')),
+                                  (200.0, 'water', '#2171b5'), (1000.0, 'water', '#08306b')),
                               set_name='sin5', norm=False):
     """
     norm=True: every curve divided by its own |Ep| at the top of the tap (101 nm) -> *_norm.png.
