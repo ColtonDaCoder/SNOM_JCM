@@ -750,10 +750,10 @@ def plot_approach_and_tapping(xs=((-1000.0, 'oil', '#7f2704'), (-40.0, 'oil', '#
     z = MIN_GAP + TAP_AMPLITUDE/2*(1 + np.cos(2*np.pi*t))
     tc = np.linspace(0, 1, 4000, endpoint=False)       # one full cycle for the Fourier coefficients
     zc = MIN_GAP + TAP_AMPLITUDE/2*(1 + np.cos(2*np.pi*tc))
-    rc = plt.rc_context({'font.size': 16, 'axes.titlesize': 19, 'axes.labelsize': 17,
-                         'xtick.labelsize': 15, 'ytick.labelsize': 15, 'legend.fontsize': 16, 'figure.titlesize': 19})
+    rc = plt.rc_context({'font.size': 32, 'axes.titlesize': 38, 'axes.labelsize': 34,
+                         'xtick.labelsize': 30, 'ytick.labelsize': 30, 'legend.fontsize': 32, 'figure.titlesize': 38})
     rc.__enter__()
-    fig, axs = plt.subplots(2, 2, figsize=(15, 11))
+    fig, axs = plt.subplots(2, 2, figsize=(18, 14.5))
     ax = [axs[0, 0], axs[0, 1], axs[1, 0], axs[1, 1]]
     Sn = []
     for x, name, c in xs:
@@ -764,12 +764,12 @@ def plot_approach_and_tapping(xs=((-1000.0, 'oil', '#7f2704'), (-40.0, 'oil', '#
         spl = lambda h: k_n*np.abs(CubicSpline(gs, E.real)(h) + 1j*CubicSpline(gs, E.imag)(h))
         hh = np.linspace(gs.min(), gs.max(), 300)
         lab = f'tip over {name} (x = {x:+.0f} nm)'
-        ax[0].plot(hh, spl(hh), '-', color=c, lw=2.2)
-        ax[0].plot(gs, k_n*np.abs(E), 'o', color=c, ms=6, label=lab)
-        ax[1].plot(t, spl(z), '-', color=c, lw=2.5, label=lab)
+        ax[0].plot(hh, spl(hh), '-', color=c, lw=4)
+        ax[0].plot(gs, k_n*np.abs(E), 'o', color=c, ms=11, label=lab)
+        ax[1].plot(t, spl(z), '-', color=c, lw=4.5, label=lab)
         sc = spl(zc)
         a0, a1 = np.mean(sc), 2*np.mean(sc*np.cos(2*np.pi*tc))
-        ax[2].plot(t, (spl(z) - a0 - a1*np.cos(2*np.pi*t))*1e3, '-', color=c, lw=2.5, label=lab)
+        ax[2].plot(t, (spl(z) - a0 - a1*np.cos(2*np.pi*t))*1e3, '-', color=c, lw=4.5, label=lab)
     ticks = [0, 0.25, 0.5, 0.75, 1]
     for a in (ax[1], ax[2]):
         a.set_xticks(ticks)
@@ -780,15 +780,15 @@ def plot_approach_and_tapping(xs=((-1000.0, 'oil', '#7f2704'), (-40.0, 'oil', '#
     ax[0].set(xlabel='Tip height (nm)', ylabel=yl, title='Approach curve')
     ax[1].set(ylabel=yl, title='Tapping cycle')
     ax[2].axhline(0, color='0.6', lw=0.8)
-    ax[2].set(ylabel='Signal − DC − 1ω  (×10⁻³)', title='Higher-harmonic content (n ≥ 2)')
+    ax[2].set(ylabel='Signal − DC − 1ω\n(×10⁻³)', title='Higher-harmonic content (n ≥ 2)')
     for a in ax[:3]:
         a.grid(alpha=0.3)
     # fourth panel: the legend (same colours in all panels)
     h, l = ax[0].get_legend_handles_labels()
     ax[3].axis('off')
-    ax[3].legend(h, l, loc='center', fontsize=17, frameon=False, markerscale=1.8)
+    ax[3].legend(h, l, loc='center', fontsize=30, frameon=False, markerscale=1.4, handletextpad=0.2)
     fig.suptitle(f'2D, {SETS[set_name][2]} (tapping {TAP_AMPLITUDE} nm from {MIN_GAP} nm)')
-    fig.tight_layout()
+    fig.tight_layout(h_pad=2.5)
     out = os.path.join(FIGS, 'approach_and_tapping' + ('_norm' if norm else '') + '.png')
     fig.savefig(out, dpi=130)
     rc.__exit__(None, None, None)
