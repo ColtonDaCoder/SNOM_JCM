@@ -947,7 +947,7 @@ def plot_heights():
     hs = sorted(set([1, 2, 3, 4, 6, 8, 10, 14, 20, 30, 45, 60, 80, 101] + [5]))
     with plt.rc_context({'font.size': 22, 'axes.labelsize': 24, 'ytick.labelsize': 20}):
         fig, ax = plt.subplots(figsize=(2.6, 8))
-        ax.plot(np.zeros(len(hs)), hs, 'o', ms=11, color='C0')
+        ax.hlines(hs, -0.6, 0.6, color='C0', lw=2.5)
         ax.set_ylabel('Tip height (nm)')
         ax.set_ylim(-3, 105)
         ax.set_xlim(-1, 1)
