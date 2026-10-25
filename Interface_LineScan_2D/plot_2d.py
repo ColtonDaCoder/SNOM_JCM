@@ -133,7 +133,7 @@ def plot_complex(stage, gap=5):
     print('wrote', out)
 
 
-if __name__ == '__main__' and (len(sys.argv) < 2 or sys.argv[1] not in ('ep_sub', 'ep_step', 'ep_lines', 'approach', 'demod', 's2s3', 'nearfield', 'compare', 's2s3_prov', 's2s3_both', 's2s3_wl', 's2s3_wl3')):
+if __name__ == '__main__' and (len(sys.argv) < 2 or sys.argv[1] not in ('ep_sub', 'ep_step', 'ep_lines', 'approach', 'demod', 's2s3', 'nearfield', 'compare', 's2s3_prov', 's2s3_both', 's2s3_wl', 's2s3_wl3', 'explain')):
     what = sys.argv[1] if len(sys.argv) > 1 else 'scan_h5'
     plot_scan(what)
     plot_combined(what)
@@ -630,3 +630,106 @@ if __name__ == '__main__' and len(sys.argv) > 1 and sys.argv[1] == 's2s3_wl':
 if __name__ == '__main__' and len(sys.argv) > 1 and sys.argv[1] == 's2s3_wl3':
     plot_s2s3_sin5_sin20(sets=(('sin5', 'C0'), ('wl5p5', 'C2'), ('wl2p95', 'C4')),
                          title='6.1 / 5.5 / 2.95 um (5 nm SiN)', fname='S2_over_S3_wavelengths.png')
+
+
+def plot_demod_explained(x, set_name='sin5'):
+    """
+    Illustration of how S2 is obtained at one tip position x.
+    Plotted quantity: Re[E * exp(-i arg S2)], the part of the complex backscattered field E that is in phase
+    with S2 (then the whole S2 is the real amplitude of the 2w wiggle); the cycle average is subtracted.
+    Left : approach curve (15 solved heights, colour = height, spline) with the straight chord between h = 1 and
+           101 nm, and below it the deviation from that chord (the curvature that S2 senses).
+    Right: the same curve read out over one tapping cycle h(t) = 1 + 50 (1 + cos wt) nm:
+           tip height, signal and its 1w part, signal minus 1w part and its 2w part (= S2).
+    """
+    from scipy.interpolate import CubicSpline
+    from matplotlib.gridspec import GridSpec
+    pts = approach_points(stages=SETS[set_name][0])
+    gs = np.array(sorted(g for xx, g in pts if xx == x))
+    if len(gs) < N_HEIGHTS:
+        raise SystemExit(f'x = {x}: only {len(gs)} heights')
+    E = np.array([pts[(x, g)][0] for g in gs])
+    n_t = 2000
+    t = np.linspace(0, 1, n_t, endpoint=False)
+    z = MIN_GAP + TAP_AMPLITUDE/2*(1 + np.cos(2*np.pi*t))
+    spl = lambda h: CubicSpline(gs, E.real)(h) + 1j*CubicSpline(gs, E.imag)(h)
+    Ez = spl(z)
+    S = {n: np.mean(Ez*np.exp(-2j*np.pi*n*t)) for n in range(0, 5)}
+    rot = np.exp(-1j*np.angle(S[2]))
+    sc = 1e3                                           # plot units: 1e-3 of the incident-normalised field
+    S0 = (S[0]*rot).real
+    proj = lambda e: (e*rot).real - S0                 # in-phase part, cycle average removed
+    sig = sc*proj(Ez)
+    c1 = sc*(2*S[1]*rot).real*np.cos(2*np.pi*t)        # 1w part of the signal
+    c2 = sc*2*abs(S[2])*np.cos(4*np.pi*t)              # 2w part: amplitude 2 |S2|
+    hh = np.linspace(MIN_GAP, MIN_GAP + TAP_AMPLITUDE, 300)
+    curve = sc*proj(spl(hh))
+    pointsE = sc*proj(E)
+    chord = lambda h: np.interp(h, [hh[0], hh[-1]], [curve[0], curve[-1]])
+
+    fig = plt.figure(figsize=(15, 9))
+    G = GridSpec(3, 2, height_ratios=[0.8, 2.2, 2.2], hspace=0.45, wspace=0.22)
+    cmap, norm = plt.get_cmap('viridis'), plt.Normalize(MIN_GAP, MIN_GAP + TAP_AMPLITUDE)
+
+    axL1 = fig.add_subplot(G[0:2, 0])
+    axL1.axvspan(MIN_GAP, MIN_GAP + TAP_AMPLITUDE, color='0.95', zorder=0)
+    axL1.plot(hh, curve, '-', color='0.35', lw=1.5, label='spline through the solved heights', zorder=2)
+    axL1.plot([hh[0], hh[-1]], [curve[0], curve[-1]], '--', color='C3', lw=1.2, label='straight line (h = 1 to 101 nm)', zorder=1)
+    axL1.fill_between(hh, chord(hh), curve, color='C1', alpha=0.25, label='curvature: what S2 senses')
+    axL1.scatter(gs, pointsE, c=gs, cmap=cmap, norm=norm, s=55, edgecolor='k', linewidth=0.6, zorder=3)
+    axL1.plot([], [], 'o', color='0.6', mec='k', ms=7, label=f'{len(gs)} solves (one per height)')
+    axL1.set(xlabel='tip height h above the SiN (nm)', ylabel='in-phase part of E  (x 1e-3, arb.)',
+             title='Approach curve: backscattered field vs tip height')
+    axL1.legend(fontsize=8, loc='upper right')
+    axL1.grid(alpha=0.3)
+
+    axL2 = fig.add_subplot(G[2, 0], sharex=axL1)
+    axL2.axhline(0, color='C3', lw=1.2, ls='--')
+    axL2.plot(hh, curve - chord(hh), '-', color='0.35', lw=1.5)
+    axL2.fill_between(hh, 0, curve - chord(hh), color='C1', alpha=0.25)
+    axL2.scatter(gs, pointsE - chord(gs), c=gs, cmap=cmap, norm=norm, s=40, edgecolor='k', linewidth=0.6, zorder=3)
+    axL2.set(xlabel='tip height h (nm)', ylabel='curve minus straight line  (x 1e-3)',
+             title='Curvature: approach curve minus the straight line')
+    axL2.grid(alpha=0.3)
+
+    axH = fig.add_subplot(G[0, 1])
+    axH.scatter(t, z, c=z, cmap=cmap, norm=norm, s=4)
+    axH.set(ylabel='tip height (nm)', title=f'One tapping cycle:  h(t) = {MIN_GAP} + {TAP_AMPLITUDE//2} (1 + cos wt) nm')
+    axH.set_xticks([0, 0.5, 1]); axH.set_xticklabels(['top', 'bottom', 'top'])
+    axH.set_xlim(0, 1)
+    axH.grid(alpha=0.3)
+
+    axS = fig.add_subplot(G[1, 1], sharex=axH)
+    axS.scatter(t, sig, c=z, cmap=cmap, norm=norm, s=4)
+    axS.plot([], [], 'o', color='0.4', ms=3, label='signal  E(t) = E(h(t))')
+    axS.plot(t, c1, '-', color='C3', lw=1.6, label='its 1w part (dominant: the approach curve is mostly a slope)')
+    axS.set(ylabel='signal  (x 1e-3)', title='The approach curve read out in time')
+    axS.legend(fontsize=8, loc='best')
+    axS.grid(alpha=0.3)
+
+    axR = fig.add_subplot(G[2, 1], sharex=axH)
+    axR.scatter(t, sig - c1, c=z, cmap=cmap, norm=norm, s=4)
+    axR.plot([], [], 'o', color='0.4', ms=3, label='signal minus 1w part')
+    axR.plot(t, c2, '-', color='C1', lw=2, label=f'2w part: amplitude 2 |S2| = {2*sc*abs(S[2]):.2f}e-3')
+    axR.axhline(0, color='0.6', lw=0.8)
+    axR.set(xlabel='time within one tapping cycle', ylabel='remainder  (x 1e-3)',
+            title='Remove the 1w part: the 2w wiggle left over is S2')
+    axR.set_xticks([0, 0.25, 0.5, 0.75, 1]); axR.set_xticklabels(['top', '', 'bottom', '', 'top'])
+    axR.legend(fontsize=8, loc='best')
+    axR.grid(alpha=0.3)
+
+    cb = fig.colorbar(plt.cm.ScalarMappable(norm=norm, cmap=cmap), ax=[axL1, axL2, axH, axS, axR],
+                      location='right', shrink=0.6, pad=0.02)
+    cb.set_label('tip height (nm)')
+    where = 'oil' if x < 0 else 'water' if x > 0 else 'at the interface'
+    fig.suptitle(f'How demodulation works: tip over {where} (x = {x:+.0f} nm), {SETS[set_name][2]}\n'
+                 f'S2 = average over one tapping cycle of E(t) exp(-2i wt)   ->   |S2| = {abs(S[2]):.3e},  '
+                 f'arg S2 = {np.angle(S[2]):+.2f} rad', fontsize=12)
+    out = os.path.join(FIGS, f'demod_explained_x{x:+.0f}.png')
+    fig.savefig(out, dpi=130, bbox_inches='tight')
+    print('wrote', out, f'|S1|={abs(S[1]):.3e} |S2|={abs(S[2]):.3e} |S3|={abs(S[3]):.3e}')
+
+
+if __name__ == '__main__' and len(sys.argv) > 1 and sys.argv[1] == 'explain':
+    for _x in ([float(sys.argv[2])] if len(sys.argv) > 2 else (-1000.0, 0.0, 1000.0)):
+        plot_demod_explained(_x, SET)
