@@ -750,7 +750,10 @@ def plot_approach_and_tapping(xs=((-1000.0, 'oil', '#7f2704'), (-500.0, 'oil', '
     z = MIN_GAP + TAP_AMPLITUDE/2*(1 + np.cos(2*np.pi*t))
     tc = np.linspace(0, 1, 4000, endpoint=False)       # one full cycle for the Fourier coefficients
     zc = MIN_GAP + TAP_AMPLITUDE/2*(1 + np.cos(2*np.pi*tc))
-    fig, axs = plt.subplots(2, 2, figsize=(14, 10))
+    rc = plt.rc_context({'font.size': 16, 'axes.titlesize': 19, 'axes.labelsize': 17,
+                         'xtick.labelsize': 15, 'ytick.labelsize': 15, 'legend.fontsize': 16, 'figure.titlesize': 19})
+    rc.__enter__()
+    fig, axs = plt.subplots(2, 2, figsize=(15, 11))
     ax = [axs[0, 0], axs[0, 1], axs[1, 0], axs[1, 1]]
     Sn = []
     for x, name, c in xs:
@@ -761,45 +764,34 @@ def plot_approach_and_tapping(xs=((-1000.0, 'oil', '#7f2704'), (-500.0, 'oil', '
         spl = lambda h: k_n*np.abs(CubicSpline(gs, E.real)(h) + 1j*CubicSpline(gs, E.imag)(h))
         hh = np.linspace(gs.min(), gs.max(), 300)
         lab = f'tip over {name} (x = {x:+.0f} nm)'
-        ax[0].plot(hh, spl(hh), '-', color=c, lw=1.8)
-        ax[0].plot(gs, k_n*np.abs(E), 'o', color=c, ms=5, label=lab)
-        ax[1].plot(t, spl(z), '-', color=c, lw=2, label=lab)
+        ax[0].plot(hh, spl(hh), '-', color=c, lw=2.2)
+        ax[0].plot(gs, k_n*np.abs(E), 'o', color=c, ms=6, label=lab)
+        ax[1].plot(t, spl(z), '-', color=c, lw=2.5, label=lab)
         sc = spl(zc)
         a0, a1 = np.mean(sc), 2*np.mean(sc*np.cos(2*np.pi*tc))
-        ax[2].plot(t, (spl(z) - a0 - a1*np.cos(2*np.pi*t))*1e3, '-', color=c, lw=2, label=lab)
+        ax[2].plot(t, (spl(z) - a0 - a1*np.cos(2*np.pi*t))*1e3, '-', color=c, lw=2.5, label=lab)
     ticks = [0, 0.25, 0.5, 0.75, 1]
     for a in (ax[1], ax[2]):
         a.set_xticks(ticks)
         a.set_xticklabels([f'{z0:.0f}' for z0 in MIN_GAP + TAP_AMPLITUDE/2*(1 + np.cos(2*np.pi*np.array(ticks)))])
         a.set_xlim(0, 1)
-        a.set_xlabel('tip height during one tapping cycle (nm)')
-    yl = '|Ep| / |Ep| at 101 nm' if norm else 'backscattered |Ep| (arb.)'
-    ax[0].set(xlabel='tip height (nm)', ylabel=yl, title='Approach curve')
-    ax[1].set(ylabel=yl, title='Signal during one tapping cycle')
+        a.set_xlabel('Tip height during tap (nm)')
+    yl = '|Ep| / |Ep(101 nm)|' if norm else '|Ep| (arb.)'
+    ax[0].set(xlabel='Tip height (nm)', ylabel=yl, title='Approach curve')
+    ax[1].set(ylabel=yl, title='Tapping cycle')
     ax[2].axhline(0, color='0.6', lw=0.8)
-    ax[2].set(ylabel=('normalized |Ep|' if norm else '|Ep|') + ' minus average and 1w part (x 1e-3)',
-              title='Signal during one tapping cycle, 1w wiggle removed')
-    # |S2| and |S3| per position, relative to the oil end (absolute values on the bars)
-    w = 0.8/len(xs)
-    for k, n in enumerate((2, 3)):
-        ref = abs(Sn[0][n])
-        for j, ((x, name, c), S) in enumerate(zip(xs, Sn)):
-            pos = k + (j - (len(xs) - 1)/2)*w
-            ax[3].bar(pos, abs(S[n])/ref, width=w*0.9, color=c, label=f'x = {x:+.0f} nm' if k == 0 else None)
-            ax[3].text(pos, abs(S[n])/ref + 0.01, f'{abs(S[n]):.2e}', ha='center', va='bottom', fontsize=7, rotation=90)
-    ax[3].set_xticks([0, 1])
-    ax[3].set_xticklabels(['S2', 'S3'])
-    ax[3].set_ylim(0.6, 1.25)
-    ax[3].set(ylabel='|Sn| / |Sn| at x = -1000 nm (oil)', title='Demodulated signal: S2 and S3')
-    for a in ax:
+    ax[2].set(ylabel='Signal − DC − 1ω  (×10⁻³)', title='Higher-harmonic content (n ≥ 2)')
+    for a in ax[:3]:
         a.grid(alpha=0.3)
-    ax[3].legend(fontsize=8, loc='upper right', ncol=2)
+    # fourth panel: the legend (same colours in all panels)
+    h, l = ax[0].get_legend_handles_labels()
+    ax[3].axis('off')
+    ax[3].legend(h, l, loc='center', fontsize=17, frameon=False, markerscale=1.8)
     fig.suptitle(f'2D, {SETS[set_name][2]} (tapping {TAP_AMPLITUDE} nm from {MIN_GAP} nm)')
-    h, l = ax[0].get_legend_handles_labels()           # same colours in all panels: one legend under the title
-    fig.legend(h, l, loc='upper center', ncol=4, fontsize=9, bbox_to_anchor=(0.5, 0.965), frameon=False)
-    fig.tight_layout(rect=(0, 0, 1, 0.92))
+    fig.tight_layout()
     out = os.path.join(FIGS, 'approach_and_tapping' + ('_norm' if norm else '') + '.png')
     fig.savefig(out, dpi=130)
+    rc.__exit__(None, None, None)
     print('wrote', out)
 
 
