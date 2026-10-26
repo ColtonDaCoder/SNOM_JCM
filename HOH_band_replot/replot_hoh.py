@@ -198,3 +198,37 @@ def highlight(files=('SNx_Water_Simple/results_example.pkl', 'SNx_Water_Simple/d
 
 if __name__ == '__main__':
     highlight()
+
+
+def normal_with_k(f='SNx_Water_Simple/results_example.pkl'):
+    """Plain water run (no adsorbed layer): |S2|, |S3| and their phases vs wavenumber, water k on the right axis."""
+    d_w = np.array([l.split(',') for l in open(WATER) if l[0].isdigit()], float)
+    m = (d_w[:, 0] > 5.4) & (d_w[:, 0] < 6.6)
+    res, _, _ = demod(pk.load(open(os.path.join(ROOT, f), 'rb')))
+    wl = np.array(sorted(res))
+    with plt.rc_context({'font.size': 17, 'axes.labelsize': 18, 'legend.fontsize': 15,
+                         'xtick.labelsize': 15, 'ytick.labelsize': 15}):
+        fig, axs = plt.subplots(1, 2, figsize=(16, 6))
+        for col, (ax, kind) in enumerate(zip(axs, ('signal', 'phase'))):
+            tk = ax.twinx()
+            tk.fill_between(1e4/d_w[m, 0], 0, d_w[m, 2], color='0.6', alpha=0.25, lw=0)
+            tk.plot(1e4/d_w[m, 0], d_w[m, 2], '-', color='0.4', lw=1.5, label='water k')
+            tk.set_ylim(0, d_w[m, 2].max()*1.15)
+            tk.set_ylabel('k (water)', color='0.35')
+            for n, c in ((2, 'C0'), (3, 'C3')):
+                S = np.array([res[x][n - 2] for x in wl])
+                y = np.abs(S)/np.abs(S[0]) if kind == 'signal' else np.unwrap(np.angle(S)) - np.angle(S[0])
+                ax.plot(1e4/wl, y, 'o-', ms=5, lw=2.5, color=c, label=f'S{n}', zorder=3)
+            ax.set_zorder(tk.get_zorder() + 1)
+            ax.patch.set_visible(False)
+            ax.set_xlim(1840, 1530)
+            ax.set_xlabel('Wavenumber (cm⁻¹)')
+            ax.set_ylabel('Signal |Sn| (normalized to 1818 cm⁻¹)' if kind == 'signal' else 'Phase (rad, relative to 1818 cm⁻¹)')
+            ax.grid(alpha=0.3)
+            h1, l1 = ax.get_legend_handles_labels()
+            h2, l2 = tk.get_legend_handles_labels()
+            ax.legend(h1 + h2, l1 + l2, loc='lower left' if kind == 'signal' else 'upper left')
+        fig.tight_layout()
+        out = os.path.join(FIGS, 'hoh_sweep_water_with_k.png')
+        fig.savefig(out, dpi=130)
+    print('wrote', out)
