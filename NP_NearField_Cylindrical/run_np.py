@@ -4,9 +4,9 @@ Near field around a nanoparticle under the s-SNOM tip (cylindrical / axisymmetri
 Geometry (nm), x = r >= 0, y along the tip axis, y = 0 is the SiN top surface:
     air above, Pt tip (75 nm apex radius, 30.14 deg half angle) -- SHORT tip (TIP_LEN, default 2 um
     instead of 12.94 um) so the domain and the mesh are much smaller
-    Au sphere of radius R on top of the SiN (1 nm air gap), centred on the axis
-    tip apex GAP_ABOVE = 5 nm above the top of the particle (or above the SiN for R = 0, no particle)
+    tip apex GAP_ABOVE = 5 nm above the SiN top (same for every case)
     5 nm SiN window, water below
+    Au sphere of radius R in the water UNDER the window (1 nm water gap below the SiN), centred on the axis
 Illumination as in the line scans: Gaussian beam, 6.1 um, 60 deg, NA 0.4, waist lambda/(pi NA), p polarized,
 focus on the SiN surface.  Accuracy: FE degree 4, HAdaptive 3 steps, Precision 1e-5 (same as the 2D runs).
 
@@ -42,8 +42,8 @@ WVL = 6.1e-6
 THETA, NA = 60.0, 0.4
 T_SIN, R_TIP, HALF_ANGLE = 5.0, 75.0, 30.14
 TIP_LEN = 2000.0              # short tip (the line scans used 12940 nm)
-GAP_ABOVE = 5.0               # tip apex above the particle top (or above the SiN when there is no particle)
-NP_SPACING = 1.0              # air gap between SiN top and particle
+GAP_ABOVE = 5.0               # tip apex above the SiN top
+NP_SPACING = 1.0              # water gap between the SiN bottom and the particle
 LIQ_DEPTH, AIR_ABOVE, R_MAX = 1500.0, 300.0, 3000.0
 MAX_SIDE = 300.0
 EPS_AU = (-1682.1, 175.2)     # Au, value used in the old Silicon Nitride NP runs (~6 um)
@@ -63,7 +63,7 @@ def pts(p):
 
 
 def geometry(R):
-    gap = (NP_SPACING + 2*R if R > 0 else 0.0) + GAP_ABOVE      # apex height above the SiN top
+    gap = GAP_ABOVE                                             # apex height above the SiN top
     a = np.deg2rad(HALF_ANGLE)
     tip = [(0.0, gap)]
     for p in np.linspace(-np.pi/2, -a, 40)[1:]:
@@ -71,7 +71,8 @@ def geometry(R):
     y_top = gap + TIP_LEN
     r_t, y_t = tip[-1]
     tip += [(r_t + (y_top - y_t)*np.tan(a), y_top), (0.0, y_top)]
-    part = [(R*np.cos(t), NP_SPACING + R + R*np.sin(t)) for t in np.linspace(-np.pi/2, np.pi/2, 61)] if R > 0 else None
+    yc = -T_SIN - NP_SPACING - R                                # particle centre, in the water under the window
+    part = [(R*np.cos(t), yc + R*np.sin(t)) for t in np.linspace(-np.pi/2, np.pi/2, 61)] if R > 0 else None
     return gap, tip, part
 
 
@@ -181,7 +182,8 @@ PostProcess {
 """)
     y1 = gap + 150.0
     gx = ' '.join('%.6e' % (v*1e-9) for v in np.arange(-250.0, 250.0 + 1e-6, MAP_STEP))
-    gy = ' '.join('%.6e' % (v*1e-9) for v in np.arange(-60.0, y1 + 1e-6, MAP_STEP))
+    y0 = -T_SIN - NP_SPACING - 2*R - 40.0 if R > 0 else -60.0     # down past the particle bottom
+    gy = ' '.join('%.6e' % (v*1e-9) for v in np.arange(y0, y1 + 1e-6, MAP_STEP))
     open(os.path.join(wd, 'export.jcmp'), 'w').write(f"""PostProcess {{
   ExportFields {{
     FieldBagPath = "project_results/fieldbag.jcm"
