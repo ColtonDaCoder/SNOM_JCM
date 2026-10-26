@@ -1,0 +1,11 @@
+jcm_console.log  9138
+sources.jcm  1277
+layout.jcm  1056
+project.jcmp  3721
+grid.jcm  2617072
+materials.jcm  544
+project_results/computational_costs.jcm  3770
+project_results/ft.jcm  190856
+project_results/map.jcm  638417
+project_results/fieldbag.jcm  73257710
+project_results/line_axis.jcm  3943

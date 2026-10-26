@@ -1,0 +1,5 @@
+job 655939 on smic060, 8 cores, stages: nearfield_map --part 1/2
+JCMROOT=/home/coltonb/software/JCMsuite_6_0_10
+=== stage nearfield_map.part1of2 on smic060 (2026-10-25 14:06:37): 2 solves to run, 0 already done, fine mesh, 6.1 um
+[nearfield_map.part1of2 1/2] x=+0 nm gap=1 nm  |Ep|(p_in)=7.42125e-02 arg=+2.2861  |gap int Ey|(p_in)=8.2716e+00 arg=-2.1751  314 dirs  unknowns=[1235051, 1503621, 1809279, 2141715]  3565 s  est.err FarField=[(1, 0.000931719181), (2, 7.0494054e-05), (3, 2.52436364e-05)]
+[nearfield_map.part1of2 2/2] x=+0 nm gap=30 nm  |Ep|(p_in)=7.17294e-02 arg=+2.2093  |gap int Ey|(p_in)=1.3787e+02 arg=-2.2605  314 dirs  unknowns=[1235727, 1501411, 1806053, 2129441]  3004 s  est.err FarField=[(1, 0.000911408445), (2, 6.98444095e-05), (3, 2.82404696e-05)]
