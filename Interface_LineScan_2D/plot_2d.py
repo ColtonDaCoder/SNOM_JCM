@@ -133,7 +133,7 @@ def plot_complex(stage, gap=5):
     print('wrote', out)
 
 
-if __name__ == '__main__' and (len(sys.argv) < 2 or sys.argv[1] not in ('ep_sub', 'ep_step', 'ep_lines', 'approach', 'demod', 's2s3', 'nearfield', 'compare', 's2s3_prov', 's2s3_both', 's2s3_wl', 's2s3_wl3', 'explain', 'tapview', 'tapview_inphase', 's2s3_wl_amp', 'nk', 'heights', 'farfield')):
+if __name__ == '__main__' and (len(sys.argv) < 2 or sys.argv[1] not in ('ep_sub', 'ep_step', 'ep_lines', 'approach', 'demod', 's2s3', 'nearfield', 'compare', 's2s3_prov', 's2s3_both', 's2s3_wl', 's2s3_wl3', 'explain', 'tapview', 'tapview_inphase', 's2s3_wl_amp', 'nk', 'heights', 'farfield', 'nfmaps')):
     what = sys.argv[1] if len(sys.argv) > 1 else 'scan_h5'
     plot_scan(what)
     plot_combined(what)
@@ -1006,3 +1006,72 @@ def plot_farfield(xs=((-1000.0, 'oil', '#7f2704'), (1000.0, 'water', '#08306b'))
 
 if __name__ == '__main__' and len(sys.argv) > 1 and sys.argv[1] == 'farfield':
     plot_farfield()
+
+
+def read_grid_2d(path):
+    """Points (nm) and triangles (point indices, domain id) from a binary JCM 2D grid.jcm (JCMgeo output)."""
+    import re
+    b = open(path, 'rb').read()
+    h = b[:b.index(b'*/')].decode('latin1')
+    H = {k: float(v) for k, v in re.findall(r'<[IF]>(\w+)=([-\d.e+]+)', h)}
+    s = b.index(b'*/') + 4                              # '*/', newline, section marker '0'
+    n_p, n_t = int(H['NPoints']), int(H['NTriangles'])
+    rec = np.frombuffer(b[s:s + 52*n_p], dtype=np.dtype([('id', '<i4'), ('x', '<i8'), ('xh', '<i8'), ('y', '<i8'),
+                                                          ('yh', '<i8'), ('z', '<i8'), ('zh', '<i8')]))
+    x = (H['ExactOffsetX'] + H['ExactDeltaX']*rec['x']/H['NExactIntervals'])*1e9
+    y = (H['ExactOffsetY'] + H['ExactDeltaY']*rec['y']/H['NExactIntervals'])*1e9
+    t = np.frombuffer(b[s + 52*n_p:s + 52*n_p + 16*n_t], dtype='<i4').reshape(-1, 4)
+    return x, y, t[:, :3] - 1, t[:, 3]
+
+
+def plot_nearfield_maps(gaps=(1, 5, 30, 101), mesh=True):
+    """|E| (p-polarized) around the apex from results/fields/nearfield_map_x+0_g<gap>.npz, starting mesh overlaid."""
+    import glob
+    from matplotlib.colors import LogNorm
+    from matplotlib.tri import Triangulation
+    maps = {}
+    for g in gaps:
+        f = np.load(os.path.join(RESULTS, 'fields', f'nearfield_map_x+0_g{g}.npz'))
+        maps[g] = (f['X'], f['Y'], np.linalg.norm(f['E'][1], axis=-1))
+    vmax = max(np.nanmax(A) for X, Y, A in maps.values())
+    norm = LogNorm(vmin=vmax/200, vmax=vmax)
+    with plt.rc_context({'font.size': 16, 'axes.titlesize': 19, 'axes.labelsize': 17,
+                         'xtick.labelsize': 14, 'ytick.labelsize': 14}):
+        fig, axs = plt.subplots(2, 2, figsize=(15, 11.5))
+        axs = axs.ravel()
+        for ax, g in zip(axs, gaps):
+            X, Y, A = maps[g]
+            im = ax.pcolormesh(X, Y, np.clip(A, vmax/200, None), norm=norm, cmap='inferno', shading='auto')
+            if mesh:
+                gf = glob.glob(os.path.join(RESULTS, 'fields', f'nearfield_map_x+0_g{g}_*grid.jcm'))
+                if gf:
+                    px, py, tri, dom = read_grid_2d(gf[0])
+                    keep = np.all((px[tri] > X.min() - 50) & (px[tri] < X.max() + 50) &
+                                  (py[tri] > Y.min() - 50) & (py[tri] < Y.max() + 50), axis=1)
+                    ax.triplot(Triangulation(px, py, tri[keep]), color='w', lw=0.35, alpha=0.45)
+            ax.axhline(0, color='c', lw=0.8, ls='--')
+            ax.axhline(-GEOM_T_SIN, color='c', lw=0.8, ls='--')
+            ax.plot([0, 0], [Y.min(), -GEOM_T_SIN], color='c', lw=1.5)          # water | oil interface
+            ax.text(X.min() + 12, Y.min() + 10, 'water', color='w', fontsize=15)
+            ax.text(X.max() - 12, Y.min() + 10, 'oil', color='w', fontsize=15, ha='right')
+            ax.set_xlim(X.min(), X.max())
+            ax.set_ylim(Y.min(), Y.max())
+            ax.set_aspect('equal')
+            ax.set_title(f'Tip height {g} nm')
+            ax.set_xlabel('x (nm)')
+            ax.set_ylabel('y (nm)')
+        cb = fig.colorbar(im, ax=list(axs), shrink=0.8, pad=0.015)
+        cb.set_label('|E|  (incident = 1)')
+        fig.suptitle('2D near field |E|, p-polarized, 6.1 µm, 5 nm SiN, tip over the water | oil interface'
+                     + (' (starting mesh in white)' if mesh else ''))
+        out = os.path.join(FIGS, 'nearfield_maps' + ('_mesh' if mesh else '') + '.png')
+        fig.savefig(out, dpi=150, bbox_inches='tight')
+    print('wrote', out, 'max |E|', vmax)
+
+
+GEOM_T_SIN = 5.0
+
+
+if __name__ == '__main__' and len(sys.argv) > 1 and sys.argv[1] == 'nfmaps':
+    plot_nearfield_maps(mesh=True)
+    plot_nearfield_maps(mesh=False)
