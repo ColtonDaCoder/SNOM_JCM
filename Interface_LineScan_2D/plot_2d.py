@@ -1063,9 +1063,6 @@ def plot_nearfield_maps(gaps=(1, 5, 30, 101), mesh=True, out_name=None):
                          shading='flat', zorder=3)
             if mesh:
                 ax.triplot(Triangulation(px, py, tri[keep]), color='w', lw=0.35, alpha=0.45, zorder=4)
-            ax.axhline(0, color='c', lw=0.8, ls='--')
-            ax.axhline(-GEOM_T_SIN, color='c', lw=0.8, ls='--')
-            ax.plot([0, 0], [Y.min(), -GEOM_T_SIN], color='c', lw=1.5)          # water | oil interface
             ax.text(X.min() + 12, Y.min() + 10, 'water', color='w', fontsize=15)
             ax.text(X.max() - 12, Y.min() + 10, 'oil', color='w', fontsize=15, ha='right')
             ax.set_xlim(X.min(), X.max())
