@@ -51,15 +51,18 @@ def main(mesh=True):
             tt, dd = np.r_[t, t + len(x)], np.r_[d, d]
             keep = (yy[tt].min(1) < Y.max()) & (yy[tt].max(1) > Y.min()) & (np.abs(xx[tt]).min(1) < X.max())
             tip = Triangulation(xx, yy, tt[keep & (dd == 3)])          # for drawing (both halves)
-            tip_half = Triangulation(x, y, t[d == 3])                  # geometry is axisymmetric: test |x|
-            inside = (tip_half.get_trifinder()(np.abs(X), Y) >= 0) | (A < lo)
+            metal_half = Triangulation(x, y, t[(d == 3) | (d == 5)])    # geometry is axisymmetric: test |x|
+            inside = (metal_half.get_trifinder()(np.abs(X), Y) >= 0) | (A < lo)
             from scipy.ndimage import distance_transform_edt
             idx = distance_transform_edt(inside, return_distances=False, return_indices=True)
             im = ax.pcolormesh(X, Y, np.clip(A, lo, None)[tuple(idx)], norm=norm, cmap='inferno', shading='auto')
             ax.tripcolor(tip, np.zeros(len(tip.triangles)), cmap=ListedColormap(['#140b34']), shading='flat', zorder=3)
             if R > 0:
+                part = Triangulation(xx, yy, tt[keep & (dd == 5)])
+                ax.tripcolor(part, np.zeros(len(part.triangles)), cmap=ListedColormap(['#5c4a00']), shading='flat',
+                             zorder=3)
                 th = np.linspace(0, 2*np.pi, 200)
-                ax.plot(R*np.cos(th), 1 + R + R*np.sin(th), color='w', lw=1.0, ls='--', zorder=5)
+                ax.plot(R*np.cos(th), 1 + R + R*np.sin(th), color='#e6b800', lw=1.5, zorder=5)
             if mesh:
                 ax.triplot(Triangulation(xx, yy, tt[keep]), color='w', lw=0.3, alpha=0.4, zorder=4)
             ax.set_xlim(X.min(), X.max())
