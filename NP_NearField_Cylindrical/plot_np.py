@@ -82,3 +82,28 @@ def main(mesh=True):
 if __name__ == '__main__':
     main(mesh=True)
     main(mesh=False)
+
+
+def plain():
+    """Only the exported |E| map (no mesh, no tip / particle drawing): metal interiors show as the darkest colour."""
+    cases = [c for c in ORDER if os.path.exists(os.path.join(RES, f'{c}.npz'))]
+    data = {c: np.load(os.path.join(RES, f'{c}.npz')) for c in cases}
+    vmax = max(np.linalg.norm(z['E'], axis=-1).max() for z in data.values())
+    norm = LogNorm(vmin=0.3, vmax=vmax)
+    with plt.rc_context({'font.size': 15, 'axes.titlesize': 17, 'axes.labelsize': 16}):
+        fig, axs = plt.subplots(1, len(cases), figsize=(5*len(cases) + 1.5, 6), squeeze=False)
+        axs = axs[0]
+        for ax, c in zip(axs, cases):
+            z = data[c]
+            A = np.clip(np.linalg.norm(z['E'], axis=-1), 0.3, None)
+            im = ax.pcolormesh(z['X'], z['Y'], A, norm=norm, cmap='inferno', shading='gouraud')
+            ax.set_aspect('equal')
+            R = float(z['radius'])
+            ax.set_title('no particle' if R == 0 else f'Au particle, r = {R:g} nm')
+            ax.set_xlabel('x (nm)')
+        axs[0].set_ylabel('y (nm)')
+        cb = fig.colorbar(im, ax=list(axs), shrink=0.9, pad=0.015, fraction=0.03)
+        cb.set_label('|E|  (incident = 1)')
+        out = os.path.join(FIGS, 'np_nearfield_plain.png')
+        fig.savefig(out, dpi=150, bbox_inches='tight')
+    print('wrote', out)
