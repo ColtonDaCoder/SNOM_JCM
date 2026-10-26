@@ -84,3 +84,30 @@ def plot_onlynp():
 
 if __name__ == '__main__':
     plot_onlynp()
+
+
+def plot_withlayer():
+    """Silicon Nitride NP/WithLayer: change of the backscattered field with particle radius, graphene vs SiN layer."""
+    sets = (('Graphene', 'graphene layer', '#333333'), ('SN', 'SiN layer', '#1f77b4'))
+    with plt.rc_context({'font.size': 18, 'axes.labelsize': 19, 'xtick.labelsize': 16, 'ytick.labelsize': 16,
+                         'legend.fontsize': 16}):
+        fig, ax = plt.subplots(1, 2, figsize=(15, 6))
+        for key, lab, c in sets:
+            d = pk.load(open(os.path.join(ROOT, 'Silicon Nitride NP', 'WithLayer', f'field_vs_NP_{key}.pkl'), 'rb'))
+            r = np.asarray(d['radius'], float)
+            E = np.array([complex(np.ravel(x)[0]) for x in d['field']])
+            o = np.argsort(r)
+            r, E = r[o], E[o]
+            ref = E[:5].mean()                                       # smallest particles (10-14 nm) as baseline
+            ax[0].plot(r, (np.abs(E)/abs(ref) - 1)*100, 'o-', ms=4, lw=2.5, color=c, label=lab)
+            ax[1].plot(r, (np.unwrap(np.angle(E)) - np.angle(ref))*1e3, 'o-', ms=4, lw=2.5, color=c, label=lab)
+        ax[0].set(xlabel='Nanoparticle radius (nm)', ylabel='Signal change (%)', title='Amplitude')
+        ax[1].set(xlabel='Nanoparticle radius (nm)', ylabel='Phase change (mrad)', title='Phase')
+        for a in ax:
+            a.axhline(0, color='0.6', lw=1)
+            a.grid(alpha=0.3)
+            a.legend()
+        fig.tight_layout()
+        out = os.path.join(HERE, 'figures', 'np_size_withLayer.png')
+        fig.savefig(out, dpi=150)
+    print('wrote', out)
