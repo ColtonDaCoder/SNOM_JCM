@@ -559,3 +559,98 @@ solving discrete problem done: 00:00:03.02 (cpu), 00:00:00.87 (total), 261.61MB 
        Compartment  "Y": 1.5e-06 (thickness level=0)
        Compartment "-Y": 3e-06 (thickness level=0)
 updating inner nodes ...
+updating inner nodes done: 00:00:04.93 (cpu), 00:00:00.70 (total)
+
+
+*** Fourier modes +/-4:
+assembling problem (196869 unknowns) ...  
+assembling problem done: 00:00:09.93 (cpu), 00:00:01.59 (total) (matrix entries/row = 44)
+solving discrete problem ... 
+solving discrete problem done: 00:00:03.02 (cpu), 00:00:00.87 (total), 263.54MB (mem)
+  *** A posteriori exterior domain quality check:
+       Compartment  "X": 6.5e-12 (thickness level=0)
+       Compartment  "Y": 1.2e-08 (thickness level=0)
+       Compartment "-Y": 2.5e-08 (thickness level=0)
+updating inner nodes ...
+updating inner nodes done: 00:00:04.95 (cpu), 00:00:00.71 (total)
+
+  *** Fourier mode quality check = 1.4e+02. Number of modes = 9 
+
+*** Fourier modes +/-5:
+assembling problem (196869 unknowns) ...  
+assembling problem done: 00:00:09.98 (cpu), 00:00:01.60 (total) (matrix entries/row = 44)
+solving discrete problem ... 
+solving discrete problem done: 00:00:03.03 (cpu), 00:00:00.87 (total), 263.78MB (mem)
+  *** A posteriori exterior domain quality check:
+       Compartment  "X": 3e-13 (thickness level=0)
+       Compartment  "Y": 7.7e-10 (thickness level=0)
+       Compartment "-Y": 2.1e-10 (thickness level=0)
+updating inner nodes ...
+updating inner nodes done: 00:00:04.94 (cpu), 00:00:00.70 (total)
+
+
+*** Fourier modes +/-6:
+assembling problem (196869 unknowns) ...  
+assembling problem done: 00:00:09.96 (cpu), 00:00:01.59 (total) (matrix entries/row = 44)
+solving discrete problem ... 
+solving discrete problem done: 00:00:03.02 (cpu), 00:00:00.87 (total), 251.09MB (mem)
+  *** A posteriori exterior domain quality check:
+       Compartment  "X": 1.3e-14 (thickness level=0)
+       Compartment  "Y": 1.6e-10 (thickness level=0)
+       Compartment "-Y": 6.2e-12 (thickness level=0)
+updating inner nodes ...
+updating inner nodes done: 00:00:04.94 (cpu), 00:00:00.70 (total)
+
+  *** Fourier mode quality check =  6.7. Number of modes = 13 
+
+*** Fourier modes +/-7:
+assembling problem (196869 unknowns) ...  
+assembling problem done: 00:00:09.96 (cpu), 00:00:01.59 (total) (matrix entries/row = 44)
+solving discrete problem ... 
+solving discrete problem done: 00:00:03.01 (cpu), 00:00:00.87 (total), 250.76MB (mem)
+  *** A posteriori exterior domain quality check:
+       Compartment  "X": 5.2e-16 (thickness level=0)
+       Compartment  "Y": 3.2e-11 (thickness level=0)
+       Compartment "-Y": 8.2e-12 (thickness level=0)
+updating inner nodes ...
+updating inner nodes done: 00:00:04.92 (cpu), 00:00:00.70 (total)
+
+
+*** Fourier modes +/-8:
+assembling problem (196869 unknowns) ...  
+assembling problem done: 00:00:09.99 (cpu), 00:00:01.60 (total) (matrix entries/row = 44)
+solving discrete problem ... 
+solving discrete problem done: 00:00:03.01 (cpu), 00:00:00.87 (total), 251.16MB (mem)
+  *** A posteriori exterior domain quality check:
+       Compartment  "X": 3.8e-17 (thickness level=0)
+       Compartment  "Y": 6.3e-12 (thickness level=0)
+       Compartment "-Y": 1.4e-11 (thickness level=0)
+updating inner nodes ...
+updating inner nodes done: 00:00:04.95 (cpu), 00:00:00.70 (total)
+
+  *** Fourier mode quality check = 0.11. Number of modes = 17 
+
+estimating field errors ...  
+estimating field errors: done 00:00:00.82 (cpu)
+
+   rel. error (FarField)  
+  level       est.error  ratio
+------------------------------
+    -/-             -/-    -/-
+      1  4.34371127e-04    -/-
+      2  2.04697858e-04   2.12
+      3  8.93912226e-05   2.29
+
+
+   rel. error (NearField)  
+  level       est.error  ratio
+------------------------------
+    -/-             -/-    -/-
+      1  1.22299033e-03    -/-
+      2  3.80654957e-03   0.32
+      3  1.20550054e-03   3.16
+
+
+*** Maximum number of refinement steps reached. *** 
+
+post process FourierTransform (output file: 'ft.jcm') ... done: 00:00:03.27 (cpu), 00:00:01.22 (total)
