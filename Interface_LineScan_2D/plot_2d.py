@@ -1046,14 +1046,17 @@ def plot_nearfield_maps(gaps=(1, 5, 30, 101), mesh=True):
             tx, ty = px[tri], py[tri]                                      # keep triangles overlapping the window
             keep = ((tx.min(1) < X.max()) & (tx.max(1) > X.min()) & (ty.min(1) < Y.max()) & (ty.max(1) > Y.min()))
             tip = Triangulation(px, py, tri[keep & (dom == 3)])          # Pt tip triangles from the mesh
-            inside = tip.get_trifinder()(X, Y) >= 0                       # map points inside the tip: not plotted
-            im = ax.pcolormesh(X, Y, np.ma.masked_where(inside, np.clip(A, vmax/200, None)), norm=norm,
-                               cmap='inferno', shading='auto')
-            ax.tripcolor(tip, np.zeros(len(tip.triangles)), cmap='Greys', vmin=-1, vmax=4, shading='flat')
+            # map points inside the tip get the value of the nearest point outside, so the map cells that straddle
+            # the tip surface carry the outside field; the tip itself is then drawn on top from the mesh
+            from scipy.ndimage import distance_transform_edt
+            inside = (tip.get_trifinder()(X, Y) >= 0) | (A < 0.3)       # 2nd: cells sampled inside the metal
+            idx = distance_transform_edt(inside, return_distances=False, return_indices=True)
+            Af = np.clip(A, vmax/200, None)[tuple(idx)]
+            im = ax.pcolormesh(X, Y, Af, norm=norm, cmap='inferno', shading='auto')
+            ax.tripcolor(tip, np.zeros(len(tip.triangles)), cmap=matplotlib.colors.ListedColormap(['#140b34']),
+                         shading='flat', zorder=3)
             if mesh:
-                ax.triplot(Triangulation(px, py, tri[keep]), color='w', lw=0.35, alpha=0.45)
-            else:
-                ax.triplot(tip, color='0.45', lw=0.0)
+                ax.triplot(Triangulation(px, py, tri[keep]), color='w', lw=0.35, alpha=0.45, zorder=4)
             ax.axhline(0, color='c', lw=0.8, ls='--')
             ax.axhline(-GEOM_T_SIN, color='c', lw=0.8, ls='--')
             ax.plot([0, 0], [Y.min(), -GEOM_T_SIN], color='c', lw=1.5)          # water | oil interface
