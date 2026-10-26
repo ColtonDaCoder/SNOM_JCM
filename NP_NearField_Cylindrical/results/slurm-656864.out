@@ -1,0 +1,3 @@
+job 656864 on smic047, 8 cores, cases: all
+JCMROOT=/home/coltonb/software/JCMsuite_6_0_10
+R0: solve 125 s, export 1 s, unknowns [123099, 140705, 156181, 179113]

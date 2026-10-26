@@ -1,0 +1,656 @@
+
+
+
+*** Solving /ddnA/work/coltonb/SNOM_JCM/NP_NearField_Cylindrical/work/R0/project.jcmp on refinement level 0 ... 
+  *** A priori interior domain wave propagation characteristics (vacuum wavelength = 6.100 um):
+  
+       Compartment "X":
+    computational domain size: 0.55 (wavelengths).
+    computational domain range wave propagation error: 1.3e-07
+    'one wavelength' wave propagation error: 1.6e-07 
+  
+       Compartment "Y":
+    computational domain size: 0.62 (wavelengths).
+    computational domain range wave propagation error: 1.9e-07
+    'one wavelength' wave propagation error: 2.4e-07 
+  
+       Compartment "-Y":
+    computational domain size: 0.83 (wavelengths).
+    computational domain range wave propagation error: 6.1e-07
+    'one wavelength' wave propagation error: 6.4e-07 
+
+Cell percentage per Finite Element degree
+  FEM degree  Cell percentage
+-----------------------------------------
+           4            100.0
+
+*** Fourier mode 0:
+assembling problem (123099 unknowns) ...  
+assembling problem done: 00:00:06.23 (cpu), 00:00:01.04 (total) (matrix entries/row = 46)
+solving discrete problem ... 
+solving discrete problem done: 00:00:01.85 (cpu), 00:00:00.43 (total), 249.31MB (mem)
+  *** A posteriori exterior domain quality check:
+       Compartment  "X": 1.7e-25 (thickness level=0)
+       Compartment  "Y": 0.00025 (thickness level=0)
+       Compartment "-Y": 0.009 (thickness level=0)
+updating inner nodes ...
+updating inner nodes done: 00:00:02.91 (cpu), 00:00:00.41 (total)
+
+
+*** Fourier modes +/-1:
+assembling problem (123099 unknowns) ...  
+assembling problem done: 00:00:06.61 (cpu), 00:00:01.05 (total) (matrix entries/row = 46)
+solving discrete problem ... 
+solving discrete problem done: 00:00:01.91 (cpu), 00:00:00.55 (total), 250.31MB (mem)
+  *** A posteriori exterior domain quality check:
+       Compartment  "X": 9.5e-09 (thickness level=0)
+       Compartment  "Y": 0.0016 (thickness level=0)
+       Compartment "-Y": 0.02 (thickness level=0)
+updating inner nodes ...
+updating inner nodes done: 00:00:02.95 (cpu), 00:00:00.43 (total)
+
+
+*** Fourier modes +/-2:
+assembling problem (123099 unknowns) ...  
+assembling problem done: 00:00:06.54 (cpu), 00:00:01.05 (total) (matrix entries/row = 46)
+solving discrete problem ... 
+solving discrete problem done: 00:00:01.91 (cpu), 00:00:00.54 (total), 173.88MB (mem)
+  *** A posteriori exterior domain quality check:
+       Compartment  "X": 2.6e-09 (thickness level=0)
+       Compartment  "Y": 4.9e-05 (thickness level=0)
+       Compartment "-Y": 0.00041 (thickness level=0)
+updating inner nodes ...
+updating inner nodes done: 00:00:02.95 (cpu), 00:00:00.43 (total)
+
+
+*** Fourier modes +/-3:
+assembling problem (123099 unknowns) ...  
+assembling problem done: 00:00:06.55 (cpu), 00:00:01.05 (total) (matrix entries/row = 46)
+solving discrete problem ... 
+solving discrete problem done: 00:00:01.89 (cpu), 00:00:00.53 (total), 166.02MB (mem)
+  *** A posteriori exterior domain quality check:
+       Compartment  "X": 1.3e-10 (thickness level=0)
+       Compartment  "Y": 3.4e-07 (thickness level=0)
+       Compartment "-Y": 3.1e-06 (thickness level=0)
+updating inner nodes ...
+updating inner nodes done: 00:00:02.95 (cpu), 00:00:00.43 (total)
+
+
+*** Fourier modes +/-4:
+assembling problem (123099 unknowns) ...  
+assembling problem done: 00:00:06.53 (cpu), 00:00:01.05 (total) (matrix entries/row = 46)
+solving discrete problem ... 
+solving discrete problem done: 00:00:01.89 (cpu), 00:00:00.53 (total), 163.62MB (mem)
+  *** A posteriori exterior domain quality check:
+       Compartment  "X": 6.3e-12 (thickness level=0)
+       Compartment  "Y": 3.3e-09 (thickness level=0)
+       Compartment "-Y": 2.6e-08 (thickness level=0)
+updating inner nodes ...
+updating inner nodes done: 00:00:02.97 (cpu), 00:00:00.44 (total)
+
+  *** Fourier mode quality check = 1.3e+02. Number of modes = 9 
+
+*** Fourier modes +/-5:
+assembling problem (123099 unknowns) ...  
+assembling problem done: 00:00:06.52 (cpu), 00:00:01.04 (total) (matrix entries/row = 46)
+solving discrete problem ... 
+solving discrete problem done: 00:00:01.91 (cpu), 00:00:00.54 (total), 163.47MB (mem)
+  *** A posteriori exterior domain quality check:
+       Compartment  "X": 2.9e-13 (thickness level=0)
+       Compartment  "Y": 6.3e-10 (thickness level=0)
+       Compartment "-Y": 2.2e-10 (thickness level=0)
+updating inner nodes ...
+updating inner nodes done: 00:00:02.96 (cpu), 00:00:00.44 (total)
+
+
+*** Fourier modes +/-6:
+assembling problem (123099 unknowns) ...  
+assembling problem done: 00:00:06.57 (cpu), 00:00:01.05 (total) (matrix entries/row = 46)
+solving discrete problem ... 
+solving discrete problem done: 00:00:01.89 (cpu), 00:00:00.53 (total), 157.12MB (mem)
+  *** A posteriori exterior domain quality check:
+       Compartment  "X": 1.2e-14 (thickness level=0)
+       Compartment  "Y": 1.4e-10 (thickness level=0)
+       Compartment "-Y": 6.3e-12 (thickness level=0)
+updating inner nodes ...
+updating inner nodes done: 00:00:02.97 (cpu), 00:00:00.44 (total)
+
+  *** Fourier mode quality check =  6.4. Number of modes = 13 
+
+*** Fourier modes +/-7:
+assembling problem (123099 unknowns) ...  
+assembling problem done: 00:00:06.54 (cpu), 00:00:01.05 (total) (matrix entries/row = 46)
+solving discrete problem ... 
+solving discrete problem done: 00:00:01.89 (cpu), 00:00:00.53 (total), 163.35MB (mem)
+  *** A posteriori exterior domain quality check:
+       Compartment  "X": 5.1e-16 (thickness level=0)
+       Compartment  "Y": 3e-11 (thickness level=0)
+       Compartment "-Y": 8.1e-12 (thickness level=0)
+updating inner nodes ...
+updating inner nodes done: 00:00:02.94 (cpu), 00:00:00.43 (total)
+
+
+*** Fourier modes +/-8:
+assembling problem (123099 unknowns) ...  
+assembling problem done: 00:00:06.51 (cpu), 00:00:01.05 (total) (matrix entries/row = 46)
+solving discrete problem ... 
+solving discrete problem done: 00:00:01.90 (cpu), 00:00:00.54 (total), 164.75MB (mem)
+  *** A posteriori exterior domain quality check:
+       Compartment  "X": 3.7e-17 (thickness level=0)
+       Compartment  "Y": 6.2e-12 (thickness level=0)
+       Compartment "-Y": 1.4e-11 (thickness level=0)
+updating inner nodes ...
+updating inner nodes done: 00:00:02.94 (cpu), 00:00:00.43 (total)
+
+  *** Fourier mode quality check =  0.1. Number of modes = 17 
+
+selecting cells for refinement ...  
+selecting cells for refinement: done 00:00:26.87 (cpu)
+
+refining grid ...  
+refining grid: done 00:00:00.09 (cpu)
+
+
+*** Solving /ddnA/work/coltonb/SNOM_JCM/NP_NearField_Cylindrical/work/R0/project.jcmp on refinement level 1 ... 
+  *** A priori interior domain wave propagation characteristics (vacuum wavelength = 6.100 um):
+  
+       Compartment "X":
+    computational domain size: 0.55 (wavelengths).
+    computational domain range wave propagation error: 1.3e-07
+    'one wavelength' wave propagation error: 1.6e-07 
+  
+       Compartment "Y":
+    computational domain size: 0.62 (wavelengths).
+    computational domain range wave propagation error: 4e-08
+    'one wavelength' wave propagation error: 5e-08 
+  
+       Compartment "-Y":
+    computational domain size: 0.83 (wavelengths).
+    computational domain range wave propagation error: 6.1e-07
+    'one wavelength' wave propagation error: 6.4e-07 
+
+Cell percentage per Finite Element degree
+  FEM degree  Cell percentage
+-----------------------------------------
+           4            100.0
+
+*** Fourier mode 0:
+assembling problem (140705 unknowns) ...  
+assembling problem done: 00:00:06.79 (cpu), 00:00:01.07 (total) (matrix entries/row = 45)
+solving discrete problem ... 
+solving discrete problem done: 00:00:02.08 (cpu), 00:00:00.48 (total), 190.65MB (mem)
+  *** A posteriori exterior domain quality check:
+       Compartment  "X": 1.6e-25 (thickness level=0)
+       Compartment  "Y": 0.00097 (thickness level=0)
+       Compartment "-Y": 0.009 (thickness level=0)
+updating inner nodes ...
+updating inner nodes done: 00:00:03.37 (cpu), 00:00:00.47 (total)
+
+
+*** Fourier modes +/-1:
+assembling problem (140705 unknowns) ...  
+assembling problem done: 00:00:07.46 (cpu), 00:00:01.18 (total) (matrix entries/row = 45)
+solving discrete problem ... 
+solving discrete problem done: 00:00:02.18 (cpu), 00:00:00.61 (total), 192.87MB (mem)
+  *** A posteriori exterior domain quality check:
+       Compartment  "X": 9.3e-09 (thickness level=0)
+       Compartment  "Y": 0.0055 (thickness level=0)
+       Compartment "-Y": 0.019 (thickness level=0)
+updating inner nodes ...
+updating inner nodes done: 00:00:03.37 (cpu), 00:00:00.49 (total)
+
+
+*** Fourier modes +/-2:
+assembling problem (140705 unknowns) ...  
+assembling problem done: 00:00:07.38 (cpu), 00:00:01.17 (total) (matrix entries/row = 45)
+solving discrete problem ... 
+solving discrete problem done: 00:00:02.18 (cpu), 00:00:00.61 (total), 182.08MB (mem)
+  *** A posteriori exterior domain quality check:
+       Compartment  "X": 2.6e-09 (thickness level=0)
+       Compartment  "Y": 0.00019 (thickness level=0)
+       Compartment "-Y": 0.0004 (thickness level=0)
+updating inner nodes ...
+updating inner nodes done: 00:00:03.38 (cpu), 00:00:00.49 (total)
+
+
+*** Fourier modes +/-3:
+assembling problem (140705 unknowns) ...  
+assembling problem done: 00:00:07.38 (cpu), 00:00:01.18 (total) (matrix entries/row = 45)
+solving discrete problem ... 
+solving discrete problem done: 00:00:02.17 (cpu), 00:00:00.61 (total), 182.07MB (mem)
+  *** A posteriori exterior domain quality check:
+       Compartment  "X": 1.3e-10 (thickness level=0)
+       Compartment  "Y": 1.5e-06 (thickness level=0)
+       Compartment "-Y": 3.1e-06 (thickness level=0)
+updating inner nodes ...
+updating inner nodes done: 00:00:03.38 (cpu), 00:00:00.49 (total)
+
+
+*** Fourier modes +/-4:
+assembling problem (140705 unknowns) ...  
+assembling problem done: 00:00:07.44 (cpu), 00:00:01.19 (total) (matrix entries/row = 45)
+solving discrete problem ... 
+solving discrete problem done: 00:00:02.19 (cpu), 00:00:00.62 (total), 185.91MB (mem)
+  *** A posteriori exterior domain quality check:
+       Compartment  "X": 6.2e-12 (thickness level=0)
+       Compartment  "Y": 1.2e-08 (thickness level=0)
+       Compartment "-Y": 2.6e-08 (thickness level=0)
+updating inner nodes ...
+updating inner nodes done: 00:00:03.41 (cpu), 00:00:00.49 (total)
+
+  *** Fourier mode quality check = 1.4e+02. Number of modes = 9 
+
+*** Fourier modes +/-5:
+assembling problem (140705 unknowns) ...  
+assembling problem done: 00:00:07.39 (cpu), 00:00:01.18 (total) (matrix entries/row = 45)
+solving discrete problem ... 
+solving discrete problem done: 00:00:02.18 (cpu), 00:00:00.61 (total), 189.55MB (mem)
+  *** A posteriori exterior domain quality check:
+       Compartment  "X": 2.9e-13 (thickness level=0)
+       Compartment  "Y": 7.7e-10 (thickness level=0)
+       Compartment "-Y": 2.2e-10 (thickness level=0)
+updating inner nodes ...
+updating inner nodes done: 00:00:03.39 (cpu), 00:00:00.49 (total)
+
+
+*** Fourier modes +/-6:
+assembling problem (140705 unknowns) ...  
+assembling problem done: 00:00:07.36 (cpu), 00:00:01.17 (total) (matrix entries/row = 45)
+solving discrete problem ... 
+solving discrete problem done: 00:00:02.18 (cpu), 00:00:00.62 (total), 182.99MB (mem)
+  *** A posteriori exterior domain quality check:
+       Compartment  "X": 1.2e-14 (thickness level=0)
+       Compartment  "Y": 1.6e-10 (thickness level=0)
+       Compartment "-Y": 6.4e-12 (thickness level=0)
+updating inner nodes ...
+updating inner nodes done: 00:00:03.38 (cpu), 00:00:00.49 (total)
+
+  *** Fourier mode quality check =  6.6. Number of modes = 13 
+
+*** Fourier modes +/-7:
+assembling problem (140705 unknowns) ...  
+assembling problem done: 00:00:07.44 (cpu), 00:00:01.18 (total) (matrix entries/row = 45)
+solving discrete problem ... 
+solving discrete problem done: 00:00:02.18 (cpu), 00:00:00.62 (total), 181.88MB (mem)
+  *** A posteriori exterior domain quality check:
+       Compartment  "X": 5.1e-16 (thickness level=0)
+       Compartment  "Y": 3.2e-11 (thickness level=0)
+       Compartment "-Y": 8.1e-12 (thickness level=0)
+updating inner nodes ...
+updating inner nodes done: 00:00:03.38 (cpu), 00:00:00.49 (total)
+
+
+*** Fourier modes +/-8:
+assembling problem (140705 unknowns) ...  
+assembling problem done: 00:00:07.44 (cpu), 00:00:01.19 (total) (matrix entries/row = 45)
+solving discrete problem ... 
+solving discrete problem done: 00:00:02.17 (cpu), 00:00:00.61 (total), 181.72MB (mem)
+  *** A posteriori exterior domain quality check:
+       Compartment  "X": 4.1e-17 (thickness level=0)
+       Compartment  "Y": 6.4e-12 (thickness level=0)
+       Compartment "-Y": 1.4e-11 (thickness level=0)
+updating inner nodes ...
+updating inner nodes done: 00:00:03.41 (cpu), 00:00:00.49 (total)
+
+  *** Fourier mode quality check = 0.11. Number of modes = 17 
+
+estimating field errors ...  
+estimating field errors: done 00:00:00.66 (cpu)
+
+selecting cells for refinement ...  
+selecting cells for refinement: done 00:00:31.43 (cpu)
+
+   rel. error (FarField)  
+  level       est.error  ratio
+------------------------------
+    -/-             -/-    -/-
+      1  4.94915457e-04    -/-
+
+
+   rel. error (NearField)  
+  level       est.error  ratio
+------------------------------
+    -/-             -/-    -/-
+      1  5.61724032e-04    -/-
+
+
+refining grid ...  
+refining grid: done 00:00:00.10 (cpu)
+
+
+*** Solving /ddnA/work/coltonb/SNOM_JCM/NP_NearField_Cylindrical/work/R0/project.jcmp on refinement level 2 ... 
+  *** A priori interior domain wave propagation characteristics (vacuum wavelength = 6.100 um):
+  
+       Compartment "X":
+    computational domain size: 0.55 (wavelengths).
+    computational domain range wave propagation error: 1.3e-07
+    'one wavelength' wave propagation error: 1.6e-07 
+  
+       Compartment "Y":
+    computational domain size: 0.62 (wavelengths).
+    computational domain range wave propagation error: 4e-08
+    'one wavelength' wave propagation error: 5e-08 
+  
+       Compartment "-Y":
+    computational domain size: 0.83 (wavelengths).
+    computational domain range wave propagation error: 6.1e-07
+    'one wavelength' wave propagation error: 6.4e-07 
+
+Cell percentage per Finite Element degree
+  FEM degree  Cell percentage
+-----------------------------------------
+           4            100.0
+
+*** Fourier mode 0:
+assembling problem (156181 unknowns) ...  
+assembling problem done: 00:00:07.54 (cpu), 00:00:01.18 (total) (matrix entries/row = 45)
+solving discrete problem ... 
+solving discrete problem done: 00:00:02.37 (cpu), 00:00:00.55 (total), 206.30MB (mem)
+  *** A posteriori exterior domain quality check:
+       Compartment  "X": 1.6e-25 (thickness level=0)
+       Compartment  "Y": 0.00097 (thickness level=0)
+       Compartment "-Y": 0.009 (thickness level=0)
+updating inner nodes ...
+updating inner nodes done: 00:00:03.86 (cpu), 00:00:00.53 (total)
+
+
+*** Fourier modes +/-1:
+assembling problem (156181 unknowns) ...  
+assembling problem done: 00:00:08.20 (cpu), 00:00:01.30 (total) (matrix entries/row = 45)
+solving discrete problem ... 
+solving discrete problem done: 00:00:02.49 (cpu), 00:00:00.71 (total), 216.14MB (mem)
+  *** A posteriori exterior domain quality check:
+       Compartment  "X": 9.3e-09 (thickness level=0)
+       Compartment  "Y": 0.0055 (thickness level=0)
+       Compartment "-Y": 0.019 (thickness level=0)
+updating inner nodes ...
+updating inner nodes done: 00:00:03.86 (cpu), 00:00:00.55 (total)
+
+
+*** Fourier modes +/-2:
+assembling problem (156181 unknowns) ...  
+assembling problem done: 00:00:08.20 (cpu), 00:00:01.30 (total) (matrix entries/row = 45)
+solving discrete problem ... 
+solving discrete problem done: 00:00:02.47 (cpu), 00:00:00.70 (total), 205.66MB (mem)
+  *** A posteriori exterior domain quality check:
+       Compartment  "X": 2.5e-09 (thickness level=0)
+       Compartment  "Y": 0.00019 (thickness level=0)
+       Compartment "-Y": 0.0004 (thickness level=0)
+updating inner nodes ...
+updating inner nodes done: 00:00:03.87 (cpu), 00:00:00.55 (total)
+
+
+*** Fourier modes +/-3:
+assembling problem (156181 unknowns) ...  
+assembling problem done: 00:00:08.16 (cpu), 00:00:01.29 (total) (matrix entries/row = 45)
+solving discrete problem ... 
+solving discrete problem done: 00:00:02.49 (cpu), 00:00:00.70 (total), 206.08MB (mem)
+  *** A posteriori exterior domain quality check:
+       Compartment  "X": 1.3e-10 (thickness level=0)
+       Compartment  "Y": 1.5e-06 (thickness level=0)
+       Compartment "-Y": 3.1e-06 (thickness level=0)
+updating inner nodes ...
+updating inner nodes done: 00:00:03.88 (cpu), 00:00:00.55 (total)
+
+
+*** Fourier modes +/-4:
+assembling problem (156181 unknowns) ...  
+assembling problem done: 00:00:08.28 (cpu), 00:00:01.31 (total) (matrix entries/row = 45)
+solving discrete problem ... 
+solving discrete problem done: 00:00:02.49 (cpu), 00:00:00.71 (total), 214.11MB (mem)
+  *** A posteriori exterior domain quality check:
+       Compartment  "X": 6.2e-12 (thickness level=0)
+       Compartment  "Y": 1.2e-08 (thickness level=0)
+       Compartment "-Y": 2.6e-08 (thickness level=0)
+updating inner nodes ...
+updating inner nodes done: 00:00:03.88 (cpu), 00:00:00.55 (total)
+
+  *** Fourier mode quality check = 1.4e+02. Number of modes = 9 
+
+*** Fourier modes +/-5:
+assembling problem (156181 unknowns) ...  
+assembling problem done: 00:00:08.15 (cpu), 00:00:01.30 (total) (matrix entries/row = 45)
+solving discrete problem ... 
+solving discrete problem done: 00:00:02.48 (cpu), 00:00:00.70 (total), 205.89MB (mem)
+  *** A posteriori exterior domain quality check:
+       Compartment  "X": 2.9e-13 (thickness level=0)
+       Compartment  "Y": 7.7e-10 (thickness level=0)
+       Compartment "-Y": 2.2e-10 (thickness level=0)
+updating inner nodes ...
+updating inner nodes done: 00:00:03.87 (cpu), 00:00:00.55 (total)
+
+
+*** Fourier modes +/-6:
+assembling problem (156181 unknowns) ...  
+assembling problem done: 00:00:08.12 (cpu), 00:00:01.29 (total) (matrix entries/row = 45)
+solving discrete problem ... 
+solving discrete problem done: 00:00:02.47 (cpu), 00:00:00.70 (total), 206.18MB (mem)
+  *** A posteriori exterior domain quality check:
+       Compartment  "X": 1.2e-14 (thickness level=0)
+       Compartment  "Y": 1.6e-10 (thickness level=0)
+       Compartment "-Y": 5.9e-12 (thickness level=0)
+updating inner nodes ...
+updating inner nodes done: 00:00:03.85 (cpu), 00:00:00.55 (total)
+
+  *** Fourier mode quality check =  6.7. Number of modes = 13 
+
+*** Fourier modes +/-7:
+assembling problem (156181 unknowns) ...  
+assembling problem done: 00:00:08.18 (cpu), 00:00:01.29 (total) (matrix entries/row = 45)
+solving discrete problem ... 
+solving discrete problem done: 00:00:02.49 (cpu), 00:00:00.71 (total), 206.66MB (mem)
+  *** A posteriori exterior domain quality check:
+       Compartment  "X": 5e-16 (thickness level=0)
+       Compartment  "Y": 3.2e-11 (thickness level=0)
+       Compartment "-Y": 8.1e-12 (thickness level=0)
+updating inner nodes ...
+updating inner nodes done: 00:00:03.89 (cpu), 00:00:00.56 (total)
+
+
+*** Fourier modes +/-8:
+assembling problem (156181 unknowns) ...  
+assembling problem done: 00:00:08.22 (cpu), 00:00:01.30 (total) (matrix entries/row = 45)
+solving discrete problem ... 
+solving discrete problem done: 00:00:02.48 (cpu), 00:00:00.70 (total), 215.55MB (mem)
+  *** A posteriori exterior domain quality check:
+       Compartment  "X": 3e-17 (thickness level=0)
+       Compartment  "Y": 6.3e-12 (thickness level=0)
+       Compartment "-Y": 1.4e-11 (thickness level=0)
+updating inner nodes ...
+updating inner nodes done: 00:00:03.88 (cpu), 00:00:00.55 (total)
+
+  *** Fourier mode quality check = 0.11. Number of modes = 17 
+
+estimating field errors ...  
+estimating field errors: done 00:00:00.70 (cpu)
+
+selecting cells for refinement ...  
+selecting cells for refinement: done 00:00:37.06 (cpu)
+
+   rel. error (FarField)  
+  level       est.error  ratio
+------------------------------
+    -/-             -/-    -/-
+      1  4.94926661e-04    -/-
+      2  2.31407249e-04   2.14
+
+
+   rel. error (NearField)  
+  level       est.error  ratio
+------------------------------
+    -/-             -/-    -/-
+      1  5.61709567e-04    -/-
+      2  2.50880116e-04   2.24
+
+
+refining grid ...  
+refining grid: done 00:00:00.14 (cpu)
+
+
+*** Solving /ddnA/work/coltonb/SNOM_JCM/NP_NearField_Cylindrical/work/R0/project.jcmp on refinement level 3 ... 
+  *** A priori interior domain wave propagation characteristics (vacuum wavelength = 6.100 um):
+  
+       Compartment "X":
+    computational domain size: 0.55 (wavelengths).
+    computational domain range wave propagation error: 1.3e-07
+    'one wavelength' wave propagation error: 1.6e-07 
+  
+       Compartment "Y":
+    computational domain size: 0.62 (wavelengths).
+    computational domain range wave propagation error: 4e-08
+    'one wavelength' wave propagation error: 5e-08 
+  
+       Compartment "-Y":
+    computational domain size: 0.83 (wavelengths).
+    computational domain range wave propagation error: 6.1e-07
+    'one wavelength' wave propagation error: 6.4e-07 
+
+Cell percentage per Finite Element degree
+  FEM degree  Cell percentage
+-----------------------------------------
+           4            100.0
+
+*** Fourier mode 0:
+assembling problem (179113 unknowns) ...  
+assembling problem done: 00:00:08.56 (cpu), 00:00:01.33 (total) (matrix entries/row = 44)
+solving discrete problem ... 
+solving discrete problem done: 00:00:02.63 (cpu), 00:00:00.61 (total), 250.31MB (mem)
+  *** A posteriori exterior domain quality check:
+       Compartment  "X": 1.6e-25 (thickness level=0)
+       Compartment  "Y": 0.00097 (thickness level=0)
+       Compartment "-Y": 0.009 (thickness level=0)
+updating inner nodes ...
+updating inner nodes done: 00:00:04.52 (cpu), 00:00:00.62 (total)
+
+
+*** Fourier modes +/-1:
+assembling problem (179113 unknowns) ...  
+assembling problem done: 00:00:09.33 (cpu), 00:00:01.46 (total) (matrix entries/row = 44)
+solving discrete problem ... 
+solving discrete problem done: 00:00:02.77 (cpu), 00:00:00.79 (total), 251.28MB (mem)
+  *** A posteriori exterior domain quality check:
+       Compartment  "X": 9.3e-09 (thickness level=0)
+       Compartment  "Y": 0.0055 (thickness level=0)
+       Compartment "-Y": 0.019 (thickness level=0)
+updating inner nodes ...
+updating inner nodes done: 00:00:04.57 (cpu), 00:00:00.64 (total)
+
+
+*** Fourier modes +/-2:
+assembling problem (179113 unknowns) ...  
+assembling problem done: 00:00:09.33 (cpu), 00:00:01.47 (total) (matrix entries/row = 44)
+solving discrete problem ... 
+solving discrete problem done: 00:00:02.78 (cpu), 00:00:00.79 (total), 232.94MB (mem)
+  *** A posteriori exterior domain quality check:
+       Compartment  "X": 2.5e-09 (thickness level=0)
+       Compartment  "Y": 0.00019 (thickness level=0)
+       Compartment "-Y": 0.0004 (thickness level=0)
+updating inner nodes ...
+updating inner nodes done: 00:00:04.56 (cpu), 00:00:00.64 (total)
+
+
+*** Fourier modes +/-3:
+assembling problem (179113 unknowns) ...  
+assembling problem done: 00:00:09.38 (cpu), 00:00:01.47 (total) (matrix entries/row = 44)
+solving discrete problem ... 
+solving discrete problem done: 00:00:02.77 (cpu), 00:00:00.79 (total), 233.23MB (mem)
+  *** A posteriori exterior domain quality check:
+       Compartment  "X": 1.3e-10 (thickness level=0)
+       Compartment  "Y": 1.5e-06 (thickness level=0)
+       Compartment "-Y": 3.1e-06 (thickness level=0)
+updating inner nodes ...
+updating inner nodes done: 00:00:04.59 (cpu), 00:00:00.64 (total)
+
+
+*** Fourier modes +/-4:
+assembling problem (179113 unknowns) ...  
+assembling problem done: 00:00:09.39 (cpu), 00:00:01.48 (total) (matrix entries/row = 44)
+solving discrete problem ... 
+solving discrete problem done: 00:00:02.78 (cpu), 00:00:00.80 (total), 243.58MB (mem)
+  *** A posteriori exterior domain quality check:
+       Compartment  "X": 6.2e-12 (thickness level=0)
+       Compartment  "Y": 1.1e-08 (thickness level=0)
+       Compartment "-Y": 2.6e-08 (thickness level=0)
+updating inner nodes ...
+updating inner nodes done: 00:00:04.59 (cpu), 00:00:00.64 (total)
+
+  *** Fourier mode quality check = 1.4e+02. Number of modes = 9 
+
+*** Fourier modes +/-5:
+assembling problem (179113 unknowns) ...  
+assembling problem done: 00:00:09.31 (cpu), 00:00:01.47 (total) (matrix entries/row = 44)
+solving discrete problem ... 
+solving discrete problem done: 00:00:02.77 (cpu), 00:00:00.80 (total), 243.61MB (mem)
+  *** A posteriori exterior domain quality check:
+       Compartment  "X": 2.9e-13 (thickness level=0)
+       Compartment  "Y": 7.7e-10 (thickness level=0)
+       Compartment "-Y": 2.2e-10 (thickness level=0)
+updating inner nodes ...
+updating inner nodes done: 00:00:04.58 (cpu), 00:00:00.64 (total)
+
+
+*** Fourier modes +/-6:
+assembling problem (179113 unknowns) ...  
+assembling problem done: 00:00:09.33 (cpu), 00:00:01.46 (total) (matrix entries/row = 44)
+solving discrete problem ... 
+solving discrete problem done: 00:00:02.77 (cpu), 00:00:00.79 (total), 233.27MB (mem)
+  *** A posteriori exterior domain quality check:
+       Compartment  "X": 1.2e-14 (thickness level=0)
+       Compartment  "Y": 1.6e-10 (thickness level=0)
+       Compartment "-Y": 6.3e-12 (thickness level=0)
+updating inner nodes ...
+updating inner nodes done: 00:00:04.58 (cpu), 00:00:00.64 (total)
+
+  *** Fourier mode quality check =  6.7. Number of modes = 13 
+
+*** Fourier modes +/-7:
+assembling problem (179113 unknowns) ...  
+assembling problem done: 00:00:09.36 (cpu), 00:00:01.47 (total) (matrix entries/row = 44)
+solving discrete problem ... 
+solving discrete problem done: 00:00:02.77 (cpu), 00:00:00.79 (total), 232.62MB (mem)
+  *** A posteriori exterior domain quality check:
+       Compartment  "X": 5.1e-16 (thickness level=0)
+       Compartment  "Y": 3.2e-11 (thickness level=0)
+       Compartment "-Y": 8.1e-12 (thickness level=0)
+updating inner nodes ...
+updating inner nodes done: 00:00:04.60 (cpu), 00:00:00.64 (total)
+
+
+*** Fourier modes +/-8:
+assembling problem (179113 unknowns) ...  
+assembling problem done: 00:00:09.34 (cpu), 00:00:01.47 (total) (matrix entries/row = 44)
+solving discrete problem ... 
+solving discrete problem done: 00:00:02.78 (cpu), 00:00:00.80 (total), 232.50MB (mem)
+  *** A posteriori exterior domain quality check:
+       Compartment  "X": 3.9e-17 (thickness level=0)
+       Compartment  "Y": 6.3e-12 (thickness level=0)
+       Compartment "-Y": 1.4e-11 (thickness level=0)
+updating inner nodes ...
+updating inner nodes done: 00:00:04.58 (cpu), 00:00:00.64 (total)
+
+  *** Fourier mode quality check = 0.11. Number of modes = 17 
+
+estimating field errors ...  
+estimating field errors: done 00:00:00.76 (cpu)
+
+   rel. error (FarField)  
+  level       est.error  ratio
+------------------------------
+    -/-             -/-    -/-
+      1  4.94931538e-04    -/-
+      2  2.31409530e-04   2.14
+      3  1.00943492e-04   2.29
+
+
+   rel. error (NearField)  
+  level       est.error  ratio
+------------------------------
+    -/-             -/-    -/-
+      1  5.61703600e-04    -/-
+      2  2.50877452e-04   2.24
+      3  1.32630153e-04   1.89
+
+
+*** Maximum number of refinement steps reached. *** 
+
+post process FourierTransform (output file: 'ft.jcm') ... done: 00:00:03.04 (cpu), 00:00:01.19 (total)
