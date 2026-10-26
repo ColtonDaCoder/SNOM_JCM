@@ -68,27 +68,14 @@ def plot_onlynp():
             o = np.argsort(r)
             r, E = r[o], E[o]
             ref = E[:5].mean()                                       # smallest particles (10-14 nm) as baseline
-            amp = (np.abs(E)/abs(ref) - 1)*100
-            ph = (np.unwrap(np.angle(E)) - np.angle(ref))*1e3
-            rr = np.linspace(r.min(), r.max(), 200)
-            for k, y in enumerate((amp, ph)):
-                ax[k].plot(r, y, 'o', ms=3.5, color=c, alpha=0.75, label=lab)
-                if key == 'Dielectric' and k == 0:                       # no size dependence: flat line
-                    ax[k].plot(rr, np.full_like(rr, y.mean()), '-', lw=2.5, color=c)
-                else:                                                    # a + b r^3 (particle volume)
-                    A = np.vstack([np.ones_like(r), r**3]).T
-                    cf = np.linalg.lstsq(A, y, rcond=None)[0]
-                    ax[k].plot(rr, cf[0] + cf[1]*rr**3, '-', lw=2.5, color=c)
+            ax[0].plot(r, (np.abs(E)/abs(ref) - 1)*100, 'o-', ms=4, lw=2.5, color=c, label=lab)
+            ax[1].plot(r, (np.unwrap(np.angle(E)) - np.angle(ref))*1e3, 'o-', ms=4, lw=2.5, color=c, label=lab)
         ax[0].set(xlabel='Nanoparticle radius (nm)', ylabel='Signal change (%)', title='Amplitude')
         ax[1].set(xlabel='Nanoparticle radius (nm)', ylabel='Phase change (mrad)', title='Phase')
-        from matplotlib.lines import Line2D
         for a in ax:
             a.axhline(0, color='0.6', lw=1)
             a.grid(alpha=0.3)
-            h, l = a.get_legend_handles_labels()
-            h += [Line2D([], [], color='0.3', lw=2.5)]
-            l += ['fit: a + b·r³  (dielectric amplitude: constant)' if a is ax[0] else 'fit: a + b·r³']
-            a.legend(h, l, fontsize=13)
+            a.legend()
         fig.tight_layout()
         out = os.path.join(HERE, 'figures', 'np_size_onlyNP.png')
         fig.savefig(out, dpi=150)
