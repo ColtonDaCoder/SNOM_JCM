@@ -61,8 +61,6 @@ def main(mesh=True):
                 part = Triangulation(xx, yy, tt[keep & (dd == 5)])
                 ax.tripcolor(part, np.zeros(len(part.triangles)), cmap=ListedColormap(['#5c4a00']), shading='flat',
                              zorder=3)
-                th = np.linspace(0, 2*np.pi, 200)
-                ax.plot(R*np.cos(th), -5 - 1 - R + R*np.sin(th), color='#e6b800', lw=1.5, zorder=5)   # under the window
             if mesh:
                 ax.triplot(Triangulation(xx, yy, tt[keep]), color='w', lw=0.3, alpha=0.4, zorder=4)
             ax.set_xlim(X.min(), X.max())
