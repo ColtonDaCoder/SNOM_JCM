@@ -215,10 +215,9 @@ def normal_with_k(f='SNx_Water_Simple/results_example.pkl'):
             yw = d_w[m, col_w]
             name = 'n' if kind == 'signal' else 'k'
             if kind == 'phase':
-                tk.fill_between(1e4/d_w[m, 0], 0, yw, color='0.6', alpha=0.25, lw=0)
                 tk.set_ylim(0, yw.max()*1.15)
-            tk.plot(1e4/d_w[m, 0], yw, '-', color='0.4', lw=2, label=f'water {name}')
-            tk.set_ylabel(f'{name} (water)', color='0.35')
+            tk.plot(1e4/d_w[m, 0], yw, '-', color='k', lw=3.5, label=f'water {name}')
+            tk.set_ylabel(f'{name} (water)')
             for n, c in ((2, 'C0'), (3, 'C3')):
                 S = np.array([res[x][n - 2] for x in wl])
                 y = np.abs(S)/np.abs(S[0]) if kind == 'signal' else np.unwrap(np.angle(S)) - np.angle(S[0])
