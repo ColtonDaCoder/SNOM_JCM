@@ -111,3 +111,101 @@ def plot_withlayer():
         out = os.path.join(HERE, 'figures', 'np_size_withLayer.png')
         fig.savefig(out, dpi=150)
     print('wrote', out)
+
+
+def _withlayer_common():
+    """Graphene and SiN WithLayer sweeps on their common radii: r, {key: complex E}."""
+    data = {}
+    for key in ('Graphene', 'SN'):
+        d = pk.load(open(os.path.join(ROOT, 'Silicon Nitride NP', 'WithLayer', f'field_vs_NP_{key}.pkl'), 'rb'))
+        data[key] = dict(zip(np.asarray(d['radius'], float), [complex(np.ravel(x)[0]) for x in d['field']]))
+    r = np.array(sorted(set(data['Graphene']) & set(data['SN'])))
+    return r, {k: np.array([v[x] for x in r]) for k, v in data.items()}
+
+
+def withlayer_figures(k_sigma=3.0, inst=((0.1, 'amp', '%'), (1.0, 'ph', 'mrad'))):
+    """
+    1) amplitude / phase change vs radius, common radii only
+    2) direct comparison: graphene minus SiN, and the complex change |E - E_ref| / |E_ref| of both
+    3) detection limit: smallest radius where the fitted change (a + b r^3) exceeds k_sigma x the simulation
+       scatter, and where it exceeds an assumed instrument noise level (inst)
+    """
+    r, E = _withlayer_common()
+    cols = {'Graphene': ('graphene layer', '#333333'), 'SN': ('15 nm SiN layer', '#1f77b4')}
+    ch = {}
+    for k, e in E.items():
+        ref = e[:5].mean()
+        ch[k] = {'amp': (np.abs(e)/abs(ref) - 1)*100, 'ph': (np.unwrap(np.angle(e)) - np.angle(ref))*1e3,
+                 'cplx': np.abs(e - ref)/abs(ref)*100}
+    rc = {'font.size': 18, 'axes.labelsize': 19, 'xtick.labelsize': 16, 'ytick.labelsize': 16, 'legend.fontsize': 15}
+    # --- 1) common radii
+    with plt.rc_context(rc):
+        fig, ax = plt.subplots(1, 2, figsize=(15, 6))
+        for k, (lab, c) in cols.items():
+            ax[0].plot(r, ch[k]['amp'], 'o-', ms=4, lw=2.5, color=c, label=lab)
+            ax[1].plot(r, ch[k]['ph'], 'o-', ms=4, lw=2.5, color=c, label=lab)
+        ax[0].set(xlabel='Nanoparticle radius (nm)', ylabel='Signal change (%)', title='Amplitude')
+        ax[1].set(xlabel='Nanoparticle radius (nm)', ylabel='Phase change (mrad)', title='Phase')
+        for a in ax:
+            a.axhline(0, color='0.6', lw=1)
+            a.grid(alpha=0.3)
+            a.legend()
+        fig.tight_layout()
+        fig.savefig(os.path.join(HERE, 'figures', 'np_size_withLayer.png'), dpi=150)
+        plt.close(fig)
+    # --- 2) comparison
+    with plt.rc_context(rc):
+        fig, ax = plt.subplots(1, 2, figsize=(15, 6))
+        ax[0].plot(r, ch['Graphene']['amp'] - ch['SN']['amp'], 'o-', ms=4, lw=2.5, color='C3', label='amplitude (%)')
+        ax0b = ax[0].twinx()
+        ax0b.plot(r, ch['Graphene']['ph'] - ch['SN']['ph'], 's-', ms=4, lw=2.5, color='C2', label='phase (mrad)')
+        ax[0].set(xlabel='Nanoparticle radius (nm)', ylabel='Amplitude change: graphene − SiN (%)',
+                  title='Difference between the two layers')
+        ax0b.set_ylabel('Phase change: graphene − SiN (mrad)')
+        ax[0].axhline(0, color='0.6', lw=1)
+        h1, l1 = ax[0].get_legend_handles_labels()
+        h2, l2 = ax0b.get_legend_handles_labels()
+        ax[0].legend(h1 + h2, l1 + l2, loc='upper center', fontsize=13)
+        for k, (lab, c) in cols.items():
+            ax[1].plot(r, ch[k]['cplx'], 'o-', ms=4, lw=2.5, color=c, label=lab)
+        ax[1].set(xlabel='Nanoparticle radius (nm)', ylabel='|E − E_ref| / |E_ref| (%)',
+                  title='Total change (amp. + phase)')
+        ax[1].legend()
+        for a in ax:
+            a.grid(alpha=0.3)
+        fig.tight_layout()
+        fig.savefig(os.path.join(HERE, 'figures', 'np_size_withLayer_compare.png'), dpi=150)
+        plt.close(fig)
+    # --- 3) detection limits
+    rows = []
+    rr = np.linspace(r.min(), r.max(), 2000)
+    with plt.rc_context(rc):
+        fig, ax = plt.subplots(1, 2, figsize=(15, 6))
+        for j, (q, lab_q, unit) in enumerate((('amp', 'Amplitude', '%'), ('ph', 'Phase', 'mrad'))):
+            for k, (lab, c) in cols.items():
+                y = ch[k][q]
+                A = np.vstack([np.ones_like(r), r**3]).T
+                cf = np.linalg.lstsq(A, y, rcond=None)[0]
+                sig = np.std(y - A @ cf)
+                fit = np.abs(cf[1]*rr**3)                            # change relative to a tiny particle
+                lim_sim = rr[np.argmax(fit > k_sigma*sig)] if (fit > k_sigma*sig).any() else np.nan
+                lev = dict((n, v) for v, n, _ in inst)[q]
+                lim_inst = rr[np.argmax(fit > lev)] if (fit > lev).any() else np.nan
+                rows.append((lab, lab_q, sig, lim_sim, lev, unit, lim_inst))
+                ax[j].plot(r, np.abs(y - cf[0]), 'o', ms=3.5, color=c, alpha=0.7)
+                ax[j].plot(rr, fit, '-', lw=2.5, color=c, label=f'{lab}: r ≥ {lim_sim:.0f} nm ({k_sigma:g}σ sim)')
+                ax[j].axhline(k_sigma*sig, color=c, ls=':', lw=1.5)
+            ax[j].axhline(lev, color='C3', ls='--', lw=1.8, label=f'assumed instrument noise {lev:g} {unit}')
+            ax[j].set_yscale('log')
+            ax[j].set_ylim(1e-3 if q == 'amp' else 1e-2, None)
+            ax[j].set(xlabel='Nanoparticle radius (nm)', ylabel=f'|{lab_q.lower()} change| ({unit})',
+                      title=f'{lab_q}: detection limit')
+            ax[j].grid(alpha=0.3, which='both')
+            ax[j].legend(fontsize=12, loc='lower right')
+        fig.tight_layout()
+        fig.savefig(os.path.join(HERE, 'figures', 'np_size_withLayer_detection.png'), dpi=150)
+        plt.close(fig)
+    print(f'common radii {r.min():g}-{r.max():g} nm ({len(r)})')
+    for lab, q, sig, ls, lev, unit, li in rows:
+        print(f'{lab:16s} {q:9s} sim scatter {sig:.3g} {unit}; {k_sigma:g}σ limit r = {ls:.0f} nm; '
+              f'limit at {lev:g} {unit} noise r = {li:.0f} nm')
