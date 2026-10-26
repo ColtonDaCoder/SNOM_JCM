@@ -209,3 +209,24 @@ def withlayer_figures(k_sigma=3.0, inst=((0.1, 'amp', '%'), (1.0, 'ph', 'mrad'))
     for lab, q, sig, ls, lev, unit, li in rows:
         print(f'{lab:16s} {q:9s} sim scatter {sig:.3g} {unit}; {k_sigma:g}σ limit r = {ls:.0f} nm; '
               f'limit at {lev:g} {unit} noise r = {li:.0f} nm')
+
+
+def withlayer_raw():
+    """Raw |E| and phase vs radius (common radii) for the graphene and 15 nm SiN layer runs."""
+    r, E = _withlayer_common()
+    cols = {'Graphene': ('graphene layer', '#333333'), 'SN': ('15 nm SiN layer', '#1f77b4')}
+    with plt.rc_context({'font.size': 18, 'axes.labelsize': 19, 'xtick.labelsize': 16, 'ytick.labelsize': 16,
+                         'legend.fontsize': 16}):
+        fig, ax = plt.subplots(1, 2, figsize=(15, 6))
+        for k, (lab, c) in cols.items():
+            ax[0].plot(r, np.abs(E[k])*1e3, 'o-', ms=4, lw=2.5, color=c, label=lab)
+            ax[1].plot(r, np.unwrap(np.angle(E[k])), 'o-', ms=4, lw=2.5, color=c, label=lab)
+        ax[0].set(xlabel='Nanoparticle radius (nm)', ylabel='|E| (×10⁻³, arb.)', title='Amplitude')
+        ax[1].set(xlabel='Nanoparticle radius (nm)', ylabel='Phase (rad)', title='Phase')
+        for a in ax:
+            a.grid(alpha=0.3)
+            a.legend()
+        fig.tight_layout()
+        out = os.path.join(HERE, 'figures', 'np_size_withLayer_raw.png')
+        fig.savefig(out, dpi=150)
+    print('wrote', out)
