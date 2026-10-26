@@ -872,7 +872,7 @@ if __name__ == '__main__' and len(sys.argv) > 1 and sys.argv[1] == 'tapview_inph
     plot_approach_and_tapping_inphase(set_name=SET, norm='--norm' in sys.argv)
 
 
-def plot_s2s3_amplitude(sets=(('sin5', 'C0', '6.1 µm'), ('wl5p5', 'C2', '5.5 µm'), ('wl2p95', 'C4', '2.95 µm')),
+def plot_s2s3_amplitude(sets=(('sin5', 'C0', '1639 cm⁻¹'), ('wl5p5', 'C2', '1818 cm⁻¹'), ('wl2p95', 'C4', '3390 cm⁻¹')),
                         fname='S2_over_S3_wavelengths.png', title='Backscattered Ep, 5 nm SiN'):
     """|S2/S3| vs x (left) and normalized to the oil end x = -1000 nm (right), one curve per data set."""
     with plt.rc_context({'font.size': 16, 'axes.titlesize': 18, 'axes.labelsize': 17,
@@ -912,26 +912,27 @@ def plot_nk(wmin=2.5, wmax=7.0):
         return d[m, 0], d[m, 1], d[m, 2]
     mats = (('water_HaleQuerry.csv', 'water (Hale & Querry)', 'C0'),
             ('octane_Myers.csv', 'n-octane (Myers)', 'C1'))
-    marks = ((2.95, 'O–H stretch'), (5.5, 'off-band'), (6.1, 'H–O–H bend'))
+    marks = ((2.95, 'O–H stretch'), (5.5, 'off-band'), (6.1, 'H–O–H bend'))    # wavelengths (um) of the runs
+    wn = lambda w: 1e4/np.asarray(w)                                             # um -> cm^-1
     with plt.rc_context({'font.size': 24, 'axes.titlesize': 26, 'axes.labelsize': 28,
                          'xtick.labelsize': 22, 'ytick.labelsize': 22, 'legend.fontsize': 21}):
         fig, ax = plt.subplots(2, 1, figsize=(12, 10.5), sharex=True)
         for f, lab, c in mats:
             w, n, k = read(f)
-            ax[0].plot(w, n, '-', lw=3, color=c, label=lab)
-            ax[1].plot(w, k, '-', lw=3, color=c, label=lab)
+            ax[0].plot(wn(w), n, '-', lw=3, color=c, label=lab)
+            ax[1].plot(wn(w), k, '-', lw=3, color=c, label=lab)
         for a in ax:
             for w0, txt in marks:
-                a.axvline(w0, color='0.4', ls='--', lw=1)
+                a.axvline(wn(w0), color='0.4', ls='--', lw=1)
             a.grid(alpha=0.3)
-        align = {2.95: 'center', 5.5: 'right', 6.1: 'left'}      # 5.5 and 6.1 are close: push labels apart
+        align = {2.95: 'center', 5.5: 'right', 6.1: 'left'}      # axis is reversed: 1818 sits left of 1639
         for w0, txt in marks:
-            ax[0].text(w0, 1.0, f'{txt}\n{w0:g} µm', transform=ax[0].get_xaxis_transform(), va='bottom',
+            ax[0].text(wn(w0), 1.0, f'{txt}\n{wn(w0):.0f} cm⁻¹', transform=ax[0].get_xaxis_transform(), va='bottom',
                        ha=align[w0], multialignment='center', fontsize=19)
         ax[0].set(ylabel='n')
-        ax[1].set(ylabel='k', xlabel='Wavelength (µm)')
-        ax[0].legend(loc='lower right')
-        ax[1].set_xlim(wmin, wmax)
+        ax[1].set(ylabel='k', xlabel='Wavenumber (cm⁻¹)')
+        ax[0].legend(loc='lower left')
+        ax[1].set_xlim(wn(wmin), wn(wmax))                  # high wavenumber on the left (IR convention)
         fig.tight_layout()
         out = os.path.join(FIGS, 'nk_water_octane.png')
         fig.savefig(out, dpi=130)
