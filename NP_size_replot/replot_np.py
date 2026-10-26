@@ -68,8 +68,8 @@ def plot_onlynp():
             o = np.argsort(r)
             r, E = r[o], E[o]
             ref = E[:5].mean()                                       # smallest particles (10-14 nm) as baseline
-            ax[0].plot(r, (np.abs(E)/abs(ref) - 1)*100, 'o-', ms=4, lw=2.5, color=c, label=lab)
-            ax[1].plot(r, (np.unwrap(np.angle(E)) - np.angle(ref))*1e3, 'o-', ms=4, lw=2.5, color=c, label=lab)
+            ax[0].plot(r, (np.abs(E)/abs(ref) - 1)*100, 'o', ms=6, color=c, label=lab)
+            ax[1].plot(r, (np.unwrap(np.angle(E)) - np.angle(ref))*1e3, 'o', ms=6, color=c, label=lab)
         ax[0].set(xlabel='Nanoparticle radius (nm)', ylabel='Signal change (%)', title='Amplitude')
         ax[1].set(xlabel='Nanoparticle radius (nm)', ylabel='Phase change (mrad)', title='Phase')
         for a in ax:
