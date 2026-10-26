@@ -1024,7 +1024,7 @@ def read_grid_2d(path):
     return x, y, t[:, :3] - 1, t[:, 3]
 
 
-def plot_nearfield_maps(gaps=(1, 5, 30, 101), mesh=True):
+def plot_nearfield_maps(gaps=(1, 5, 30, 101), mesh=True, out_name=None):
     """|E| (p-polarized) around the apex from results/fields/nearfield_map_x+0_g<gap>.npz, starting mesh overlaid."""
     import glob
     from matplotlib.colors import LogNorm
@@ -1034,11 +1034,17 @@ def plot_nearfield_maps(gaps=(1, 5, 30, 101), mesh=True):
         f = np.load(os.path.join(RESULTS, 'fields', f'nearfield_map_x+0_g{g}.npz'))
         maps[g] = (f['X'], f['Y'], np.linalg.norm(f['E'][1], axis=-1))
     vmax = max(np.nanmax(A) for X, Y, A in maps.values())
-    norm = LogNorm(vmin=vmax/200, vmax=vmax)
+    lo = vmax/200 if len(gaps) != 2 else 0.5          # 2-panel: start the scale near the smallest field outside the tip
+    norm = LogNorm(vmin=lo, vmax=vmax)
     with plt.rc_context({'font.size': 16, 'axes.titlesize': 19, 'axes.labelsize': 17,
                          'xtick.labelsize': 14, 'ytick.labelsize': 14}):
-        fig, axs = plt.subplots(2, 2, figsize=(15, 11.5))
-        axs = axs.ravel()
+        if len(gaps) == 2:                               # side by side, same y range, tight
+            fig, axs = plt.subplots(1, 2, figsize=(14, 4.6), sharey=True, gridspec_kw={'wspace': 0.04})
+            ylim = (max(m[1].min() for m in maps.values()), min(m[1].max() for m in maps.values()))
+        else:
+            fig, axs = plt.subplots(2, 2, figsize=(15, 11.5))
+            ylim = None
+        axs = np.ravel(axs)
         for ax, g in zip(axs, gaps):
             X, Y, A = maps[g]
             px, py, tri, dom = read_grid_2d(glob.glob(os.path.join(RESULTS, 'fields',
@@ -1051,7 +1057,7 @@ def plot_nearfield_maps(gaps=(1, 5, 30, 101), mesh=True):
             from scipy.ndimage import distance_transform_edt
             inside = (tip.get_trifinder()(X, Y) >= 0) | (A < 0.3)       # 2nd: cells sampled inside the metal
             idx = distance_transform_edt(inside, return_distances=False, return_indices=True)
-            Af = np.clip(A, vmax/200, None)[tuple(idx)]
+            Af = np.clip(A, lo, None)[tuple(idx)]
             im = ax.pcolormesh(X, Y, Af, norm=norm, cmap='inferno', shading='auto')
             ax.tripcolor(tip, np.zeros(len(tip.triangles)), cmap=matplotlib.colors.ListedColormap(['#140b34']),
                          shading='flat', zorder=3)
@@ -1063,16 +1069,21 @@ def plot_nearfield_maps(gaps=(1, 5, 30, 101), mesh=True):
             ax.text(X.min() + 12, Y.min() + 10, 'water', color='w', fontsize=15)
             ax.text(X.max() - 12, Y.min() + 10, 'oil', color='w', fontsize=15, ha='right')
             ax.set_xlim(X.min(), X.max())
-            ax.set_ylim(Y.min(), Y.max())
+            ax.set_ylim(*(ylim or (Y.min(), Y.max())))
             ax.set_aspect('equal')
             ax.set_title(f'Tip height {g} nm')
             ax.set_xlabel('x (nm)')
-            ax.set_ylabel('y (nm)')
-        cb = fig.colorbar(im, ax=list(axs), shrink=0.8, pad=0.015)
+            if ax is axs[0] or len(gaps) != 2:
+                ax.set_ylabel('y (nm)')
+        cb = fig.colorbar(im, ax=list(axs), shrink=0.8 if len(gaps) != 2 else 1.0, pad=0.015, fraction=0.03)
+        if len(gaps) == 2:
+            cb.set_ticks([t for t in (0.5, 1, 2, 3, 5) if lo <= t <= vmax])
+            cb.set_ticklabels([f'{t:g}' for t in (0.5, 1, 2, 3, 5) if lo <= t <= vmax])
         cb.set_label('|E|  (incident = 1)')
-        fig.suptitle('2D near field |E|, p-polarized, 6.1 µm, 5 nm SiN, tip over the water | oil interface'
-                     + (' (starting mesh in white)' if mesh else ''))
-        out = os.path.join(FIGS, 'nearfield_maps' + ('_mesh' if mesh else '') + '.png')
+        if len(gaps) != 2:
+            fig.suptitle('2D near field |E|, p-polarized, 6.1 µm, 5 nm SiN, tip over the water | oil interface'
+                         + (' (starting mesh in white)' if mesh else ''))
+        out = os.path.join(FIGS, out_name or ('nearfield_maps' + ('_mesh' if mesh else '') + '.png'))
         fig.savefig(out, dpi=150, bbox_inches='tight')
     print('wrote', out, 'max |E|', vmax)
 
@@ -1083,3 +1094,4 @@ GEOM_T_SIN = 5.0
 if __name__ == '__main__' and len(sys.argv) > 1 and sys.argv[1] == 'nfmaps':
     plot_nearfield_maps(mesh=True)
     plot_nearfield_maps(mesh=False)
+    plot_nearfield_maps(gaps=(1, 30), mesh=True, out_name='nearfield_maps_mesh_1_30nm.png')
