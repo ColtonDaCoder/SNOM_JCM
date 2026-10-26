@@ -211,10 +211,14 @@ def normal_with_k(f='SNx_Water_Simple/results_example.pkl'):
         fig, axs = plt.subplots(1, 2, figsize=(16, 6))
         for col, (ax, kind) in enumerate(zip(axs, ('signal', 'phase'))):
             tk = ax.twinx()
-            tk.fill_between(1e4/d_w[m, 0], 0, d_w[m, 2], color='0.6', alpha=0.25, lw=0)
-            tk.plot(1e4/d_w[m, 0], d_w[m, 2], '-', color='0.4', lw=1.5, label='water k')
-            tk.set_ylim(0, d_w[m, 2].max()*1.15)
-            tk.set_ylabel('k (water)', color='0.35')
+            col_w = 1 if kind == 'signal' else 2                     # signal <-> n, phase <-> k
+            yw = d_w[m, col_w]
+            name = 'n' if kind == 'signal' else 'k'
+            if kind == 'phase':
+                tk.fill_between(1e4/d_w[m, 0], 0, yw, color='0.6', alpha=0.25, lw=0)
+                tk.set_ylim(0, yw.max()*1.15)
+            tk.plot(1e4/d_w[m, 0], yw, '-', color='0.4', lw=2, label=f'water {name}')
+            tk.set_ylabel(f'{name} (water)', color='0.35')
             for n, c in ((2, 'C0'), (3, 'C3')):
                 S = np.array([res[x][n - 2] for x in wl])
                 y = np.abs(S)/np.abs(S[0]) if kind == 'signal' else np.unwrap(np.angle(S)) - np.angle(S[0])
