@@ -1041,14 +1041,19 @@ def plot_nearfield_maps(gaps=(1, 5, 30, 101), mesh=True):
         axs = axs.ravel()
         for ax, g in zip(axs, gaps):
             X, Y, A = maps[g]
-            im = ax.pcolormesh(X, Y, np.clip(A, vmax/200, None), norm=norm, cmap='inferno', shading='auto')
+            px, py, tri, dom = read_grid_2d(glob.glob(os.path.join(RESULTS, 'fields',
+                                                                   f'nearfield_map_x+0_g{g}_*grid.jcm'))[0])
+            tx, ty = px[tri], py[tri]                                      # keep triangles overlapping the window
+            keep = ((tx.min(1) < X.max()) & (tx.max(1) > X.min()) & (ty.min(1) < Y.max()) & (ty.max(1) > Y.min()))
+            tip = Triangulation(px, py, tri[keep & (dom == 3)])          # Pt tip triangles from the mesh
+            inside = tip.get_trifinder()(X, Y) >= 0                       # map points inside the tip: not plotted
+            im = ax.pcolormesh(X, Y, np.ma.masked_where(inside, np.clip(A, vmax/200, None)), norm=norm,
+                               cmap='inferno', shading='auto')
+            ax.tripcolor(tip, np.zeros(len(tip.triangles)), cmap='Greys', vmin=-1, vmax=4, shading='flat')
             if mesh:
-                gf = glob.glob(os.path.join(RESULTS, 'fields', f'nearfield_map_x+0_g{g}_*grid.jcm'))
-                if gf:
-                    px, py, tri, dom = read_grid_2d(gf[0])
-                    keep = np.all((px[tri] > X.min() - 50) & (px[tri] < X.max() + 50) &
-                                  (py[tri] > Y.min() - 50) & (py[tri] < Y.max() + 50), axis=1)
-                    ax.triplot(Triangulation(px, py, tri[keep]), color='w', lw=0.35, alpha=0.45)
+                ax.triplot(Triangulation(px, py, tri[keep]), color='w', lw=0.35, alpha=0.45)
+            else:
+                ax.triplot(tip, color='0.45', lw=0.0)
             ax.axhline(0, color='c', lw=0.8, ls='--')
             ax.axhline(-GEOM_T_SIN, color='c', lw=0.8, ls='--')
             ax.plot([0, 0], [Y.min(), -GEOM_T_SIN], color='c', lw=1.5)          # water | oil interface
