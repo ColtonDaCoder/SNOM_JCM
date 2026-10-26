@@ -1,0 +1,5 @@
+job 656877 on smic039, 8 cores, cases: R25 R50 R75
+JCMROOT=/home/coltonb/software/JCMsuite_6_0_10
+R25: solve 139 s, export 1 s, unknowns [133613, 153129, 170767, 195081]
+R50: solve 135 s, export 1 s, unknowns [133873, 153663, 171301, 195719]
+R75: solve 132 s, export 2 s, unknowns [131913, 150923, 168561, 192615]
