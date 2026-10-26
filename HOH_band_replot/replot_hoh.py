@@ -235,3 +235,41 @@ def normal_with_k(f='SNx_Water_Simple/results_example.pkl'):
         out = os.path.join(FIGS, 'hoh_sweep_water_with_k.png')
         fig.savefig(out, dpi=130)
     print('wrote', out)
+
+
+def normal_ref_normalized(f='SNx_Water_Simple/results_example.pkl', fref='SNx_Water_Simple/dev_v13_base_ref.pkl'):
+    """S_n / S_n,ref (amplitude ratio, phase difference) vs wavenumber; signal vs water n, phase vs water k."""
+    d_w = np.array([l.split(',') for l in open(WATER) if l[0].isdigit()], float)
+    m = (d_w[:, 0] > 5.4) & (d_w[:, 0] < 6.6)
+    res, _, _ = demod(pk.load(open(os.path.join(ROOT, f), 'rb')))
+    ref, _, _ = demod(pk.load(open(os.path.join(ROOT, fref), 'rb')))
+    wl = np.array(sorted(set(res) & set(ref)))
+    with plt.rc_context({'font.size': 17, 'axes.labelsize': 18, 'legend.fontsize': 15,
+                         'xtick.labelsize': 15, 'ytick.labelsize': 15}):
+        fig, axs = plt.subplots(1, 2, figsize=(16, 6))
+        for ax, kind in zip(axs, ('signal', 'phase')):
+            tk = ax.twinx()
+            yw = d_w[m, 1 if kind == 'signal' else 2]
+            name = 'n' if kind == 'signal' else 'k'
+            if kind == 'phase':
+                tk.set_ylim(0, yw.max()*1.15)
+            tk.plot(1e4/d_w[m, 0], yw, '-', color='k', lw=3.5, label=f'water {name}')
+            tk.set_ylabel(f'{name} (water)')
+            for n, c in ((2, 'C0'), (3, 'C3')):
+                R = np.array([res[x][n - 2]/ref[x][n - 2] for x in wl])
+                y = np.abs(R) if kind == 'signal' else np.unwrap(np.angle(R))
+                lab = f'S{n}/S{n},ref'
+                ax.plot(1e4/wl, y, 'o-', ms=5, lw=2.5, color=c, label=lab, zorder=3)
+            ax.set_zorder(tk.get_zorder() + 1)
+            ax.patch.set_visible(False)
+            ax.set_xlim(1840, 1530)
+            ax.set_xlabel('Wavenumber (cm⁻¹)')
+            ax.set_ylabel('|Sn / Sn,ref|' if kind == 'signal' else 'Phase of Sn / Sn,ref (rad)')
+            ax.grid(alpha=0.3)
+            h1, l1 = ax.get_legend_handles_labels()
+            h2, l2 = tk.get_legend_handles_labels()
+            ax.legend(h1 + h2, l1 + l2, loc='lower left' if kind == 'signal' else 'upper left')
+        fig.tight_layout()
+        out = os.path.join(FIGS, 'hoh_sweep_water_ref_normalized.png')
+        fig.savefig(out, dpi=130)
+    print('wrote', out)
