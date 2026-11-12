@@ -27,6 +27,7 @@ s = E along z (perpendicular to the plane of incidence), p = E in the x-y plane.
     python run_2d.py --stage scan_demod_5p5um   # 5.5 um, 5 nm SiN, same x / heights (wavelength control)
     python run_2d.py --stage scan_demod     # -1000 ... 1000 nm every 100 nm x 14 heights (+ 5 nm from scan_h5) -> S2, S3
     python run_2d.py --stage scan_demod --part 2/2   # only every 2nd point starting at the 2nd (2 JCM licenses: at most 2 jobs at once)
+    python run_2d.py --stage win_SiO2_6p1um     # window comparison: win_<SiO2|Si3N4>_<6p1um|2p95um>, 15 nm window, X_GRADED x 15 heights
     python run_2d.py --jcm                  # only write the .jcm files (JCMcontrol)
 
 Per solve (results/<stage>[.partIofN].pkl): backscattered far field in the NA window for s and p
@@ -92,6 +93,16 @@ STAGES = {
     # refined mesh files -> results/fields/ (for figures)
     'nearfield_map':     dict(mesh='fine',     wvl=6.1, x=[0], gaps=[1, 5, 30, 101], field_map=True),
 }
+
+# Window-material comparison: 15 nm SiO2 and 15 nm Si3N4 windows (domain 7 gets the window's n, k),
+# H-O-H bend (6.1 um) and O-H stretch (2.95 um), X_GRADED positions x 15 heights (HEIGHTS + 5 nm) each.
+WINDOWS = {
+    'SiO2':  dict(window='SiO2_Kischkat.csv', geom={'t_SiN': 15}),   # Kischkat 2012, sputtered a-SiO2
+    'Si3N4': dict(window='SiN_Kischkat.csv',  geom={'t_SiN': 15}),   # Kischkat 2012 (refractiveindex.info Si3N4)
+}
+for _w, _c in WINDOWS.items():
+    for _wvl, _tag in ((6.1, '6p1um'), (2.95, '2p95um')):
+        STAGES[f'win_{_w}_{_tag}'] = dict(mesh='fine', wvl=_wvl, x=X_GRADED, gaps=sorted(HEIGHTS + [5]), **_c)
 MIN_DIRECTIONS = 20     # far-field directions inside the NA window; fewer -> raise ft_refinements
 
 MATERIAL_FILES = {
@@ -139,9 +150,14 @@ def nk_permittivity(path, wvl):
     return eps.real, eps.imag
 
 
-def material_keys(wvl):
+def material_files(window=None):
+    """MATERIAL_FILES with the window (domain 7, key prefix 'SN') replaced by a stage's window file."""
+    return dict(MATERIAL_FILES, **({'SN': window} if window else {}))
+
+
+def material_keys(wvl, window=None):
     keys = {}
-    for name, fname in MATERIAL_FILES.items():
+    for name, fname in material_files(window).items():
         keys[name + '_eps1'], keys[name + '_eps2'] = nk_permittivity(os.path.join(HERE, 'optical_data', fname), wvl)
     return keys
 
@@ -310,9 +326,9 @@ def run_exportbench():
             json.dump(out, f, indent=1)
 
 
-def scan_keys(mesh, wvl, geom=None):
+def scan_keys(mesh, wvl, geom=None, window=None):
     keys = dict(GEOMETRY, **(geom or {}), **MESH[mesh])
-    keys.update(material_keys(wvl))
+    keys.update(material_keys(wvl, window))
     keys.update(source_keys(wvl, THETA))
     return keys
 
@@ -459,18 +475,18 @@ def run_stage(name, part=None):
     source = {k: (v.tolist() if isinstance(v, np.ndarray) else v) for k, v in source_keys(wvl, THETA).items()}
     geometry = dict(GEOMETRY, **cfg.get('geom', {}), **MESH[cfg['mesh']])
     if data['records'] and old and (old['geometry'] != geometry
-                                    or old['wvl'] != wvl or old['materials'] != material_keys(wvl)
+                                    or old['wvl'] != wvl or old['materials'] != material_keys(wvl, cfg.get('window'))
                                     or old.get('source') != source):
         raise SystemExit(f'{out_file} was made with different settings; move it away (e.g. results/old/) first')
     data['settings'] = {
         'stage': name, 'part': part, 'mesh': cfg['mesh'], 'wvl': wvl, 'theta': THETA, 'NA': NA,
         'tap_amplitude': TAP_AMPLITUDE, 'min_gap': MIN_GAP, 'heights': HEIGHTS,
         'geometry': geometry,
-        'material_files': MATERIAL_FILES, 'materials': material_keys(wvl), 'source': source,
+        'material_files': material_files(cfg.get('window')), 'materials': material_keys(wvl, cfg.get('window')), 'source': source,
         'host': socket.gethostname(), 'resources': configure_resources(),
         'slurm_job': os.environ.get('SLURM_JOB_ID'),
     }
-    base_keys = scan_keys(cfg['mesh'], wvl, cfg.get('geom'))
+    base_keys = scan_keys(cfg['mesh'], wvl, cfg.get('geom'), cfg.get('window'))
 
     all_jobs = [(float(x), float(g)) for x in cfg['x'] for g in cfg['gaps']]
     if part is not None:

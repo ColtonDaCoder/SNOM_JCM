@@ -16,7 +16,7 @@ Material {
   RelPermittivity = (%(pt_eps1)e, %(pt_eps2)e)
   RelPermeability = 1
 }
-#Silicon Nitride
+#Window (SiN, or the stage window material)
 Material {
   DomainId = 7
   RelPermittivity = (%(SN_eps1)e, %(SN_eps2)e)
