@@ -16,13 +16,22 @@ Material {
   RelPermittivity = (%(pt_eps1)e, %(pt_eps2)e)
   RelPermeability = 1
 }
+<?
+# window: scalar (SN_eps1/2) or, for the equivalent monolayer layers, a diagonal tensor string (SN_tensor)
+# plus the window part above the oil block (domain 10, SNoil_tensor)
+keys['win_eps'] = keys.get('SN_tensor', '(%e, %e)' % (keys['SN_eps1'], keys['SN_eps2']))
+keys['winoil_mat'] = ''
+if 'SNoil_tensor' in keys:
+    keys['winoil_mat'] = ('#Window above the oil block\nMaterial {\n  DomainId = 10\n  RelPermittivity = '
+                          + keys['SNoil_tensor'] + '\n  RelPermeability = 1\n}\n')
+?>
 #Window (SiN, or the stage window material)
 Material {
   DomainId = 7
-  RelPermittivity = (%(SN_eps1)e, %(SN_eps2)e)
+  RelPermittivity = %(win_eps)s
   RelPermeability = 1
 }
-#Oil / OTS
+%(winoil_mat)s#Oil / OTS
 Material {
   DomainId = 9
   RelPermittivity = (%(oil_eps1)e, %(oil_eps2)e)

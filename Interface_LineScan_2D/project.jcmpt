@@ -16,9 +16,17 @@ y_gap = (np.arange(20) + 0.5)/20*g
 keys['axis_y'] = np.concatenate([y_liq, y_gap])*1e-9
 # optional near-field map around the apex (stage nearfield_map only; 4.4k - 6.5k points, slow export)
 map_block = ''
-if keys.get('map', 0):
+if keys.get('map', 0) == 2:
+    # depth map (depthmap stages): inside the liquid, graded, 71 x 31 = 2201 points
+    side = np.r_[2:11:2, 15:51:5, 60:151:10, 175:301:25, 350:601:50].astype(float)
+    mx = ' '.join('%.6e' % v for v in np.r_[-side[::-1], 0.0, side]*1e-9)
+    depth = np.array([0.25, 1, 2, 3, 4, 5, 6, 8, 10, 12, 15, 18, 22, 26, 30, 35, 40, 50, 60, 70, 85, 100,
+                      120, 140, 170, 200, 250, 300, 400, 500, 600], float)
+    my = ' '.join('%.6e' % v for v in (-t - depth[::-1])*1e-9)
+elif keys.get('map', 0):
     mx = ' '.join('%.6e' % v for v in np.arange(-250.0, 250.1, 5.0)*1e-9)
     my = ' '.join('%.6e' % v for v in np.arange(-60.0, g + 150.1, 5.0)*1e-9)   # up to 150 nm above the apex
+if keys.get('map', 0):
     map_block = ('PostProcess {\n  ExportFields {\n    FieldBagPath = "project_results/fieldbag.jcm"\n'
                  '    OutputFileName = "project_results/map.jcm"\n    OutputQuantity = ElectricFieldStrength\n'
                  '    Cartesian {\n      GridPointsX = [' + mx + ']\n      GridPointsY = [' + my + ']\n    }\n  }\n}\n')

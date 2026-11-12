@@ -28,6 +28,9 @@ s = E along z (perpendicular to the plane of incidence), p = E in the x-y plane.
     python run_2d.py --stage scan_demod     # -1000 ... 1000 nm every 100 nm x 14 heights (+ 5 nm from scan_h5) -> S2, S3
     python run_2d.py --stage scan_demod --part 2/2   # only every 2nd point starting at the 2nd (2 JCM licenses: at most 2 jobs at once)
     python run_2d.py --stage win_SiO2_6p1um     # window comparison: win_<SiO2|Si3N4>_<6p1um|2p95um>, 15 nm window, X_GRADED x 15 heights
+    python run_2d.py --stage win_graphene_6p1um # monolayers win_<graphene|hBN>_<6p1um|2p95um>: 2 nm equivalent layer (eqlayer_keys)
+    python run_2d.py --stage eqcheck_real2nm    # check of the equivalent layer: eqcheck_real2nm / eqcheck_eq5nm / eqcheck_eq12nm
+    python run_2d.py --stage depthmap_6p1um     # depth sensitivity maps (also depthmap_2p95um): field inside the water, 15 heights
     python run_2d.py --jcm                  # only write the .jcm files (JCMcontrol)
 
 Per solve (results/<stage>[.partIofN].pkl): backscattered far field in the NA window for s and p
@@ -100,9 +103,33 @@ WINDOWS = {
     'SiO2':  dict(window='SiO2_Kischkat.csv', geom={'t_SiN': 15}),   # Kischkat 2012, sputtered a-SiO2
     'Si3N4': dict(window='SiN_Kischkat.csv',  geom={'t_SiN': 15}),   # Kischkat 2012 (refractiveindex.info Si3N4)
 }
+# Monolayers (too thin to mesh: 0.335 nm -> 551k triangles): 2 nm equivalent layer = monolayer + 1.67 nm
+# of the liquid below it (see eqlayer_keys).  Graphene undoped (Kubo, E_F = 0), hBN Caldwell 2014 phonon model.
+EQ_T = 2.0
+WINDOWS['graphene'] = dict(geom={'t_SiN': EQ_T},
+                           eqlayer=dict(t0=0.335, t_eq=EQ_T, par='graphene_undoped_Kubo.csv', perp=None))
+WINDOWS['hBN'] = dict(geom={'t_SiN': EQ_T},
+                      eqlayer=dict(t0=0.33, t_eq=EQ_T, par='hBN_Caldwell_o.csv', perp='hBN_Caldwell_e.csv'))
 for _w, _c in WINDOWS.items():
     for _wvl, _tag in ((6.1, '6p1um'), (2.95, '2p95um')):
         STAGES[f'win_{_w}_{_tag}'] = dict(mesh='fine', wvl=_wvl, x=X_GRADED, gaps=sorted(HEIGHTS + [5]), **_c)
+
+# Check of the equivalent-layer method on a window that CAN be meshed: a real 2 nm SiN window vs the same
+# window as 5 nm and 12 nm equivalent layers (12 / 2 = same thickness ratio as 2 / 0.335 for graphene),
+# 6.1 um, 3 positions (oil plateau, interface, water plateau) x 15 heights -> compare S2, S3, S2/S3.
+_EQX, _EQG = [-1000, 0, 1000], sorted(HEIGHTS + [5])
+STAGES['eqcheck_real2nm'] = dict(mesh='fine', wvl=6.1, x=_EQX, gaps=_EQG, geom={'t_SiN': 2})
+for _t in (5, 12):
+    STAGES[f'eqcheck_eq{_t}nm'] = dict(mesh='fine', wvl=6.1, x=_EQX, gaps=_EQG, geom={'t_SiN': _t},
+                                       eqlayer=dict(t0=2.0, t_eq=float(_t), par='SiN_Kischkat.csv',
+                                                    perp='SiN_Kischkat.csv'))
+
+# Depth sensitivity maps: tip over water only (interface 5 um away), 5 nm SiN, 15 heights, field exported
+# inside the water (x +-600 nm, 0 - 600 nm below the window, graded grid, 2201 points; see project.jcmpt).
+# Reciprocity: a change d_eps at r changes the backscattered signal by ~ d_eps E(r).E(r) -> demodulate
+# E.E over the tapping cycle -> where S1..S4 come from.
+for _wvl, _tag in ((6.1, '6p1um'), (2.95, '2p95um')):
+    STAGES[f'depthmap_{_tag}'] = dict(mesh='fine', wvl=_wvl, x=[5000], gaps=sorted(HEIGHTS + [5]), field_map='depth')
 MIN_DIRECTIONS = 20     # far-field directions inside the NA window; fewer -> raise ft_refinements
 
 MATERIAL_FILES = {
@@ -155,11 +182,38 @@ def material_files(window=None):
     return dict(MATERIAL_FILES, **({'SN': window} if window else {}))
 
 
-def material_keys(wvl, window=None):
+def material_keys(wvl, window=None, eqlayer=None):
     keys = {}
     for name, fname in material_files(window).items():
         keys[name + '_eps1'], keys[name + '_eps2'] = nk_permittivity(os.path.join(HERE, 'optical_data', fname), wvl)
+    if eqlayer:
+        keys.update(eqlayer_keys(wvl, eqlayer, keys))
     return keys
+
+
+def eqlayer_keys(wvl, eq, mat):
+    """
+    Equivalent layer for a window too thin to mesh (monolayers): a layer of thickness t_eq (the stage's
+    t_SiN) = the real layer (t0, in-plane eps_par, out-of-plane eps_perp) + (t_eq - t0) of the liquid
+    below it, as one homogeneous anisotropic layer (y is out of plane):
+        in plane (sheet sum):      eps_x = eps_z = eps_liq + (eps_par - eps_liq) t0 / t_eq
+        out of plane (series sum): t_eq / eps_y = t0 / eps_perp + (t_eq - t0) / eps_liq
+    exact to first order in t_eq / (field variation length); the liquid stays t0 below the surface.
+    Domain 7 (above water) uses water as the filler, domain 10 (above the oil block) octane.
+    """
+    f = lambda fn: complex(*nk_permittivity(os.path.join(HERE, 'optical_data', fn), wvl))
+    e_par = f(eq['par'])
+    e_perp = f(eq['perp']) if eq.get('perp') else 1.0 + 0j
+    t0, t = eq['t0'], eq['t_eq']
+    out = {}
+    for key, liq in (('SN', 'water'), ('SNoil', 'oil')):
+        el = complex(mat[liq + '_eps1'], mat[liq + '_eps2'])
+        ex = el + (e_par - el)*t0/t
+        ey = t/(t0/e_perp + (t - t0)/el)
+        c = lambda z: '(%.9e, %.9e)' % (z.real, z.imag)
+        out[key + '_tensor'] = f'[{c(ex)} 0 0  0 {c(ey)} 0  0 0 {c(ex)}]'
+    out['win_split'] = 1
+    return out
 
 
 BEAM_FILE = os.path.join(RESULTS, 'beamcheck.json')
@@ -326,9 +380,9 @@ def run_exportbench():
             json.dump(out, f, indent=1)
 
 
-def scan_keys(mesh, wvl, geom=None, window=None):
+def scan_keys(mesh, wvl, geom=None, window=None, eqlayer=None):
     keys = dict(GEOMETRY, **(geom or {}), **MESH[mesh])
-    keys.update(material_keys(wvl, window))
+    keys.update(material_keys(wvl, window, eqlayer))
     keys.update(source_keys(wvl, THETA))
     return keys
 
@@ -429,7 +483,7 @@ def save_map(wd, stage, x, gap):
 
 
 def run_point(base_keys, x, gap, stage, wd, save_fields=False, field_map=False):
-    keys = dict(base_keys, x_interface=x, gap=gap, map=int(bool(field_map)))
+    keys = dict(base_keys, x_interface=x, gap=gap, map=2 if field_map == 'depth' else int(bool(field_map)))
     t0 = time.time()
     results = solve('project.jcmp', keys, wd, f'jcm_{stage}.log')
     record = {'x_interface': x, 'gap': gap, 'wall_time_s': time.time() - t0,
@@ -475,18 +529,18 @@ def run_stage(name, part=None):
     source = {k: (v.tolist() if isinstance(v, np.ndarray) else v) for k, v in source_keys(wvl, THETA).items()}
     geometry = dict(GEOMETRY, **cfg.get('geom', {}), **MESH[cfg['mesh']])
     if data['records'] and old and (old['geometry'] != geometry
-                                    or old['wvl'] != wvl or old['materials'] != material_keys(wvl, cfg.get('window'))
+                                    or old['wvl'] != wvl or old['materials'] != material_keys(wvl, cfg.get('window'), cfg.get('eqlayer'))
                                     or old.get('source') != source):
         raise SystemExit(f'{out_file} was made with different settings; move it away (e.g. results/old/) first')
     data['settings'] = {
         'stage': name, 'part': part, 'mesh': cfg['mesh'], 'wvl': wvl, 'theta': THETA, 'NA': NA,
         'tap_amplitude': TAP_AMPLITUDE, 'min_gap': MIN_GAP, 'heights': HEIGHTS,
         'geometry': geometry,
-        'material_files': material_files(cfg.get('window')), 'materials': material_keys(wvl, cfg.get('window')), 'source': source,
+        'material_files': material_files(cfg.get('window')), 'materials': material_keys(wvl, cfg.get('window'), cfg.get('eqlayer')), 'eqlayer': cfg.get('eqlayer'), 'source': source,
         'host': socket.gethostname(), 'resources': configure_resources(),
         'slurm_job': os.environ.get('SLURM_JOB_ID'),
     }
-    base_keys = scan_keys(cfg['mesh'], wvl, cfg.get('geom'), cfg.get('window'))
+    base_keys = scan_keys(cfg['mesh'], wvl, cfg.get('geom'), cfg.get('window'), cfg.get('eqlayer'))
 
     all_jobs = [(float(x), float(g)) for x in cfg['x'] for g in cfg['gaps']]
     if part is not None:

@@ -27,6 +27,12 @@ keys['water_pts'] = rect(-half, half, y_bot, -t)
 keys['sin_pts'] = rect(-half, half, -t, 0.0)
 xp = half - keys['patch_margin']
 keys['oil_pts'] = rect(keys['x_interface'], xp, -t - keys['oil_depth'], -t)
+# equivalent monolayer windows: the part of the window above the oil block is its own domain (10),
+# because the equivalent layer is the monolayer plus a liquid filler (oil above oil, water above water)
+keys['winoil_block'] = ''
+if keys.get('win_split', 0):
+    keys['winoil_block'] = ('    Polygon {\n      Name = "WindowOverOil"\n      DomainId = 10\n      Priority = 2\n'
+                            '      Points = [' + rect(keys['x_interface'], xp, -t, 0.0) + ']\n    }\n')
 # tip: virtual apex of the cone so that the rounded tip touches y = gap
 y_v = g - R/np.sin(alpha) + R
 y_tt = g + keys['tip_length']
@@ -69,7 +75,7 @@ Layout2D {
       Priority = 2
       Points = [%(oil_pts)s]
     }
-    Polygon {
+%(winoil_block)s    Polygon {
       Name = "Tip"
       DomainId = 3
       Priority = 4
