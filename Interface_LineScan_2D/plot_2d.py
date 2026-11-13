@@ -133,7 +133,7 @@ def plot_complex(stage, gap=5):
     print('wrote', out)
 
 
-if __name__ == '__main__' and (len(sys.argv) < 2 or sys.argv[1] not in ('ep_sub', 'ep_step', 'ep_lines', 'approach', 'demod', 's2s3', 'nearfield', 'compare', 's2s3_prov', 's2s3_both', 's2s3_wl', 's2s3_wl3', 'explain', 'tapview', 'tapview_inphase', 's2s3_wl_amp', 'nk', 'heights', 'farfield', 'nfmaps')):
+if __name__ == '__main__' and (len(sys.argv) < 2 or sys.argv[1] not in ('ep_sub', 'ep_step', 'ep_lines', 'approach', 'demod', 's2s3', 'nearfield', 'compare', 's2s3_prov', 's2s3_both', 's2s3_wl', 's2s3_wl3', 'explain', 'tapview', 'tapview_inphase', 's2s3_wl_amp', 'nk', 'heights', 'farfield', 'nfmaps', 'winmat')):
     what = sys.argv[1] if len(sys.argv) > 1 else 'scan_h5'
     plot_scan(what)
     plot_combined(what)
@@ -303,6 +303,9 @@ SETS = {'sin5': (('scan_demod', 'scan_h5', 'scan_demod_fill'), '', '5 nm SiN, 6.
         'sin20': (('scan_demod_sin20',), '_sin20', '20 nm SiN, 6.1 um'),
         'wl5p5': (('scan_demod_5p5um',), '_5p5um', '5 nm SiN, 5.5 um'),
         'wl2p95': (('scan_demod_2p95um',), '_2p95um', '5 nm SiN, 2.95 um')}
+for _w, _lab in (('SiO2', '15 nm SiO$_2$'), ('Si3N4', '15 nm Si$_3$N$_4$'), ('graphene', 'graphene'), ('hBN', 'hBN')):
+    for _t, _wl in (('6p1um', '6.1 um'), ('2p95um', '2.95 um')):
+        SETS[f'win_{_w}_{_t}'] = ((f'win_{_w}_{_t}',), f'_win_{_w}_{_t}', f'{_lab}, {_wl}')
 SET = _SET_ARG or 'sin5'
 
 
@@ -902,6 +905,21 @@ def plot_s2s3_amplitude(sets=(('sin5', 'C0', '1639 cm⁻¹'), ('wl5p5', 'C2', '1
 
 if __name__ == '__main__' and len(sys.argv) > 1 and sys.argv[1] == 's2s3_wl_amp':
     plot_s2s3_amplitude()
+
+
+def plot_windows():
+    """|S2/S3| for the window materials, one figure per wavelength (data sets present so far)."""
+    # fixed colour per window; sets without data are skipped by plot_s2s3_amplitude
+    for tag, wn, base in (('6p1um', '1639 cm⁻¹', (('sin5', 'C0', '5 nm SiN'), ('sin20', 'C1', '20 nm SiN'))),
+                          ('2p95um', '3390 cm⁻¹', (('wl2p95', 'C0', '5 nm SiN'),))):
+        sets = list(base) + [(f'win_{w}_{tag}', c, lab) for w, c, lab in
+                             (('SiO2', 'C2', '15 nm SiO$_2$'), ('Si3N4', 'C3', '15 nm Si$_3$N$_4$'),
+                              ('graphene', 'C4', 'graphene'), ('hBN', 'C5', 'hBN'))]
+        plot_s2s3_amplitude(sets=sets, fname=f'S2_over_S3_windows_{tag}.png', title=f'Window comparison, {wn}')
+
+
+if __name__ == '__main__' and len(sys.argv) > 1 and sys.argv[1] == 'winmat':
+    plot_windows()
 
 
 def plot_nk(wmin=2.5, wmax=7.0):
