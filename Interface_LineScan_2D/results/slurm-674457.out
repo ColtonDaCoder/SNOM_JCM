@@ -1,0 +1,181 @@
+job 674457 on smic126, 8 cores, stages: depthmap_6p1um depthmap_2p95um eqcheck_real2nm eqcheck_eq5nm eqcheck_eq12nm
+JCMROOT=/home/coltonb/software/JCMsuite_6_0_10
+=== stage depthmap_6p1um on smic126 (2026-11-11 21:51:39): 15 solves to run, 0 already done, fine mesh, 6.1 um
+[depthmap_6p1um 1/15] x=+5000 nm gap=1 nm  |Ep|(p_in)=6.98208e-02 arg=+2.2266  |gap int Ey|(p_in)=7.8899e+00 arg=-2.1264  314 dirs  unknowns=[1130421, 1379297, 1656935, 1963267]  1478 s  est.err FarField=[(1, 0.000918986718), (2, 6.9496777e-05), (3, 2.47147311e-05)]
+[depthmap_6p1um 2/15] x=+5000 nm gap=2 nm  |Ep|(p_in)=6.97518e-02 arg=+2.2233  |gap int Ey|(p_in)=1.4897e+01 arg=-2.1399  314 dirs  unknowns=[1127873, 1376125, 1652671, 1954687]  1344 s  est.err FarField=[(1, 0.000937700528), (2, 7.23918574e-05), (3, 2.66015732e-05)]
+[depthmap_6p1um 3/15] x=+5000 nm gap=3 nm  |Ep|(p_in)=6.96829e-02 arg=+2.2200  |gap int Ey|(p_in)=2.1376e+01 arg=-2.1496  314 dirs  unknowns=[1127509, 1375033, 1649551, 1950787]  1315 s  est.err FarField=[(1, 0.0009374866), (2, 7.24064094e-05), (3, 2.66061454e-05)]
+[depthmap_6p1um 4/15] x=+5000 nm gap=4 nm  |Ep|(p_in)=6.96142e-02 arg=+2.2169  |gap int Ey|(p_in)=2.7405e+01 arg=-2.1576  314 dirs  unknowns=[1128133, 1376801, 1652255, 1953855]  1324 s  est.err FarField=[(1, 0.000937249704), (2, 7.24482469e-05), (3, 2.66829353e-05)]
+[depthmap_6p1um 5/15] x=+5000 nm gap=5 nm  |Ep|(p_in)=6.95458e-02 arg=+2.2138  |gap int Ey|(p_in)=3.3233e+01 arg=-2.1640  314 dirs  unknowns=[1127873, 1376543, 1651169, 1950949]  1325 s  est.err FarField=[(1, 0.000935528318), (2, 7.16182224e-05), (3, 2.41405473e-05)]
+[depthmap_6p1um 6/15] x=+5000 nm gap=6 nm  |Ep|(p_in)=6.94776e-02 arg=+2.2107  |gap int Ey|(p_in)=3.8708e+01 arg=-2.1706  314 dirs  unknowns=[1128809, 1377785, 1656059, 1956671]  1318 s  est.err FarField=[(1, 0.000916531082), (2, 6.92115943e-05), (3, 2.42191943e-05)]
+[depthmap_6p1um 7/15] x=+5000 nm gap=8 nm  |Ep|(p_in)=6.93422e-02 arg=+2.2048  |gap int Ey|(p_in)=4.8986e+01 arg=-2.1809  314 dirs  unknowns=[1129173, 1378409, 1657321, 1957777]  1365 s  est.err FarField=[(1, 0.000914957645), (2, 6.91794801e-05), (3, 2.43081683e-05)]
+[depthmap_6p1um 8/15] x=+5000 nm gap=10 nm  |Ep|(p_in)=6.92080e-02 arg=+2.1991  |gap int Ey|(p_in)=5.8587e+01 arg=-2.1910  314 dirs  unknowns=[1129329, 1380073, 1658153, 1958713]  1302 s  est.err FarField=[(1, 0.000914560959), (2, 6.91467143e-05), (3, 2.65398438e-05)]
+[depthmap_6p1um 9/15] x=+5000 nm gap=14 nm  |Ep|(p_in)=6.89430e-02 arg=+2.1880  |gap int Ey|(p_in)=7.6406e+01 arg=-2.2057  314 dirs  unknowns=[1129953, 1379657, 1657255, 1958127]  1332 s  est.err FarField=[(1, 0.000913782104), (2, 6.91231219e-05), (3, 2.42264712e-05)]
+[depthmap_6p1um 10/15] x=+5000 nm gap=20 nm  |Ep|(p_in)=6.85534e-02 arg=+2.1724  |gap int Ey|(p_in)=1.0011e+02 arg=-2.2245  314 dirs  unknowns=[1131669, 1382119, 1655809, 1954705]  1351 s  est.err FarField=[(1, 0.000992437461), (2, 7.1779917e-05), (3, 2.66513352e-05)]
+[depthmap_6p1um 11/15] x=+5000 nm gap=30 nm  |Ep|(p_in)=6.79221e-02 arg=+2.1480  |gap int Ey|(p_in)=1.3446e+02 arg=-2.2545  314 dirs  unknowns=[1135167, 1384473, 1661619, 1962335]  1382 s  est.err FarField=[(1, 0.00095885977), (2, 7.10413407e-05), (3, 2.69563463e-05)]
+[depthmap_6p1um 12/15] x=+5000 nm gap=45 nm  |Ep|(p_in)=6.70081e-02 arg=+2.1138  |gap int Ey|(p_in)=1.7848e+02 arg=-2.2771  314 dirs  unknowns=[1141445, 1390893, 1672323, 1975587]  1404 s  est.err FarField=[(1, 0.000979387498), (2, 7.17344397e-05), (3, 2.66492128e-05)]
+[depthmap_6p1um 13/15] x=+5000 nm gap=60 nm  |Ep|(p_in)=6.61247e-02 arg=+2.0816  |gap int Ey|(p_in)=2.1668e+02 arg=-2.3000  314 dirs  unknowns=[1133035, 1381241, 1653441, 1953325]  1399 s  est.err FarField=[(1, 0.000789841358), (2, 6.42396231e-05), (3, 2.68187153e-05)]
+[depthmap_6p1um 14/15] x=+5000 nm gap=80 nm  |Ep|(p_in)=6.49846e-02 arg=+2.0404  |gap int Ey|(p_in)=2.6177e+02 arg=-2.3267  314 dirs  unknowns=[1134649, 1384543, 1657507, 1957339]  1401 s  est.err FarField=[(1, 0.000940371541), (2, 7.27996528e-05), (3, 2.35688429e-05)]
+[depthmap_6p1um 15/15] x=+5000 nm gap=101 nm  |Ep|(p_in)=6.38267e-02 arg=+1.9984  |gap int Ey|(p_in)=3.0195e+02 arg=-2.3495  314 dirs  unknowns=[1134219, 1384333, 1659141, 1960897]  1483 s  est.err FarField=[(1, 0.00101214268), (2, 7.30703187e-05), (3, 2.41603238e-05)]
+=== stage depthmap_2p95um on smic126 (2026-11-12 03:33:44): 15 solves to run, 0 already done, fine mesh, 2.95 um
+[depthmap_2p95um 1/15] x=+5000 nm gap=1 nm  |Ep|(p_in)=4.43288e-02 arg=+3.0773  |gap int Ey|(p_in)=4.8212e+00 arg=-1.7748  650 dirs  unknowns=[1097525, 1335857, 1611107, 1927227]  1321 s  est.err FarField=[(1, 0.00111505614), (2, 6.36957186e-05), (3, 2.57142275e-05)]
+[depthmap_2p95um 2/15] x=+5000 nm gap=2 nm  |Ep|(p_in)=4.41302e-02 arg=+3.0707  |gap int Ey|(p_in)=9.0227e+00 arg=-1.8034  650 dirs  unknowns=[1094977, 1332685, 1605283, 1918185]  1254 s  est.err FarField=[(1, 0.000983128063), (2, 5.85230947e-05), (3, 2.58719439e-05)]
+[depthmap_2p95um 3/15] x=+5000 nm gap=3 nm  |Ep|(p_in)=4.39312e-02 arg=+3.0643  |gap int Ey|(p_in)=1.2877e+01 arg=-1.8245  650 dirs  unknowns=[1094613, 1331645, 1603255, 1914285]  1207 s  est.err FarField=[(1, 0.000983584187), (2, 5.85964036e-05), (3, 2.58606909e-05)]
+[depthmap_2p95um 4/15] x=+5000 nm gap=4 nm  |Ep|(p_in)=4.37322e-02 arg=+3.0581  |gap int Ey|(p_in)=1.6495e+01 arg=-1.8433  650 dirs  unknowns=[1095237, 1332061, 1603983, 1916001]  1221 s  est.err FarField=[(1, 0.000983994423), (2, 5.86520292e-05), (3, 2.58820042e-05)]
+[depthmap_2p95um 5/15] x=+5000 nm gap=5 nm  |Ep|(p_in)=4.35334e-02 arg=+3.0521  |gap int Ey|(p_in)=1.9905e+01 arg=-1.8563  650 dirs  unknowns=[1094977, 1334185, 1601337, 1917669]  1115 s  est.err FarField=[(1, 0.000979099075), (2, 5.85506847e-05), (3, 2.57924701e-05)]
+[depthmap_2p95um 6/15] x=+5000 nm gap=6 nm  |Ep|(p_in)=4.33350e-02 arg=+3.0462  |gap int Ey|(p_in)=2.3163e+01 arg=-1.8692  650 dirs  unknowns=[1095913, 1334445, 1602741, 1921207]  1100 s  est.err FarField=[(1, 0.00108093879), (2, 6.3731324e-05), (3, 2.56956559e-05)]
+[depthmap_2p95um 7/15] x=+5000 nm gap=8 nm  |Ep|(p_in)=4.29394e-02 arg=+3.0347  |gap int Ey|(p_in)=2.8876e+01 arg=-1.8887  650 dirs  unknowns=[1096277, 1335589, 1604011, 1921385]  1098 s  est.err FarField=[(1, 0.00107762184), (2, 6.35377145e-05), (3, 2.56708333e-05)]
+[depthmap_2p95um 8/15] x=+5000 nm gap=10 nm  |Ep|(p_in)=4.25459e-02 arg=+3.0235  |gap int Ey|(p_in)=3.5015e+01 arg=-1.9103  650 dirs  unknowns=[1096433, 1334603, 1603833, 1915227]  1226 s  est.err FarField=[(1, 0.00107872791), (2, 6.3753655e-05), (3, 2.56433037e-05)]
+[depthmap_2p95um 9/15] x=+5000 nm gap=14 nm  |Ep|(p_in)=4.17653e-02 arg=+3.0021  |gap int Ey|(p_in)=4.5556e+01 arg=-1.9419  650 dirs  unknowns=[1097057, 1334163, 1604123, 1917121]  1233 s  est.err FarField=[(1, 0.00108126466), (2, 6.37581041e-05), (3, 2.57271947e-05)]
+[depthmap_2p95um 10/15] x=+5000 nm gap=20 nm  |Ep|(p_in)=4.06104e-02 arg=+2.9713  |gap int Ey|(p_in)=5.9721e+01 arg=-1.9800  650 dirs  unknowns=[1098773, 1335605, 1608941, 1919919]  1285 s  est.err FarField=[(1, 0.000971261125), (2, 5.71515017e-05), (3, 2.55696919e-05)]
+[depthmap_2p95um 11/15] x=+5000 nm gap=30 nm  |Ep|(p_in)=3.87248e-02 arg=+2.9220  |gap int Ey|(p_in)=8.0424e+01 arg=-2.0295  650 dirs  unknowns=[1102175, 1338865, 1611361, 1926019]  1300 s  est.err FarField=[(1, 0.00109035815), (2, 6.15878853e-05), (3, 2.60488338e-05)]
+[depthmap_2p95um 12/15] x=+5000 nm gap=45 nm  |Ep|(p_in)=3.59785e-02 arg=+2.8493  |gap int Ey|(p_in)=1.0721e+02 arg=-2.0869  650 dirs  unknowns=[1108549, 1347453, 1621751, 1942759]  1157 s  est.err FarField=[(1, 0.00112561771), (2, 6.34184049e-05), (3, 2.58673352e-05)]
+[depthmap_2p95um 13/15] x=+5000 nm gap=60 nm  |Ep|(p_in)=3.33262e-02 arg=+2.7746  |gap int Ey|(p_in)=1.3071e+02 arg=-2.1335  650 dirs  unknowns=[1100043, 1331669, 1606131, 1920247]  1339 s  est.err FarField=[(1, 0.000762873014), (2, 5.6144617e-05), (3, 2.53937497e-05)]
+[depthmap_2p95um 14/15] x=+5000 nm gap=80 nm  |Ep|(p_in)=2.99497e-02 arg=+2.6670  |gap int Ey|(p_in)=1.5878e+02 arg=-2.1858  650 dirs  unknowns=[1101753, 1337085, 1615001, 1928227]  1314 s  est.err FarField=[(1, 0.00117948669), (2, 6.8534526e-05), (3, 2.59309461e-05)]
+[depthmap_2p95um 15/15] x=+5000 nm gap=101 nm  |Ep|(p_in)=2.66492e-02 arg=+2.5381  |gap int Ey|(p_in)=1.8538e+02 arg=-2.2333  650 dirs  unknowns=[1101419, 1340525, 1613471, 1931217]  1413 s  est.err FarField=[(1, 0.00100433081), (2, 5.94799752e-05), (3, 2.56145248e-05)]
+=== stage eqcheck_real2nm on smic126 (2026-11-12 08:43:28): 45 solves to run, 0 already done, fine mesh, 6.1 um
+[eqcheck_real2nm 1/45] x=-1000 nm gap=1 nm  |Ep|(p_in)=8.73435e-02 arg=+2.1023  |gap int Ey|(p_in)=8.0121e+00 arg=-2.3078  314 dirs  unknowns=[2168769, 2611979, 3130261, 3667729]  363 s  est.err FarField=[(1, 0.000884910189), (2, 7.08495979e-05), (3, 2.52364507e-05)]
+[eqcheck_real2nm 2/45] x=-1000 nm gap=2 nm  |Ep|(p_in)=8.72326e-02 arg=+2.0994  |gap int Ey|(p_in)=1.5319e+01 arg=-2.3097  314 dirs  unknowns=[2168769, 2610367, 3126309, 3664921]  364 s  est.err FarField=[(1, 0.000911953127), (2, 7.31818678e-05), (3, 3.25717599e-05)]
+[eqcheck_real2nm 3/45] x=-1000 nm gap=3 nm  |Ep|(p_in)=8.71244e-02 arg=+2.0967  |gap int Ey|(p_in)=2.2093e+01 arg=-2.3122  314 dirs  unknowns=[2168145, 2610627, 3127921, 3669185]  364 s  est.err FarField=[(1, 0.00096176513), (2, 7.3619721e-05), (3, 2.52707605e-05)]
+[eqcheck_real2nm 4/45] x=-1000 nm gap=4 nm  |Ep|(p_in)=8.70188e-02 arg=+2.0940  |gap int Ey|(p_in)=2.8510e+01 arg=-2.3156  314 dirs  unknowns=[2167261, 2609431, 3123293, 3661073]  373 s  est.err FarField=[(1, 0.000961057596), (2, 7.3591634e-05), (3, 2.5257212e-05)]
+[eqcheck_real2nm 5/45] x=-1000 nm gap=5 nm  |Ep|(p_in)=8.69154e-02 arg=+2.0913  |gap int Ey|(p_in)=3.4604e+01 arg=-2.3153  314 dirs  unknowns=[2166273, 2610639, 3123657, 3663413]  360 s  est.err FarField=[(1, 0.00102839553), (2, 7.68511226e-05), (3, 2.525366e-05)]
+[eqcheck_real2nm 6/45] x=-1000 nm gap=6 nm  |Ep|(p_in)=8.68140e-02 arg=+2.0887  |gap int Ey|(p_in)=4.0383e+01 arg=-2.3170  314 dirs  unknowns=[2169243, 2610853, 3126547, 3665159]  365 s  est.err FarField=[(1, 0.00086000252), (2, 7.05840881e-05), (3, 3.21287055e-05)]
+[eqcheck_real2nm 7/45] x=-1000 nm gap=8 nm  |Ep|(p_in)=8.66168e-02 arg=+2.0836  |gap int Ey|(p_in)=5.1361e+01 arg=-2.3202  314 dirs  unknowns=[2170329, 2603363, 3120785, 3656173]  367 s  est.err FarField=[(1, 0.000875041616), (2, 7.0986446e-05), (3, 3.36223193e-05)]
+[eqcheck_real2nm 8/45] x=-1000 nm gap=10 nm  |Ep|(p_in)=8.64260e-02 arg=+2.0787  |gap int Ey|(p_in)=6.1822e+01 arg=-2.3224  314 dirs  unknowns=[2167521, 2604467, 3123883, 3659999]  364 s  est.err FarField=[(1, 0.000858730034), (2, 7.05150537e-05), (3, 3.42945765e-05)]
+[eqcheck_real2nm 9/45] x=-1000 nm gap=14 nm  |Ep|(p_in)=8.60607e-02 arg=+2.0692  |gap int Ey|(p_in)=8.0485e+01 arg=-2.3283  314 dirs  unknowns=[2172097, 2614201, 3128811, 3668359]  369 s  est.err FarField=[(1, 0.000914400325), (2, 7.28603099e-05), (3, 3.01543769e-05)]
+[eqcheck_real2nm 10/45] x=-1000 nm gap=20 nm  |Ep|(p_in)=8.55454e-02 arg=+2.0556  |gap int Ey|(p_in)=1.0568e+02 arg=-2.3354  314 dirs  unknowns=[2170953, 2611603, 3129291, 3666915]  365 s  est.err FarField=[(1, 0.000975349087), (2, 7.59528475e-05), (3, 2.52212288e-05)]
+[eqcheck_real2nm 11/45] x=-1000 gap=30 FAILED
+Traceback (most recent call last):
+  File "/ddnA/work/coltonb/SNOM_JCM/Interface_LineScan_2D/run_2d.py", line 558, in run_stage
+    rec = run_point(base_keys, x, gap, name, wd, save, cfg.get('field_map', False))
+  File "/ddnA/work/coltonb/SNOM_JCM/Interface_LineScan_2D/run_2d.py", line 488, in run_point
+    results = solve('project.jcmp', keys, wd, f'jcm_{stage}.log')
+  File "/ddnA/work/coltonb/SNOM_JCM/Interface_LineScan_2D/run_2d.py", line 242, in solve
+    return jcmwave.solve(os.path.join(HERE, project), keys=keys, logfile=jcm_log, working_dir=workdir)
+  File "/home/coltonb/software/JCMsuite_6_0_10/ThirdPartySupport/Python/jcmwave/solve.py", line 478, in solve
+    raise RuntimeError('*** JCMsolve failed. ==>\n\n%s' % (str(msg),))
+RuntimeError: *** JCMsolve failed. ==>
+
+None
+
+[eqcheck_real2nm 12/45] x=-1000 nm gap=45 nm  |Ep|(p_in)=8.36629e-02 arg=+2.0049  |gap int Ey|(p_in)=1.8781e+02 arg=-2.3624  314 dirs  unknowns=[2176159, 2618063, 3135317, 3671121]  364 s  est.err FarField=[(1, 0.000854261415), (2, 6.97306965e-05), (3, 3.24019997e-05)]
+[eqcheck_real2nm 13/45] x=-1000 nm gap=60 nm  |Ep|(p_in)=8.26600e-02 arg=+1.9771  |gap int Ey|(p_in)=2.2792e+02 arg=-2.3764  314 dirs  unknowns=[2171993, 2605119, 3125263, 3662055]  353 s  est.err FarField=[(1, 0.000940937285), (2, 7.3019615e-05), (3, 3.1887459e-05)]
+[eqcheck_real2nm 14/45] x=-1000 nm gap=80 nm  |Ep|(p_in)=8.14140e-02 arg=+1.9419  |gap int Ey|(p_in)=2.7432e+02 arg=-2.3938  314 dirs  unknowns=[2173035, 2615299, 3127955, 3666531]  350 s  est.err FarField=[(1, 0.000878393627), (2, 7.01042487e-05), (3, 2.49061895e-05)]
+[eqcheck_real2nm 15/45] x=-1000 nm gap=101 nm  |Ep|(p_in)=8.01872e-02 arg=+1.9063  |gap int Ey|(p_in)=3.1734e+02 arg=-2.4111  314 dirs  unknowns=[2177513, 2617061, 3140817, 3680537]  358 s  est.err FarField=[(1, 0.000981911162), (2, 7.41787122e-05), (3, 3.18024749e-05)]
+[eqcheck_real2nm 16/45] x=+0 nm gap=1 nm  |Ep|(p_in)=7.37622e-02 arg=+2.2879  |gap int Ey|(p_in)=7.4145e+00 arg=-2.1723  314 dirs  unknowns=[2146297, 2575681, 3092183, 3624555]  351 s  est.err FarField=[(1, 0.00100330519), (2, 7.46769656e-05), (3, 2.38937183e-05)]
+[eqcheck_real2nm 17/45] x=+0 nm gap=2 nm  |Ep|(p_in)=7.36700e-02 arg=+2.2849  |gap int Ey|(p_in)=1.4203e+01 arg=-2.1792  314 dirs  unknowns=[2145725, 2574693, 3089739, 3625283]  358 s  est.err FarField=[(1, 0.00100376272), (2, 7.46713192e-05), (3, 2.92347996e-05)]
+[eqcheck_real2nm 18/45] x=+0 nm gap=3 nm  |Ep|(p_in)=7.35790e-02 arg=+2.2819  |gap int Ey|(p_in)=2.0575e+01 arg=-2.1875  314 dirs  unknowns=[2146245, 2575057, 3090779, 3626895]  350 s  est.err FarField=[(1, 0.00100354177), (2, 7.46609807e-05), (3, 2.77764964e-05)]
+[eqcheck_real2nm 19/45] x=+0 nm gap=4 nm  |Ep|(p_in)=7.34891e-02 arg=+2.2790  |gap int Ey|(p_in)=2.6583e+01 arg=-2.1913  314 dirs  unknowns=[2146349, 2574381, 3090155, 3627363]  350 s  est.err FarField=[(1, 0.00107514782), (2, 7.76185928e-05), (3, 2.39068681e-05)]
+[eqcheck_real2nm 20/45] x=+0 nm gap=5 nm  |Ep|(p_in)=7.34003e-02 arg=+2.2761  |gap int Ey|(p_in)=3.2342e+01 arg=-2.1953  314 dirs  unknowns=[2143593, 2570845, 3089053, 3624077]  364 s  est.err FarField=[(1, 0.00107387456), (2, 7.76016468e-05), (3, 2.39076353e-05)]
+[eqcheck_real2nm 21/45] x=+0 nm gap=6 nm  |Ep|(p_in)=7.33124e-02 arg=+2.2733  |gap int Ey|(p_in)=3.7759e+01 arg=-2.1997  314 dirs  unknowns=[2143749, 2569053, 3086753, 3619281]  353 s  est.err FarField=[(1, 0.00091605811), (2, 7.13880442e-05), (3, 3.1179313e-05)]
+[eqcheck_real2nm 22/45] x=+0 nm gap=8 nm  |Ep|(p_in)=7.31391e-02 arg=+2.2678  |gap int Ey|(p_in)=4.8181e+01 arg=-2.2071  314 dirs  unknowns=[2144685, 2569515, 3087533, 3618605]  353 s  est.err FarField=[(1, 0.000932804984), (2, 7.19859235e-05), (3, 3.3045215e-05)]
+[eqcheck_real2nm 23/45] x=+0 nm gap=10 nm  |Ep|(p_in)=7.29691e-02 arg=+2.2624  |gap int Ey|(p_in)=5.8268e+01 arg=-2.2137  314 dirs  unknowns=[2144529, 2570081, 3090769, 3622985]  360 s  est.err FarField=[(1, 0.000942760548), (2, 7.14207212e-05), (3, 3.07089884e-05)]
+[eqcheck_real2nm 24/45] x=+0 nm gap=14 nm  |Ep|(p_in)=7.26374e-02 arg=+2.2521  |gap int Ey|(p_in)=7.5884e+01 arg=-2.2246  314 dirs  unknowns=[2142709, 2570313, 3084787, 3614715]  353 s  est.err FarField=[(1, 0.000889514726), (2, 6.87009013e-05), (3, 3.22047362e-05)]
+[eqcheck_real2nm 25/45] x=+0 nm gap=20 nm  |Ep|(p_in)=7.21574e-02 arg=+2.2374  |gap int Ey|(p_in)=1.0003e+02 arg=-2.2385  314 dirs  unknowns=[2145309, 2572791, 3088347, 3618275]  353 s  est.err FarField=[(1, 0.000966104891), (2, 7.14552396e-05), (3, 2.3899886e-05)]
+[eqcheck_real2nm 26/45] x=+0 nm gap=30 nm  |Ep|(p_in)=7.13933e-02 arg=+2.2143  |gap int Ey|(p_in)=1.3490e+02 arg=-2.2576  314 dirs  unknowns=[2147181, 2575859, 3091687, 3619639]  353 s  est.err FarField=[(1, 0.000885386598), (2, 6.84874127e-05), (3, 3.31901653e-05)]
+[eqcheck_real2nm 27/45] x=+0 nm gap=45 nm  |Ep|(p_in)=7.03080e-02 arg=+2.1820  |gap int Ey|(p_in)=1.7958e+02 arg=-2.2810  314 dirs  unknowns=[2149891, 2579847, 3093819, 3624111]  356 s  est.err FarField=[(1, 0.000883167706), (2, 6.83399234e-05), (3, 2.77469379e-05)]
+[eqcheck_real2nm 28/45] x=+0 nm gap=60 nm  |Ep|(p_in)=6.92746e-02 arg=+2.1515  |gap int Ey|(p_in)=2.1831e+02 arg=-2.3007  314 dirs  unknowns=[2148585, 2579009, 3095529, 3625925]  363 s  est.err FarField=[(1, 0.000803787176), (2, 6.59480795e-05), (3, 3.21502156e-05)]
+[eqcheck_real2nm 29/45] x=+0 nm gap=80 nm  |Ep|(p_in)=6.79546e-02 arg=+2.1125  |gap int Ey|(p_in)=2.6329e+02 arg=-2.3239  314 dirs  unknowns=[2145935, 2571397, 3089813, 3620485]  359 s  est.err FarField=[(1, 0.000831418625), (2, 6.63783288e-05), (3, 2.373128e-05)]
+[eqcheck_real2nm 30/45] x=+0 nm gap=101 nm  |Ep|(p_in)=6.66225e-02 arg=+2.0730  |gap int Ey|(p_in)=3.0518e+02 arg=-2.3458  314 dirs  unknowns=[2147657, 2576269, 3094777, 3624149]  360 s  est.err FarField=[(1, 0.000838611033), (2, 6.70142368e-05), (3, 3.10432098e-05)]
+[eqcheck_real2nm 31/45] x=+1000 nm gap=1 nm  |Ep|(p_in)=6.80846e-02 arg=+2.2217  |gap int Ey|(p_in)=7.0297e+00 arg=-2.1229  314 dirs  unknowns=[2160747, 2597745, 3117061, 3655673]  359 s  est.err FarField=[(1, 0.00092321709), (2, 7.03055921e-05), (3, 2.36569416e-05)]
+[eqcheck_real2nm 32/45] x=+1000 nm gap=2 nm  |Ep|(p_in)=6.80199e-02 arg=+2.2186  |gap int Ey|(p_in)=1.3495e+01 arg=-2.1360  314 dirs  unknowns=[2161007, 2597433, 3116885, 3655749]  355 s  est.err FarField=[(1, 0.000924542343), (2, 7.03109917e-05), (3, 2.3650931e-05)]
+[eqcheck_real2nm 33/45] x=+1000 nm gap=3 nm  |Ep|(p_in)=6.79548e-02 arg=+2.2156  |gap int Ey|(p_in)=1.9527e+01 arg=-2.1455  314 dirs  unknowns=[2164235, 2593163, 3105053, 3643705]  353 s  est.err FarField=[(1, 0.000849475857), (2, 6.78450351e-05), (3, 2.36058611e-05)]
+[eqcheck_real2nm 34/45] x=+1000 nm gap=4 nm  |Ep|(p_in)=6.78896e-02 arg=+2.2126  |gap int Ey|(p_in)=2.5299e+01 arg=-2.1541  314 dirs  unknowns=[2165583, 2601055, 3115459, 3655579]  353 s  est.err FarField=[(1, 0.000969215458), (2, 7.21707726e-05), (3, 2.36491226e-05)]
+[eqcheck_real2nm 35/45] x=+1000 nm gap=5 nm  |Ep|(p_in)=6.78243e-02 arg=+2.2097  |gap int Ey|(p_in)=3.0857e+01 arg=-2.1630  314 dirs  unknowns=[2167615, 2597255, 3117575, 3657527]  358 s  est.err FarField=[(1, 0.000849271685), (2, 6.78384201e-05), (3, 2.36202186e-05)]
+[eqcheck_real2nm 36/45] x=+1000 nm gap=6 nm  |Ep|(p_in)=6.77590e-02 arg=+2.2068  |gap int Ey|(p_in)=3.6214e+01 arg=-2.1685  314 dirs  unknowns=[2167871, 2600327, 3110213, 3649969]  355 s  est.err FarField=[(1, 0.000907807169), (2, 6.9243689e-05), (3, 3.18761146e-05)]
+[eqcheck_real2nm 37/45] x=+1000 nm gap=8 nm  |Ep|(p_in)=6.76284e-02 arg=+2.2012  |gap int Ey|(p_in)=4.6257e+01 arg=-2.1795  314 dirs  unknowns=[2169951, 2604545, 3116887, 3655707]  359 s  est.err FarField=[(1, 0.00104052888), (2, 7.60781625e-05), (3, 2.90237982e-05)]
+[eqcheck_real2nm 38/45] x=+1000 nm gap=10 nm  |Ep|(p_in)=6.74980e-02 arg=+2.1957  |gap int Ey|(p_in)=5.5655e+01 arg=-2.1889  314 dirs  unknowns=[2166161, 2601009, 3113333, 3649657]  353 s  est.err FarField=[(1, 0.000834735335), (2, 6.68341606e-05), (3, 3.18245471e-05)]
+[eqcheck_real2nm 39/45] x=+1000 nm gap=14 nm  |Ep|(p_in)=6.72385e-02 arg=+2.1850  |gap int Ey|(p_in)=7.3035e+01 arg=-2.2064  314 dirs  unknowns=[2167819, 2597715, 3117205, 3654101]  360 s  est.err FarField=[(1, 0.00102485345), (2, 7.5477082e-05), (3, 3.31784849e-05)]
+[eqcheck_real2nm 40/45] x=+1000 nm gap=20 nm  |Ep|(p_in)=6.68527e-02 arg=+2.1698  |gap int Ey|(p_in)=9.5966e+01 arg=-2.2255  314 dirs  unknowns=[2174377, 2604215, 3126785, 3664825]  358 s  est.err FarField=[(1, 0.000927516995), (2, 7.07018911e-05), (3, 2.73473519e-05)]
+[eqcheck_real2nm 41/45] x=+1000 nm gap=30 nm  |Ep|(p_in)=6.62199e-02 arg=+2.1459  |gap int Ey|(p_in)=1.3070e+02 arg=-2.2525  314 dirs  unknowns=[2170679, 2606273, 3125967, 3662959]  361 s  est.err FarField=[(1, 0.000949728759), (2, 7.06724013e-05), (3, 2.3656896e-05)]
+[eqcheck_real2nm 42/45] x=+1000 nm gap=45 nm  |Ep|(p_in)=6.52931e-02 arg=+2.1122  |gap int Ey|(p_in)=1.7487e+02 arg=-2.2819  314 dirs  unknowns=[2173695, 2610141, 3125871, 3663947]  363 s  est.err FarField=[(1, 0.000848232445), (2, 6.76222423e-05), (3, 3.11061312e-05)]
+[eqcheck_real2nm 43/45] x=+1000 nm gap=60 nm  |Ep|(p_in)=6.43897e-02 arg=+2.0801  |gap int Ey|(p_in)=2.1319e+02 arg=-2.3059  314 dirs  unknowns=[2170211, 2602101, 3114679, 3653759]  359 s  est.err FarField=[(1, 0.000907074292), (2, 6.97515592e-05), (3, 3.02804843e-05)]
+[eqcheck_real2nm 44/45] x=+1000 nm gap=80 nm  |Ep|(p_in)=6.32170e-02 arg=+2.0390  |gap int Ey|(p_in)=2.5976e+02 arg=-2.3540  314 dirs  unknowns=[2170265, 2604777, 3118529, 3658397]  360 s  est.err FarField=[(1, 0.00102068501), (2, 7.55356929e-05), (3, 2.36022551e-05)]
+[eqcheck_real2nm 45/45] x=+1000 nm gap=101 nm  |Ep|(p_in)=6.20211e-02 arg=+1.9969  |gap int Ey|(p_in)=3.0007e+02 arg=-2.3577  314 dirs  unknowns=[2174789, 2606567, 3132917, 3672265]  360 s  est.err FarField=[(1, 0.00090202313), (2, 6.90920889e-05), (3, 3.29459084e-05)]
+=== stage eqcheck_eq5nm on smic126 (2026-11-12 13:07:32): 45 solves to run, 0 already done, fine mesh, 6.1 um
+[eqcheck_eq5nm 1/45] x=-1000 nm gap=1 nm  |Ep|(p_in)=8.73901e-02 arg=+2.1025  |gap int Ey|(p_in)=7.9517e+00 arg=-2.3088  314 dirs  unknowns=[1244529, 1500081, 1830863, 2162311]  221 s  est.err FarField=[(1, 0.000959391728), (2, 7.64621454e-05), (3, 2.73604367e-05)]
+[eqcheck_eq5nm 2/45] x=-1000 nm gap=2 nm  |Ep|(p_in)=8.72795e-02 arg=+2.0997  |gap int Ey|(p_in)=1.5169e+01 arg=-2.3106  314 dirs  unknowns=[1243333, 1497585, 1827899, 2154563]  216 s  est.err FarField=[(1, 0.000958892182), (2, 7.68203775e-05), (3, 3.29714069e-05)]
+[eqcheck_eq5nm 3/45] x=-1000 nm gap=3 nm  |Ep|(p_in)=8.71716e-02 arg=+2.0969  |gap int Ey|(p_in)=2.1909e+01 arg=-2.3127  314 dirs  unknowns=[1243333, 1498209, 1829171, 2155003]  216 s  est.err FarField=[(1, 0.000958572869), (2, 7.67606215e-05), (3, 3.29550845e-05)]
+[eqcheck_eq5nm 4/45] x=-1000 nm gap=4 nm  |Ep|(p_in)=8.70662e-02 arg=+2.0942  |gap int Ey|(p_in)=2.8337e+01 arg=-2.3131  314 dirs  unknowns=[1243541, 1497585, 1827091, 2151675]  217 s  est.err FarField=[(1, 0.0009582558), (2, 7.67817416e-05), (3, 3.29662129e-05)]
+[eqcheck_eq5nm 5/45] x=-1000 nm gap=5 nm  |Ep|(p_in)=8.69629e-02 arg=+2.0916  |gap int Ey|(p_in)=3.4357e+01 arg=-2.3148  314 dirs  unknowns=[1243385, 1497637, 1827195, 2151675]  218 s  est.err FarField=[(1, 0.000957941659), (2, 7.67681838e-05), (3, 3.29565675e-05)]
+[eqcheck_eq5nm 6/45] x=-1000 nm gap=6 nm  |Ep|(p_in)=8.68617e-02 arg=+2.0890  |gap int Ey|(p_in)=3.9515e+01 arg=-2.3258  314 dirs  unknowns=[1243645, 1498157, 1827975, 2154119]  215 s  est.err FarField=[(1, 0.000957629017), (2, 7.67460614e-05), (3, 3.29199147e-05)]
+[eqcheck_eq5nm 7/45] x=-1000 nm gap=8 nm  |Ep|(p_in)=8.66647e-02 arg=+2.0839  |gap int Ey|(p_in)=5.1200e+01 arg=-2.3201  314 dirs  unknowns=[1244373, 1499457, 1828281, 2154373]  217 s  est.err FarField=[(1, 0.000946013484), (2, 7.65713348e-05), (3, 3.28919385e-05)]
+[eqcheck_eq5nm 8/45] x=-1000 nm gap=10 nm  |Ep|(p_in)=8.64741e-02 arg=+2.0790  |gap int Ey|(p_in)=6.1520e+01 arg=-2.3234  314 dirs  unknowns=[1244633, 1499821, 1829581, 2155725]  217 s  est.err FarField=[(1, 0.000945661973), (2, 7.65201702e-05), (3, 3.30265616e-05)]
+[eqcheck_eq5nm 9/45] x=-1000 nm gap=14 nm  |Ep|(p_in)=8.61090e-02 arg=+2.0695  |gap int Ey|(p_in)=8.0315e+01 arg=-2.3283  314 dirs  unknowns=[1244529, 1500601, 1830933, 2156401]  217 s  est.err FarField=[(1, 0.000944258596), (2, 7.65134837e-05), (3, 3.31337835e-05)]
+[eqcheck_eq5nm 10/45] x=-1000 nm gap=20 nm  |Ep|(p_in)=8.55938e-02 arg=+2.0560  |gap int Ey|(p_in)=1.0567e+02 arg=-2.3358  314 dirs  unknowns=[1245309, 1502057, 1834613, 2160081]  219 s  est.err FarField=[(1, 0.000941448477), (2, 7.64064195e-05), (3, 3.30314183e-05)]
+[eqcheck_eq5nm 11/45] x=-1000 nm gap=30 nm  |Ep|(p_in)=8.47989e-02 arg=+2.0348  |gap int Ey|(p_in)=1.4258e+02 arg=-2.3411  314 dirs  unknowns=[1245933, 1500809, 1834093, 2158677]  223 s  est.err FarField=[(1, 0.000932240431), (2, 7.6041534e-05), (3, 3.30219225e-05)]
+[eqcheck_eq5nm 12/45] x=-1000 nm gap=45 nm  |Ep|(p_in)=8.37102e-02 arg=+2.0053  |gap int Ey|(p_in)=1.8798e+02 arg=-2.3625  314 dirs  unknowns=[1246349, 1501849, 1837567, 2162983]  224 s  est.err FarField=[(1, 0.000931156364), (2, 7.57929775e-05), (3, 3.2431116e-05)]
+[eqcheck_eq5nm 13/45] x=-1000 nm gap=60 nm  |Ep|(p_in)=8.27064e-02 arg=+1.9775  |gap int Ey|(p_in)=2.2781e+02 arg=-2.3763  314 dirs  unknowns=[1247701, 1505125, 1839151, 2166803]  219 s  est.err FarField=[(1, 0.000929746772), (2, 7.57251517e-05), (3, 3.25551849e-05)]
+[eqcheck_eq5nm 14/45] x=-1000 nm gap=80 nm  |Ep|(p_in)=8.14590e-02 arg=+1.9423  |gap int Ey|(p_in)=2.7422e+02 arg=-2.3939  314 dirs  unknowns=[1247909, 1505593, 1841127, 2169195]  224 s  est.err FarField=[(1, 0.00092484009), (2, 7.55493341e-05), (3, 3.32094125e-05)]
+[eqcheck_eq5nm 15/45] x=-1000 nm gap=101 nm  |Ep|(p_in)=8.02305e-02 arg=+1.9068  |gap int Ey|(p_in)=3.1740e+02 arg=-2.4110  314 dirs  unknowns=[1248949, 1506477, 1841727, 2170783]  227 s  est.err FarField=[(1, 0.00100722928), (2, 7.6584477e-05), (3, 3.35772611e-05)]
+[eqcheck_eq5nm 16/45] x=+0 nm gap=1 nm  |Ep|(p_in)=7.37570e-02 arg=+2.2880  |gap int Ey|(p_in)=7.3252e+00 arg=-2.1724  314 dirs  unknowns=[1239631, 1513683, 1819965, 2153649]  221 s  est.err FarField=[(1, 0.000611432547), (2, 6.24984143e-05), (3, 2.50820657e-05)]
+[eqcheck_eq5nm 17/45] x=+0 nm gap=2 nm  |Ep|(p_in)=7.36652e-02 arg=+2.2850  |gap int Ey|(p_in)=1.4082e+01 arg=-2.1764  314 dirs  unknowns=[1238279, 1511655, 1816117, 2143717]  221 s  est.err FarField=[(1, 0.000617628774), (2, 6.28674347e-05), (3, 2.39152521e-05)]
+[eqcheck_eq5nm 18/45] x=+0 nm gap=3 nm  |Ep|(p_in)=7.35745e-02 arg=+2.2820  |gap int Ey|(p_in)=2.0589e+01 arg=-2.1709  314 dirs  unknowns=[1238019, 1509899, 1815545, 2142313]  216 s  est.err FarField=[(1, 0.000671759884), (2, 6.47274755e-05), (3, 2.39178723e-05)]
+[eqcheck_eq5nm 19/45] x=+0 nm gap=4 nm  |Ep|(p_in)=7.34849e-02 arg=+2.2791  |gap int Ey|(p_in)=2.6429e+01 arg=-2.1931  314 dirs  unknowns=[1238331, 1510107, 1814869, 2140129]  219 s  est.err FarField=[(1, 0.000671760945), (2, 6.47334035e-05), (3, 2.39158085e-05)]
+[eqcheck_eq5nm 20/45] x=+0 nm gap=5 nm  |Ep|(p_in)=7.33963e-02 arg=+2.2763  |gap int Ey|(p_in)=3.4977e+01 arg=-2.1676  314 dirs  unknowns=[1238695, 1511135, 1816169, 2140441]  216 s  est.err FarField=[(1, 0.000671759202), (2, 6.47177721e-05), (3, 2.3932695e-05)]
+[eqcheck_eq5nm 21/45] x=+0 nm gap=6 nm  |Ep|(p_in)=7.33085e-02 arg=+2.2735  |gap int Ey|(p_in)=3.7496e+01 arg=-2.2081  314 dirs  unknowns=[1239007, 1512175, 1817351, 2143807]  217 s  est.err FarField=[(1, 0.000822980413), (2, 6.73702175e-05), (3, 2.39337303e-05)]
+[eqcheck_eq5nm 22/45] x=+0 nm gap=8 nm  |Ep|(p_in)=7.31357e-02 arg=+2.2680  |gap int Ey|(p_in)=4.8001e+01 arg=-2.2068  314 dirs  unknowns=[1239007, 1511915, 1816935, 2143027]  218 s  est.err FarField=[(1, 0.000679076105), (2, 6.47786122e-05), (3, 2.39181395e-05)]
+[eqcheck_eq5nm 23/45] x=+0 nm gap=10 nm  |Ep|(p_in)=7.29660e-02 arg=+2.2626  |gap int Ey|(p_in)=5.7784e+01 arg=-2.2135  314 dirs  unknowns=[1238695, 1509743, 1816793, 2142001]  222 s  est.err FarField=[(1, 0.000671715957), (2, 6.47100154e-05), (3, 2.39273765e-05)]
+[eqcheck_eq5nm 24/45] x=+0 nm gap=14 nm  |Ep|(p_in)=7.26347e-02 arg=+2.2523  |gap int Ey|(p_in)=7.5537e+01 arg=-2.2253  314 dirs  unknowns=[1238175, 1510783, 1816117, 2141377]  219 s  est.err FarField=[(1, 0.00067894697), (2, 6.47561738e-05), (3, 2.3915217e-05)]
+[eqcheck_eq5nm 25/45] x=+0 nm gap=20 nm  |Ep|(p_in)=7.21551e-02 arg=+2.2376  |gap int Ey|(p_in)=9.9944e+01 arg=-2.2383  314 dirs  unknowns=[1241515, 1513859, 1821103, 2144751]  222 s  est.err FarField=[(1, 0.000674560018), (2, 6.48716906e-05), (3, 2.80594662e-05)]
+[eqcheck_eq5nm 26/45] x=+0 nm gap=30 nm  |Ep|(p_in)=7.13914e-02 arg=+2.2145  |gap int Ey|(p_in)=1.3490e+02 arg=-2.2574  314 dirs  unknowns=[1241983, 1515289, 1822351, 2147039]  223 s  est.err FarField=[(1, 0.000674534865), (2, 6.4653636e-05), (3, 2.77677408e-05)]
+[eqcheck_eq5nm 27/45] x=+0 nm gap=45 nm  |Ep|(p_in)=7.03062e-02 arg=+2.1822  |gap int Ey|(p_in)=1.8065e+02 arg=-2.2822  314 dirs  unknowns=[1241931, 1516029, 1823831, 2151639]  224 s  est.err FarField=[(1, 0.000666980513), (2, 6.46760047e-05), (3, 2.76661787e-05)]
+[eqcheck_eq5nm 28/45] x=+0 nm gap=60 nm  |Ep|(p_in)=6.92726e-02 arg=+2.1517  |gap int Ey|(p_in)=2.1806e+02 arg=-2.3006  314 dirs  unknowns=[1242555, 1517381, 1826185, 2153265]  226 s  est.err FarField=[(1, 0.000687196598), (2, 6.50379541e-05), (3, 2.78490508e-05)]
+[eqcheck_eq5nm 29/45] x=+0 nm gap=80 nm  |Ep|(p_in)=6.79522e-02 arg=+2.1128  |gap int Ey|(p_in)=2.6325e+02 arg=-2.3238  314 dirs  unknowns=[1243597, 1519825, 1828761, 2156517]  227 s  est.err FarField=[(1, 0.000743238937), (2, 6.64118032e-05), (3, 2.49585359e-05)]
+[eqcheck_eq5nm 30/45] x=+0 nm gap=101 nm  |Ep|(p_in)=6.66195e-02 arg=+2.0732  |gap int Ey|(p_in)=3.0531e+02 arg=-2.3458  314 dirs  unknowns=[1244415, 1523877, 1832671, 2160531]  407 s  est.err FarField=[(1, 0.000681378989), (2, 6.43601061e-05), (3, 2.3720553e-05)]
+[eqcheck_eq5nm 31/45] x=+1000 gap=1 FAILED
+Traceback (most recent call last):
+  File "/ddnA/work/coltonb/SNOM_JCM/Interface_LineScan_2D/run_2d.py", line 558, in run_stage
+    rec = run_point(base_keys, x, gap, name, wd, save, cfg.get('field_map', False))
+  File "/ddnA/work/coltonb/SNOM_JCM/Interface_LineScan_2D/run_2d.py", line 488, in run_point
+    results = solve('project.jcmp', keys, wd, f'jcm_{stage}.log')
+  File "/ddnA/work/coltonb/SNOM_JCM/Interface_LineScan_2D/run_2d.py", line 242, in solve
+    return jcmwave.solve(os.path.join(HERE, project), keys=keys, logfile=jcm_log, working_dir=workdir)
+  File "/home/coltonb/software/JCMsuite_6_0_10/ThirdPartySupport/Python/jcmwave/solve.py", line 478, in solve
+    raise RuntimeError('*** JCMsolve failed. ==>\n\n%s' % (str(msg),))
+RuntimeError: *** JCMsolve failed. ==>
+
+None
+
+[eqcheck_eq5nm 32/45] x=+1000 gap=2 FAILED
+Traceback (most recent call last):
+  File "/ddnA/work/coltonb/SNOM_JCM/Interface_LineScan_2D/run_2d.py", line 558, in run_stage
+    rec = run_point(base_keys, x, gap, name, wd, save, cfg.get('field_map', False))
+  File "/ddnA/work/coltonb/SNOM_JCM/Interface_LineScan_2D/run_2d.py", line 488, in run_point
+    results = solve('project.jcmp', keys, wd, f'jcm_{stage}.log')
+  File "/ddnA/work/coltonb/SNOM_JCM/Interface_LineScan_2D/run_2d.py", line 242, in solve
+    return jcmwave.solve(os.path.join(HERE, project), keys=keys, logfile=jcm_log, working_dir=workdir)
+  File "/home/coltonb/software/JCMsuite_6_0_10/ThirdPartySupport/Python/jcmwave/solve.py", line 478, in solve
+    raise RuntimeError('*** JCMsolve failed. ==>\n\n%s' % (str(msg),))
+RuntimeError: *** JCMsolve failed. ==>
+
+None
+
+[eqcheck_eq5nm 33/45] x=+1000 gap=3 FAILED
+Traceback (most recent call last):
+  File "/ddnA/work/coltonb/SNOM_JCM/Interface_LineScan_2D/run_2d.py", line 558, in run_stage
+    rec = run_point(base_keys, x, gap, name, wd, save, cfg.get('field_map', False))
+  File "/ddnA/work/coltonb/SNOM_JCM/Interface_LineScan_2D/run_2d.py", line 488, in run_point
+    results = solve('project.jcmp', keys, wd, f'jcm_{stage}.log')
+  File "/ddnA/work/coltonb/SNOM_JCM/Interface_LineScan_2D/run_2d.py", line 242, in solve
+    return jcmwave.solve(os.path.join(HERE, project), keys=keys, logfile=jcm_log, working_dir=workdir)
+  File "/home/coltonb/software/JCMsuite_6_0_10/ThirdPartySupport/Python/jcmwave/solve.py", line 478, in solve
+    raise RuntimeError('*** JCMsolve failed. ==>\n\n%s' % (str(msg),))
+RuntimeError: *** JCMsolve failed. ==>
+
+None
+
+Traceback (most recent call last):
+  File "/ddnA/work/coltonb/SNOM_JCM/Interface_LineScan_2D/run_2d.py", line 616, in <module>
+    run_stage(stage, part)
+  File "/ddnA/work/coltonb/SNOM_JCM/Interface_LineScan_2D/run_2d.py", line 558, in run_stage
+    rec = run_point(base_keys, x, gap, name, wd, save, cfg.get('field_map', False))
+  File "/ddnA/work/coltonb/SNOM_JCM/Interface_LineScan_2D/run_2d.py", line 488, in run_point
+    results = solve('project.jcmp', keys, wd, f'jcm_{stage}.log')
+  File "/ddnA/work/coltonb/SNOM_JCM/Interface_LineScan_2D/run_2d.py", line 242, in solve
+    return jcmwave.solve(os.path.join(HERE, project), keys=keys, logfile=jcm_log, working_dir=workdir)
+  File "/home/coltonb/software/JCMsuite_6_0_10/ThirdPartySupport/Python/jcmwave/solve.py", line 478, in solve
+    raise RuntimeError('*** JCMsolve failed. ==>\n\n%s' % (str(msg),))
+RuntimeError: *** JCMsolve failed. ==>
+
+None
+stage eqcheck_eq5nm failed, stopping
