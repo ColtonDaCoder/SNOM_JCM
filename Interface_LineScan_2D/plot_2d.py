@@ -133,7 +133,7 @@ def plot_complex(stage, gap=5):
     print('wrote', out)
 
 
-if __name__ == '__main__' and (len(sys.argv) < 2 or sys.argv[1] not in ('ep_sub', 'ep_step', 'ep_lines', 'approach', 'demod', 's2s3', 'nearfield', 'compare', 's2s3_prov', 's2s3_both', 's2s3_wl', 's2s3_wl3', 'explain', 'tapview', 'tapview_inphase', 's2s3_wl_amp', 'nk', 'heights', 'farfield', 'nfmaps')):
+if __name__ == '__main__' and (len(sys.argv) < 2 or sys.argv[1] not in ('ep_sub', 'ep_step', 'ep_lines', 'approach', 'demod', 's2s3', 'nearfield', 'compare', 's2s3_prov', 's2s3_both', 's2s3_wl', 's2s3_wl3', 'explain', 'tapview', 'tapview_inphase', 's2s3_wl_amp', 'nk', 'heights', 'farfield', 'nfmaps', 'winmat', 'winimg')):
     what = sys.argv[1] if len(sys.argv) > 1 else 'scan_h5'
     plot_scan(what)
     plot_combined(what)
@@ -303,6 +303,9 @@ SETS = {'sin5': (('scan_demod', 'scan_h5', 'scan_demod_fill'), '', '5 nm SiN, 6.
         'sin20': (('scan_demod_sin20',), '_sin20', '20 nm SiN, 6.1 um'),
         'wl5p5': (('scan_demod_5p5um',), '_5p5um', '5 nm SiN, 5.5 um'),
         'wl2p95': (('scan_demod_2p95um',), '_2p95um', '5 nm SiN, 2.95 um')}
+for _w, _lab in (('SiO2', '15 nm SiO$_2$'), ('Si3N4', '15 nm Si$_3$N$_4$'), ('graphene', 'graphene'), ('hBN', 'hBN')):
+    for _t, _wl in (('6p1um', '6.1 um'), ('2p95um', '2.95 um')):
+        SETS[f'win_{_w}_{_t}'] = ((f'win_{_w}_{_t}',), f'_win_{_w}_{_t}', f'{_lab}, {_wl}')
 SET = _SET_ARG or 'sin5'
 
 
@@ -902,6 +905,63 @@ def plot_s2s3_amplitude(sets=(('sin5', 'C0', '1639 cm⁻¹'), ('wl5p5', 'C2', '1
 
 if __name__ == '__main__' and len(sys.argv) > 1 and sys.argv[1] == 's2s3_wl_amp':
     plot_s2s3_amplitude()
+
+
+def plot_windows():
+    """|S2/S3| for the window materials, one figure per wavelength (data sets present so far)."""
+    # fixed colour per window; sets without data are skipped by plot_s2s3_amplitude
+    for tag, wn, base in (('6p1um', '1639 cm⁻¹', (('sin5', 'C0', '5 nm SiN'), ('sin20', 'C1', '20 nm SiN'))),
+                          ('2p95um', '3390 cm⁻¹', (('wl2p95', 'C0', '5 nm SiN'),))):
+        sets = list(base) + [(f'win_{w}_{tag}', c, lab) for w, c, lab in
+                             (('SiO2', 'C2', '15 nm SiO$_2$'), ('Si3N4', 'C3', '15 nm Si$_3$N$_4$'),
+                              ('graphene', 'C4', 'graphene'), ('hBN', 'C5', 'hBN'))]
+        plot_s2s3_amplitude(sets=sets, fname=f'S2_over_S3_windows_{tag}.png', title=f'Window comparison, {wn}')
+
+
+if __name__ == '__main__' and len(sys.argv) > 1 and sys.argv[1] == 'winmat':
+    plot_windows()
+
+
+def plot_windows_image(half=250, step=1.0):
+    """
+    Simulated 'image' per window at 6.1 um: the |S2/S3| line scan (normalised to the oil end) repeated for
+    every y on a 500 x 500 nm grid, interface at x = 0, one shared colour scale.
+    """
+    sets = (('sin5', '5 nm SiN'), ('sin20', '20 nm SiN'), ('win_SiO2_6p1um', '15 nm SiO$_2$'),
+            ('win_Si3N4_6p1um', '15 nm Si$_3$N$_4$'), ('win_graphene_6p1um', 'graphene'), ('win_hBN_6p1um', 'hBN'))
+    xi = np.arange(-half, half + 1e-9, step)
+    imgs = []
+    for s, lab in sets:
+        rows = demod_rows(s)
+        if not rows:
+            continue
+        x = np.array([r[0] for r in rows])
+        amp = np.array([abs(r[1][2]/r[1][3]) for r in rows])
+        imgs.append((lab, np.interp(xi, x, amp/amp[0])))
+    vmin = min(p.min() for _, p in imgs)
+    vmax = max(p.max() for _, p in imgs)
+    with plt.rc_context({'font.size': 15, 'axes.titlesize': 17, 'axes.labelsize': 16}):
+        fig, axs = plt.subplots(1, len(imgs), figsize=(4.6*len(imgs) + 1.2, 5), squeeze=False)
+        axs = axs[0]
+        for ax, (lab, prof) in zip(axs, imgs):
+            img = np.tile(prof, (int(round(2*half/step)) + 1, 1))
+            im = ax.imshow(img, extent=(-half, half, 0, 2*half), origin='lower', cmap='inferno',
+                           vmin=vmin, vmax=vmax, interpolation='nearest')
+            ax.set_title(lab)
+            ax.set_xlabel('x (nm)')
+        axs[0].set_ylabel('y (nm)')
+        for ax in axs[1:]:
+            ax.set_yticklabels([])
+        cb = fig.colorbar(im, ax=list(axs), shrink=0.9, pad=0.015, fraction=0.03)
+        cb.set_label('Normalized |S$_2$ / S$_3$|')
+        out = os.path.join(FIGS, 'S2_over_S3_windows_6p1um_image.png')
+        fig.savefig(out, dpi=150, bbox_inches='tight')
+        plt.close(fig)
+    print('wrote', out)
+
+
+if __name__ == '__main__' and len(sys.argv) > 1 and sys.argv[1] == 'winimg':
+    plot_windows_image()
 
 
 def plot_nk(wmin=2.5, wmax=7.0):
