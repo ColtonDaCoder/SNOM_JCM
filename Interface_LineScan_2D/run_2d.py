@@ -143,6 +143,8 @@ for _name, _layers, _sub in (('stack1_sin5_ots_air', [[7, 5.0], [9, 1.5]], 1),
     STAGES[_name] = dict(mesh='fine', wvl=6.1, x=[0], gaps=sorted(HEIGHTS + [5]),
                          geom={'t_SiN': sum(t for _, t in _layers), 'stack': _layers, 'stack_substrate': _sub},
                          **({'extra_materials': {'Si': 'Si_Li1980.csv'}} if _sub == 11 else {}))
+    # near-field map at a 5 nm gap (same export window as nearfield_map) -> results/fields/<name>_nf_x+0_g5.npz
+    STAGES[_name + '_nf'] = dict(STAGES[_name], gaps=[5], field_map=True)
 MIN_DIRECTIONS = 20     # far-field directions inside the NA window; fewer -> raise ft_refinements
 
 MATERIAL_FILES = {
