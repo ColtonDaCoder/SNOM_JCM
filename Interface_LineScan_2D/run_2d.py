@@ -31,6 +31,7 @@ s = E along z (perpendicular to the plane of incidence), p = E in the x-y plane.
     python run_2d.py --stage win_graphene_6p1um # monolayers win_<graphene|hBN>_<6p1um|2p95um>: 2 nm equivalent layer (eqlayer_keys)
     python run_2d.py --stage eqcheck_real2nm    # check of the equivalent layer: eqcheck_real2nm / eqcheck_eq5nm / eqcheck_eq12nm
     python run_2d.py --stage depthmap_6p1um     # depth sensitivity maps (also depthmap_2p95um): field inside the water, 15 heights
+    python run_2d.py --stage stack1_sin5_ots_air  # uniform stacks in air (also stack2_ots_sin5_air, stack3_ots_sin20_si), 6.1 um, 15 heights
     python run_2d.py --jcm                  # only write the .jcm files (JCMcontrol)
 
 Per solve (results/<stage>[.partIofN].pkl): backscattered far field in the NA window for s and p
@@ -130,6 +131,18 @@ for _t in (5, 12):
 # E.E over the tapping cycle -> where S1..S4 come from.
 for _wvl, _tag in ((6.1, '6p1um'), (2.95, '2p95um')):
     STAGES[f'depthmap_{_tag}'] = dict(mesh='fine', wvl=_wvl, x=[5000], gaps=sorted(HEIGHTS + [5]), field_map='depth')
+# Uniform stacks in air (no lateral structure, so one tip position), 6.1 um, 15 heights, real layers (no
+# equivalent layers).  Layers from the top surface (y = 0) down as [DomainId, thickness nm]; DomainId 7 =
+# Si3N4 (Kischkat), 9 = OTS (n-octane stand-in, Myers), 11 = Si (Li 1980); substrate 1 = air.
+#   stack1_sin5_ots_air:   Air / 5 nm Si3N4 / 1.5 nm OTS / Air
+#   stack2_ots_sin5_air:   Air / 1.5 nm OTS / 5 nm Si3N4 / Air
+#   stack3_ots_sin20_si:   Air / 1.5 nm OTS / 20 nm Si3N4 / Si
+for _name, _layers, _sub in (('stack1_sin5_ots_air', [[7, 5.0], [9, 1.5]], 1),
+                             ('stack2_ots_sin5_air', [[9, 1.5], [7, 5.0]], 1),
+                             ('stack3_ots_sin20_si', [[9, 1.5], [7, 20.0]], 11)):
+    STAGES[_name] = dict(mesh='fine', wvl=6.1, x=[0], gaps=sorted(HEIGHTS + [5]),
+                         geom={'t_SiN': sum(t for _, t in _layers), 'stack': _layers, 'stack_substrate': _sub},
+                         **({'extra_materials': {'Si': 'Si_Li1980.csv'}} if _sub == 11 else {}))
 MIN_DIRECTIONS = 20     # far-field directions inside the NA window; fewer -> raise ft_refinements
 
 MATERIAL_FILES = {
@@ -177,14 +190,15 @@ def nk_permittivity(path, wvl):
     return eps.real, eps.imag
 
 
-def material_files(window=None):
-    """MATERIAL_FILES with the window (domain 7, key prefix 'SN') replaced by a stage's window file."""
-    return dict(MATERIAL_FILES, **({'SN': window} if window else {}))
+def material_files(window=None, extra=None):
+    """MATERIAL_FILES with the window (domain 7, key prefix 'SN') replaced by a stage's window file,
+    plus a stage's extra materials (e.g. {'Si': ...} for the stack stages)."""
+    return dict(MATERIAL_FILES, **({'SN': window} if window else {}), **(extra or {}))
 
 
-def material_keys(wvl, window=None, eqlayer=None):
+def material_keys(wvl, window=None, eqlayer=None, extra=None):
     keys = {}
-    for name, fname in material_files(window).items():
+    for name, fname in material_files(window, extra).items():
         keys[name + '_eps1'], keys[name + '_eps2'] = nk_permittivity(os.path.join(HERE, 'optical_data', fname), wvl)
     if eqlayer:
         keys.update(eqlayer_keys(wvl, eqlayer, keys))
@@ -380,9 +394,9 @@ def run_exportbench():
             json.dump(out, f, indent=1)
 
 
-def scan_keys(mesh, wvl, geom=None, window=None, eqlayer=None):
+def scan_keys(mesh, wvl, geom=None, window=None, eqlayer=None, extra=None):
     keys = dict(GEOMETRY, **(geom or {}), **MESH[mesh])
-    keys.update(material_keys(wvl, window, eqlayer))
+    keys.update(material_keys(wvl, window, eqlayer, extra))
     keys.update(source_keys(wvl, THETA))
     return keys
 
@@ -528,19 +542,22 @@ def run_stage(name, part=None):
     old = data.get('settings')
     source = {k: (v.tolist() if isinstance(v, np.ndarray) else v) for k, v in source_keys(wvl, THETA).items()}
     geometry = dict(GEOMETRY, **cfg.get('geom', {}), **MESH[cfg['mesh']])
+    mats = material_keys(wvl, cfg.get('window'), cfg.get('eqlayer'), cfg.get('extra_materials'))
     if data['records'] and old and (old['geometry'] != geometry
-                                    or old['wvl'] != wvl or old['materials'] != material_keys(wvl, cfg.get('window'), cfg.get('eqlayer'))
+                                    or old['wvl'] != wvl or old['materials'] != mats
                                     or old.get('source') != source):
         raise SystemExit(f'{out_file} was made with different settings; move it away (e.g. results/old/) first')
     data['settings'] = {
         'stage': name, 'part': part, 'mesh': cfg['mesh'], 'wvl': wvl, 'theta': THETA, 'NA': NA,
         'tap_amplitude': TAP_AMPLITUDE, 'min_gap': MIN_GAP, 'heights': HEIGHTS,
         'geometry': geometry,
-        'material_files': material_files(cfg.get('window')), 'materials': material_keys(wvl, cfg.get('window'), cfg.get('eqlayer')), 'eqlayer': cfg.get('eqlayer'), 'source': source,
+        'material_files': material_files(cfg.get('window'), cfg.get('extra_materials')), 'materials': mats,
+        'eqlayer': cfg.get('eqlayer'), 'source': source,
         'host': socket.gethostname(), 'resources': configure_resources(),
         'slurm_job': os.environ.get('SLURM_JOB_ID'),
     }
-    base_keys = scan_keys(cfg['mesh'], wvl, cfg.get('geom'), cfg.get('window'), cfg.get('eqlayer'))
+    base_keys = scan_keys(cfg['mesh'], wvl, cfg.get('geom'), cfg.get('window'), cfg.get('eqlayer'),
+                          cfg.get('extra_materials'))
 
     all_jobs = [(float(x), float(g)) for x in cfg['x'] for g in cfg['gaps']]
     if part is not None:

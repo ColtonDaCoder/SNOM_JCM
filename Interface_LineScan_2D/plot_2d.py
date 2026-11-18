@@ -361,7 +361,7 @@ if __name__ == '__main__' and len(sys.argv) > 1 and sys.argv[1] == 'approach':
 
 TAP_AMPLITUDE = 100     # nm, as in run_2d.py
 MIN_GAP = 1
-N_HEIGHTS = 15         # a position is demodulated only when all heights (14 + 5 nm) are there
+N_HEIGHTS = 14         # 15 heights (14 + 5 nm); one failed height is tolerated if the 1..101 nm range is still covered
 
 
 def demodulate(gaps, E, n_t=2000, harmonics=(1, 2, 3, 4)):
@@ -922,13 +922,14 @@ if __name__ == '__main__' and len(sys.argv) > 1 and sys.argv[1] == 'winmat':
     plot_windows()
 
 
-def plot_windows_image(half=250, step=1.0):
+def plot_windows_image(half=250, step=1.0, tag='6p1um'):
     """
-    Simulated 'image' per window at 6.1 um: the |S2/S3| line scan (normalised to the oil end) repeated for
+    Simulated 'image' per window at 6.1 or 2.95 um: the |S2/S3| line scan (normalised to the oil end) repeated for
     every y on a 500 x 500 nm grid, interface at x = 0, one shared colour scale.
     """
-    sets = (('sin5', '5 nm SiN'), ('sin20', '20 nm SiN'), ('win_SiO2_6p1um', '15 nm SiO$_2$'),
-            ('win_Si3N4_6p1um', '15 nm Si$_3$N$_4$'), ('win_graphene_6p1um', 'graphene'), ('win_hBN_6p1um', 'hBN'))
+    sin = (('sin5', '5 nm SiN'), ('sin20', '20 nm SiN')) if tag == '6p1um' else (('wl2p95', '5 nm SiN'),)
+    sets = sin + ((f'win_SiO2_{tag}', '15 nm SiO$_2$'), (f'win_Si3N4_{tag}', '15 nm Si$_3$N$_4$'),
+                  (f'win_graphene_{tag}', 'graphene'), (f'win_hBN_{tag}', 'hBN'))
     xi = np.arange(-half, half + 1e-9, step)
     imgs = []
     for s, lab in sets:
@@ -954,14 +955,15 @@ def plot_windows_image(half=250, step=1.0):
             ax.set_yticklabels([])
         cb = fig.colorbar(im, ax=list(axs), shrink=0.9, pad=0.015, fraction=0.03)
         cb.set_label('Normalized |S$_2$ / S$_3$|')
-        out = os.path.join(FIGS, 'S2_over_S3_windows_6p1um_image.png')
+        out = os.path.join(FIGS, f'S2_over_S3_windows_{tag}_image.png')
         fig.savefig(out, dpi=150, bbox_inches='tight')
         plt.close(fig)
     print('wrote', out)
 
 
 if __name__ == '__main__' and len(sys.argv) > 1 and sys.argv[1] == 'winimg':
-    plot_windows_image()
+    plot_windows_image(tag='6p1um')
+    plot_windows_image(tag='2p95um')
 
 
 def plot_nk(wmin=2.5, wmax=7.0):

@@ -98,11 +98,12 @@ def diagnostics():
                   f'50% depth {d50:.1f} nm, 90% depth {d90:.1f} nm')
 
 
-def fine_density(x, depth, p, W, step=2.0):
-    """In-phase density normalised to integral 1 (per nm^2), linearly interpolated to a regular grid."""
+def fine_density(x, depth, p, W, step=2.0, normalize=True):
+    """In-phase density (normalised to integral 1 per nm^2, or raw: demodulated E.E in units of |E0|^2),
+    linearly interpolated to a regular grid."""
     from scipy.interpolate import RegularGridInterpolator
     o = np.argsort(depth)
-    q = p[:, o]/np.real(W*np.exp(-1j*np.angle(W)))
+    q = p[:, o]/np.real(W*np.exp(-1j*np.angle(W))) if normalize else p[:, o]
     xf = np.arange(x.min(), x.max() + 1e-9, step)
     df = np.arange(0.0, depth.max() + 1e-9, step/2)
     d_in = np.r_[0.0, depth[o]]
@@ -112,21 +113,21 @@ def fine_density(x, depth, p, W, step=2.0):
     return xf, df, f((XX, DD))
 
 
-def plot_maps():
+def plot_maps(normalize=True):
     from matplotlib.colors import LogNorm
     fr = (0.5, 0.9)
     with plt.rc_context({'font.size': 15, 'axes.titlesize': 17, 'axes.labelsize': 16}):
         fig, axs = plt.subplots(2, 4, figsize=(21, 6.3), sharex=True, sharey=True,
                                 gridspec_kw=dict(hspace=0.08, wspace=0.06))
-        norm = LogNorm(vmin=1e-7, vmax=1e-3)
+        norm = LogNorm(vmin=1e-7, vmax=1e-3) if normalize else LogNorm(vmin=1e-5, vmax=2)
         for i, (tag, label) in enumerate(WVLS):
             gaps, x, depth, M = maps(tag)
             for j, n in enumerate(HARM):
                 ax = axs[i, j]
-                xf, df, q = fine_density(x, depth, M[n]['p'], M[n]['W'])
+                xf, df, q = fine_density(x, depth, M[n]['p'], M[n]['W'], normalize=normalize)
                 dA = np.outer(cell_widths(xf), cell_widths(df))
                 lv = hdr_levels(q, dA, fr)
-                im = ax.pcolormesh(xf, df, np.clip(q, 1e-7, None).T, norm=norm, cmap='inferno', shading='gouraud',
+                im = ax.pcolormesh(xf, df, np.clip(q, norm.vmin, None).T, norm=norm, cmap='inferno', shading='gouraud',
                                    rasterized=True)
                 cs = ax.contour(xf, df, q.T, levels=sorted(lv), colors='w', linewidths=[1.6, 2.2][::-1])
                 ax.clabel(cs, fmt={min(lv): '90%', max(lv): '50%'}, fontsize=13, inline_spacing=4)
@@ -138,9 +139,9 @@ def plot_maps():
                     ax.set_xlabel('x (nm)')
             axs[i, 0].set_ylabel(label.split(',')[0] + '\nDepth (nm)')
         cb = fig.colorbar(im, ax=list(axs.ravel()), shrink=0.85, pad=0.012, fraction=0.025)
-        cb.set_label('Signal density (nm$^{-2}$)')
+        cb.set_label('Signal density (nm$^{-2}$)' if normalize else 'Demodulated E·E  (|E$_0$|$^2$)')
         os.makedirs(FIGS, exist_ok=True)
-        out = os.path.join(FIGS, 'depthmap_maps.png')
+        out = os.path.join(FIGS, 'depthmap_maps.png' if normalize else 'depthmap_maps_raw.png')
         fig.savefig(out, dpi=150, bbox_inches='tight')
         plt.close(fig)
     print('wrote', out)
@@ -205,5 +206,6 @@ def plot_edge_check():
 if __name__ == '__main__':
     diagnostics()
     plot_maps()
+    plot_maps(normalize=False)
     plot_profiles()
     plot_edge_check()

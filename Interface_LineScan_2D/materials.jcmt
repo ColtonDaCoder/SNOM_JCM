@@ -4,13 +4,14 @@ Material {
   RelPermittivity = 1
   RelPermeability = 1
 }
-#Water
-Material {
-  DomainId = 2
-  RelPermittivity = (%(water_eps1)e, %(water_eps2)e)
-  RelPermeability = 1
-}
-#Platinum
+<?
+# water (domain 2): not present in the uniform-stack stages (keys['stack']), so only written otherwise
+keys['water_mat'] = ''
+if not keys.get('stack'):
+    keys['water_mat'] = ('#Water\nMaterial {\n  DomainId = 2\n  RelPermittivity = (%e, %e)\n  RelPermeability = 1\n}\n'
+                         % (keys['water_eps1'], keys['water_eps2']))
+?>
+%(water_mat)s#Platinum
 Material {
   DomainId = 3
   RelPermittivity = (%(pt_eps1)e, %(pt_eps2)e)
@@ -24,6 +25,11 @@ keys['winoil_mat'] = ''
 if 'SNoil_tensor' in keys:
     keys['winoil_mat'] = ('#Window above the oil block\nMaterial {\n  DomainId = 10\n  RelPermittivity = '
                           + keys['SNoil_tensor'] + '\n  RelPermeability = 1\n}\n')
+# silicon substrate (domain 11, stack stages with a Si substrate only)
+keys['si_mat'] = ''
+if 'Si_eps1' in keys:
+    keys['si_mat'] = ('#Silicon\nMaterial {\n  DomainId = 11\n  RelPermittivity = (%e, %e)\n  RelPermeability = 1\n}\n'
+                      % (keys['Si_eps1'], keys['Si_eps2']))
 ?>
 #Window (SiN, or the stage window material)
 Material {
@@ -31,7 +37,7 @@ Material {
   RelPermittivity = %(win_eps)s
   RelPermeability = 1
 }
-%(winoil_mat)s#Oil / OTS
+%(winoil_mat)s%(si_mat)s#Oil / OTS
 Material {
   DomainId = 9
   RelPermittivity = (%(oil_eps1)e, %(oil_eps2)e)

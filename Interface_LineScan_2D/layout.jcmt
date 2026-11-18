@@ -33,6 +33,26 @@ keys['winoil_block'] = ''
 if keys.get('win_split', 0):
     keys['winoil_block'] = ('    Polygon {\n      Name = "WindowOverOil"\n      DomainId = 10\n      Priority = 2\n'
                             '      Points = [' + rect(keys['x_interface'], xp, -t, 0.0) + ']\n    }\n')
+# uniform stacks (stack stages): keys['stack'] = [[DomainId, thickness], ...] from the top surface down,
+# keys['stack_substrate'] = DomainId below the stack (1 = air); replaces the window / water / oil objects,
+# t_SiN = total stack thickness
+def poly(name, dom, pri, pts):
+    return ('    Polygon {\n      Name = "%s"\n      DomainId = %d\n      Priority = %d\n      Points = [%s]\n    }\n'
+            % (name, dom, pri, pts))
+if keys.get('stack'):
+    body = ''
+    y = 0.0
+    for i, (dom, th) in enumerate(keys['stack']):
+        body += poly('Layer%d' % (i + 1), int(dom), 1, rect(-half, half, y - th, y))
+        y -= th
+    if abs(y + t) > 1e-9:
+        raise ValueError('t_SiN must equal the total stack thickness')
+    if int(keys['stack_substrate']) != 1:
+        body += poly('Substrate', int(keys['stack_substrate']), 1, rect(-half, half, y_bot, -t))
+    keys['body_block'] = body
+else:
+    keys['body_block'] = (poly('Water', 2, 1, keys['water_pts']) + poly('SiN', 7, 1, keys['sin_pts'])
+                          + poly('OilBlock', 9, 2, keys['oil_pts']) + keys['winoil_block'])
 # tip: virtual apex of the cone so that the rounded tip touches y = gap
 y_v = g - R/np.sin(alpha) + R
 y_tt = g + keys['tip_length']
@@ -57,25 +77,7 @@ Layout2D {
       Priority = ComputationalDomain
       Points = [%(cd_pts)s]
     }
-    Polygon {
-      Name = "Water"
-      DomainId = 2
-      Priority = 1
-      Points = [%(water_pts)s]
-    }
-    Polygon {
-      Name = "SiN"
-      DomainId = 7
-      Priority = 1
-      Points = [%(sin_pts)s]
-    }
-    Polygon {
-      Name = "OilBlock"
-      DomainId = 9
-      Priority = 2
-      Points = [%(oil_pts)s]
-    }
-%(winoil_block)s    Polygon {
+%(body_block)s    Polygon {
       Name = "Tip"
       DomainId = 3
       Priority = 4
